@@ -6,15 +6,9 @@ import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
 import Pill from './ui/Pill'
 import Icon from './ui/Icon'
-import {
-  FOCUS,
-  LEVEL_3,
-  LEVEL_3_ACTIVE,
-  LEVEL_3_HOVER,
-} from '../lib/styles'
+import { FOCUS, LEVEL_3, LEVEL_3_ACTIVE, LEVEL_3_HOVER } from '../lib/styles'
 import { featuredProject } from '../data/portfolio'
 import atelierHome from '../assets/atelier-home.jpg'
-import atelierCollections from '../assets/atelier-collections.jpg'
 import atelierProducts from '../assets/atelier-products.jpg'
 import atelierBlog from '../assets/atelier-blog.jpg'
 import 'swiper/css'
@@ -22,19 +16,14 @@ import 'swiper/css/effect-coverflow'
 
 const projectGallery = [
   {
-    src: atelierHome,
-    alt: 'Atelier De Flora homepage with the custom bouquet builder',
-    caption: 'Home - custom bouquet builder',
-  },
-  {
-    src: atelierCollections,
-    alt: 'Curated bouquet collections with prices and descriptions',
-    caption: 'Home - curated collections',
-  },
-  {
     src: atelierProducts,
     alt: 'Product catalogue with filters and bouquet cards',
     caption: 'Products - filterable catalogue',
+  },
+  {
+    src: atelierHome,
+    alt: 'Atelier De Flora homepage with the custom bouquet builder',
+    caption: 'Home - custom bouquet builder',
   },
   {
     src: atelierBlog,
@@ -127,12 +116,8 @@ export default function FeaturedProject() {
         <dl className="mt-7 grid gap-4 sm:grid-cols-3">
           {project.facts.map((fact) => (
             <div key={fact.label}>
-              <dt className="text-[13px] font-medium text-[#333333]">
-                {fact.label}
-              </dt>
-              <dd className="mt-1 text-base font-semibold text-[#333333]">
-                {fact.value}
-              </dd>
+              <dt className="text-[13px] font-medium text-[#333333]">{fact.label}</dt>
+              <dd className="mt-1 text-base font-semibold text-[#333333]">{fact.value}</dd>
             </div>
           ))}
         </dl>
@@ -146,22 +131,19 @@ export default function FeaturedProject() {
             centeredSlides={true}
             slidesPerView={'auto'}
             spaceBetween={16}
+            initialSlide={0}
             coverflowEffect={{
-              rotate: 18,
+              rotate: 0,
               stretch: 0,
-              depth: 160,
-              modifier: 1,
+              depth: 150,
+              modifier: 2.5,
               slideShadows: false,
-              scale: 0.88,
             }}
             modules={[EffectCoverflow]}
             className="atelier-coverflow"
           >
             {projectGallery.map((shot) => (
-              <SwiperSlide
-                key={shot.caption}
-                className="!w-[78%] sm:!w-[58%] lg:!w-[38%]"
-              >
+              <SwiperSlide key={shot.caption} className="!w-[78%] sm:!w-[58%] lg:!w-[38%]">
                 <figure className="min-w-0">
                   <div className="rounded-3xl bg-[#E7E7E7] p-2 shadow-[4px_4px_10px_#b6b6b6,-4px_-4px_10px_#ffffff]">
                     <img
@@ -182,9 +164,7 @@ export default function FeaturedProject() {
             ))}
           </Swiper>
         </div>
-        <p className="mt-3 px-2 text-[13px] text-[#333333]">
-          Screens captured from the deployed demo.
-        </p>
+        <p className="mt-3 px-2 text-[13px] text-[#333333]">Screens captured from the deployed demo.</p>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-12">
@@ -197,12 +177,8 @@ export default function FeaturedProject() {
                   <Icon name="check" className="h-4 w-4" />
                 </span>
                 <div className="min-w-0">
-                  <h4 className="text-base font-bold text-[#333333]">
-                    {contribution.title}
-                  </h4>
-                  <p className="mt-1 text-base leading-relaxed text-[#333333]">
-                    {contribution.body}
-                  </p>
+                  <h4 className="text-base font-bold text-[#333333]">{contribution.title}</h4>
+                  <p className="mt-1 text-base leading-relaxed text-[#333333]">{contribution.body}</p>
                 </div>
               </li>
             ))}
@@ -215,9 +191,7 @@ export default function FeaturedProject() {
             <div className="mt-4 flex flex-col gap-4">
               {project.stack.map((group) => (
                 <div key={group.label}>
-                  <p className="text-[13px] font-medium text-[#333333]">
-                    {group.label}
-                  </p>
+                  <p className="text-[13px] font-medium text-[#333333]">{group.label}</p>
                   <ul className="mt-2 flex flex-wrap gap-2">
                     {group.items.map((item) => (
                       <li key={item}>
@@ -241,15 +215,9 @@ export default function FeaturedProject() {
                   rel="noreferrer"
                   className={`${LEVEL_3} ${LEVEL_3_HOVER} ${LEVEL_3_ACTIVE} ${FOCUS} group flex w-full items-center gap-3 text-[13px]`}
                 >
-                  <Icon
-                    name={link.icon}
-                    className="h-4 w-4 shrink-0 text-[#9B9B9B]"
-                  />
+                  <Icon name={link.icon} className="h-4 w-4 shrink-0 text-[#9B9B9B]" />
                   <span className="flex-1 text-left">{link.label}</span>
-                  <Icon
-                    name="arrowUpRight"
-                    className="h-4 w-4 shrink-0 text-[#9B9B9B] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                  />
+                  <Icon name="arrowUpRight" className="h-4 w-4 shrink-0 text-[#9B9B9B] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               ))}
             </div>

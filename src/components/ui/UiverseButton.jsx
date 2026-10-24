@@ -43,10 +43,11 @@ const StyledWrapper = styled.div`
     -webkit-tap-highlight-color: transparent;
     position: relative;
     border-radius: 100em;
-    background-color: #c9c9c9;
+    background-color: #d1d1d1;
+    display: inline-flex;
     box-shadow:
-      -0.15em -0.15em 0.15em -0.075em rgba(255, 255, 255, 0.5),
-      0.0375em 0.0375em 0.0675em 0 rgba(160, 160, 160, 0.3);
+      -0.15em -0.15em 0.15em -0.075em rgba(240, 240, 240, 0.8),
+      0.05em 0.05em 0.1em 0 rgba(140, 140, 140, 0.4);
   }
 
   .button::after {
@@ -60,12 +61,12 @@ const StyledWrapper = styled.div`
     border-radius: inherit;
     background: linear-gradient(
       -135deg,
-      rgba(160, 160, 160, 0.5),
+      rgba(160, 160, 160, 0.4),
       transparent 20%,
       transparent 100%
     );
     filter: blur(0.0125em);
-    opacity: 0.4;
+    opacity: 0.3;
     mix-blend-mode: multiply;
   }
 
@@ -73,8 +74,8 @@ const StyledWrapper = styled.div`
     position: relative;
     z-index: 1;
     border-radius: inherit;
-    transition: box-shadow 300ms ease;
-    will-change: box-shadow;
+    transition: box-shadow 300ms ease, transform 200ms ease;
+    will-change: box-shadow, transform;
     box-shadow:
       0 0.05em 0.05em -0.01em rgba(160, 160, 160, 0.8),
       0 0.01em 0.01em -0.01em rgba(160, 160, 160, 0.5),
@@ -94,6 +95,9 @@ const StyledWrapper = styled.div`
     z-index: 1;
     border-radius: inherit;
     padding: 0.625em 1.25em;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     background-image: linear-gradient(
       135deg,
       #f5f5f5,
@@ -163,9 +167,12 @@ const StyledWrapper = styled.div`
     color: #333333;
   }
 
+  .button:active .button-outer {
+    transform: scale(0.96);
+  }
+
   .button:active .button-text,
   .button:active .button-icon {
-    transform: scale(0.975);
     color: #333333;
   }
 `;
