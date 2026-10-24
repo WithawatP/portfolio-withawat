@@ -12,10 +12,10 @@ const navLinks = [
   { href: '#skills', label: 'Skills' },
 ]
 
-export default function Header() {
+export default function Header({ className = '' }) {
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#E7E7E7]/80 backdrop-blur-md">
-      <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between gap-4 px-6 py-3">
+    <header className={`sticky top-6 z-50 mx-auto w-full rounded-full bg-[#E7E7E7]/85 px-8 py-3 shadow-[8px_8px_16px_#b6b6b6,-8px_-8px_16px_#ffffff] backdrop-blur-md transition-all duration-300 ${className}`}>
+      <div className="mx-auto flex w-full items-center justify-between gap-4">
         <a
           href="#home"
           aria-label="Withawat Phiraban — back to top"

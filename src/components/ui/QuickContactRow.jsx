@@ -44,9 +44,7 @@ export default function QuickContactRow({ href, label, value, icon }) {
   return (
     <Component
       {...componentProps}
-      className={`group flex min-w-0 items-center gap-3 rounded-2xl bg-[#E7E7E7] p-3 text-left shadow-[4px_4px_10px_#b6b6b6,-4px_-4px_10px_#ffffff] transition-all duration-200 active:scale-[0.99] active:shadow-[inset_3px_3px_6px_#b6b6b6,inset_-3px_-3px_6px_#ffffff] ${
-        isCopyable ? 'cursor-copy' : 'cursor-pointer'
-      } ${FOCUS}`}
+      className={`group flex min-w-0 items-center gap-3 rounded-2xl bg-[#E7E7E7] p-3 text-left shadow-[4px_4px_10px_#b6b6b6,-4px_-4px_10px_#ffffff] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_12px_#b6b6b6,-6px_-6px_12px_#ffffff] active:scale-[0.99] active:shadow-[inset_3px_3px_6px_#b6b6b6,inset_-3px_-3px_6px_#ffffff] cursor-pointer ${FOCUS}`}
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E7E7E7] text-[#9B9B9B] shadow-[3px_3px_6px_#b6b6b6,-3px_-3px_6px_#ffffff]">
         <Icon name={icon} className="h-4 w-4" />

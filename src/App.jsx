@@ -5,30 +5,30 @@ import Experience from './components/Experience'
 import Skills from './components/Skills'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import RevealOnScroll from './components/ui/RevealOnScroll'
+import ScrollReveal from './components/ui/ScrollReveal'
 
 export default function App() {
   return (
     <div className="min-h-svh overflow-x-clip bg-[#E7E7E7]">
-      <Header />
-      <main className="mx-auto w-full max-w-[1440px] px-6 pb-4 pt-4">
-        <RevealOnScroll>
+      <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col px-4 pt-6 pb-16 sm:px-8">
+        <Header />
+        <main className="flex flex-col gap-10 pt-4">
           <Hero />
-        </RevealOnScroll>
-        <RevealOnScroll>
-          <FeaturedProject />
-        </RevealOnScroll>
-        <RevealOnScroll>
-          <Experience />
-        </RevealOnScroll>
-        <RevealOnScroll>
-          <Skills />
-        </RevealOnScroll>
-        <RevealOnScroll>
-          <Contact />
-        </RevealOnScroll>
-      </main>
-      <Footer />
+          <ScrollReveal>
+            <FeaturedProject />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Experience />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Skills />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Contact />
+          </ScrollReveal>
+        </main>
+        <Footer />
+      </div>
     </div>
   )
 }

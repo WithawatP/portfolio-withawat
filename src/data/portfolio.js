@@ -117,7 +117,7 @@ export const featuredProject = {
     },
     {
       label: 'Presentation deck',
-      href: 'https://github.com/Mali-r/GP02-Data-system',
+      href: 'https://gp-02-data-system.vercel.app',
       icon: 'presentation',
     },
   ],
