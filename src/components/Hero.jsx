@@ -3,6 +3,7 @@ import InsetPanel from './ui/InsetPanel'
 import Pill from './ui/Pill'
 import QuickContactRow from './ui/QuickContactRow'
 import AvailabilityBadge from './ui/AvailabilityBadge'
+import UiverseButton from './ui/UiverseButton'
 import { coreStack, profile, quickContacts } from '../data/portfolio'
 
 export default function Hero() {
@@ -50,28 +51,15 @@ export default function Hero() {
           </div>
 
           <div className="rise rise-delay-4 mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Pill
-              href={profile.cvHref}
-              download
-              icon="download"
-              className="w-full justify-center sm:w-auto"
-            >
+            <UiverseButton href={profile.cvHref} download icon="download">
               Download CV (PDF)
-            </Pill>
-            <Pill
-              href="#featured"
-              icon="arrowRight"
-              className="w-full justify-center sm:w-auto"
-            >
+            </UiverseButton>
+            <UiverseButton href="#featured" icon="arrowRight">
               View Portfolio / Projects
-            </Pill>
-            <Pill
-              href="#contact"
-              icon="mail"
-              className="w-full justify-center sm:w-auto"
-            >
+            </UiverseButton>
+            <UiverseButton href="#contact" icon="mail">
               Contact Me
-            </Pill>
+            </UiverseButton>
           </div>
         </div>
 

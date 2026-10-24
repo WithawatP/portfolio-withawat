@@ -1,16 +1,13 @@
 import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
-import Pill from './ui/Pill'
 import Icon from './ui/Icon'
 import QuickContactRow from './ui/QuickContactRow'
-import { FOCUS, LEVEL_3, LEVEL_3_ACTIVE, LEVEL_3_HOVER } from '../lib/styles'
+import UiverseButton from './ui/UiverseButton'
+import { FOCUS } from '../lib/styles'
 import { profile } from '../data/portfolio'
 
 export default function Contact() {
-  const handleSendEmail = () => {
-    window.location.href = `mailto:${profile.email}`
-  }
 
   return (
     <SectionCard id="contact" labelledBy="contact-title">
@@ -42,29 +39,15 @@ export default function Contact() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <button
-              type="button"
-              onClick={handleSendEmail}
-              className={`${LEVEL_3} ${LEVEL_3_HOVER} ${LEVEL_3_ACTIVE} ${FOCUS} inline-flex w-full cursor-pointer items-center justify-center gap-2 text-[13px] sm:w-auto`}
-            >
-              <Icon name="arrowRight" className="h-4 w-4 shrink-0 text-[#9B9B9B]" />
-              <span>Send an email</span>
-            </button>
-            <Pill
-              href={profile.phoneHref}
-              icon="phone"
-              className="w-full justify-center sm:w-auto"
-            >
+            <UiverseButton href="mailto:withawat1201@gmail.com" icon="mail">
+              Send an email
+            </UiverseButton>
+            <UiverseButton href={profile.phoneHref} icon="phone">
               Call me
-            </Pill>
-            <Pill
-              href={profile.cvHref}
-              download
-              icon="download"
-              className="w-full justify-center sm:w-auto"
-            >
+            </UiverseButton>
+            <UiverseButton href={profile.cvHref} download icon="download">
               Download CV
-            </Pill>
+            </UiverseButton>
           </div>
         </InsetPanel>
 

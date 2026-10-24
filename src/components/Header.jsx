@@ -1,10 +1,6 @@
 import Icon from './ui/Icon'
-import {
-  FOCUS,
-  LEVEL_3,
-  LEVEL_3_ACTIVE,
-  LEVEL_3_HOVER,
-} from '../lib/styles'
+import { FOCUS } from '../lib/styles'
+import UiverseButton from './ui/UiverseButton'
 
 const navLinks = [
   { href: '#featured', label: 'Project' },
@@ -29,7 +25,7 @@ export default function Header({ className = '' }) {
           </span>
         </a>
 
-        <nav aria-label="Primary" className="flex items-center gap-1">
+        <nav aria-label="Primary" className="flex items-center gap-4">
           <div className="hidden items-center gap-1 sm:flex">
             {navLinks.map((link) => (
               <a
@@ -41,13 +37,7 @@ export default function Header({ className = '' }) {
               </a>
             ))}
           </div>
-          <a
-            href="#contact"
-            className={`${LEVEL_3} ${LEVEL_3_HOVER} ${LEVEL_3_ACTIVE} ${FOCUS} ml-1 inline-flex items-center gap-2 text-[13px]`}
-          >
-            <Icon name="mail" className="h-4 w-4 text-[#9B9B9B]" />
-            Contact
-          </a>
+          <UiverseButton href="#contact">Contact</UiverseButton>
         </nav>
       </div>
     </header>
