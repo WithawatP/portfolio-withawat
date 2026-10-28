@@ -1,79 +1,185 @@
-# Comprehensive Design System: 3-Level Nested Neumorphism
+# Design System: Hardware Neumorphism (v2.1)
 
-## 1. Core Philosophy & Architectural Concept
+Content, order, and copy live in `portfolio_content_structure_blueprint.md`. This file governs how the page looks, feels, and moves.
 
-The goal of this design system is to construct a physical, tactile, hardware-inspired interface. The surface should look like a continuous, single sheet of smooth matte plastic (`#E7E7E7`).
+**Precedence.** This file overrides any installed skill (including `design-taste-frontend`) wherever they conflict.
 
-### Strict Anti-Slop Guidelines
+- Neumorphic depth is made of resting shadows, so the skill's "no resting shadows" check is waived for the `neu-*` classes below.
+- The art direction is fixed here. Do not run the skill's direction dealer (`draw.mjs`) to pick a different one.
+- Keep every other check from the skill: no eyebrow labels, no gradients, no covered text, no empty screens, headlines at most two lines. Run its `inspect.mjs` at 1440, 768 and 390 px and fix what it reports.
+- Do not add photographs or stock imagery. The only real images are the owner's project screenshots.
 
-- **Zero Standard Borders:** Absolutely NO `border`, `border-gray-*`, or standard outlines. All visual separation MUST be achieved via light and shadow.
-- **Zero Generic Drop-Shadows:** Never use standard Tailwind shadows (`shadow-sm`, `shadow-md`, `shadow-xl`).
-- **No Pure Black / Neon Accents:** Colors must stay within the 5-tone monochrome spectrum.
-- **Unified Background Color:** Every container and main surface MUST match the canvas color `#E7E7E7` exactly to preserve the extruded illusion.
+## 1. Concept
 
----
+The page is one sheet of matte plastic lit by ONE light source. Everything on it is a piece of hardware: panels, trays, dials, switches, LEDs, grooves. Depth is the only decoration.
 
-## 2. Palette & Color Token System
+What makes the reference images work (borrow these, not their layout):
 
-Strictly limit all UI elements to these 5 HEX values:
+- Objects differ from each other: pill, squircle, circle (dial), groove (slider), tick marks. Not one card repeated.
+- A recessed tray can be a slightly darker tone (`--recess`), not only a shadow.
+- Almost everything is grey. Strong contrast appears only in small places: clock hands, a play icon, one photo.
+- Type has real scale contrast: big numerals next to tiny labels.
+- Every detail carries meaning (tick marks mark a scale, the LED shows a state).
 
-| Token Name                          | HEX Code  | Primary Usage                                       |
-| :---------------------------------- | :-------- | :-------------------------------------------------- |
-| **Canvas & Base Surface**           | `#E7E7E7` | Page background, cards, buttons, panel surfaces     |
-| **Light Source Reflection**         | `#FFFFFF` | Top-left shadow highlights (Soft white glow)        |
-| **Dark Drop Shadow**                | `#B6B6B6` | Bottom-right shadows (Soft dark depth)              |
-| **Recessed Accent / Inset Divider** | `#D1D1D1` | Subtle background shifts inside recessed tracks     |
-| **Primary Typography**              | `#333333` | Headings, main text, active icons (High contrast)   |
-| **Muted Meta / Labels**             | `#9B9B9B` | Subtitles, labels, secondary icons, disabled states |
+## 2. Tokens
 
----
+Never hardcode hex values or shadow strings in components. Use these tokens (CSS variables in `index.css`, exposed to Tailwind through the theme).
 
-## 3. The 3-Level Depth System (Nested Neumorphism)
+| Token       | Value     | Use                                                                                   |
+| :---------- | :-------- | :------------------------------------------------------------------------------------ |
+| `--surface` | `#E7E7E7` | Page and every panel. All surfaces match exactly.                                     |
+| `--light`   | `#FFFFFF` | Highlight side of every shadow                                                        |
+| `--shade`   | `#B6B6B6` | Dark side of every shadow                                                             |
+| `--recess`  | `#D1D1D1` | Optional darker fill inside a tray                                                    |
+| `--ink`     | `#333333` | Headings, key text, active icons                                                      |
+| `--ink-2`   | `#4A4A4A` | Body text                                                                             |
+| `--ink-3`   | `#666666` | Labels, dates, secondary text (4.6:1 on surface)                                      |
+| `--ink-4`   | `#9B9B9B` | Decorative only: tick marks, disabled icons. Never for text that carries information. |
+| `--led`     | `#22C55E` | The only functional color: status LED. Plus real project screenshots.                 |
 
-Referencing physical audio control panels and tactile widgets, UI depth is constructed in 3 strict layers:
+Light direction: `--lx: -1; --ly: -1;` (light from top-left; each `-1..1`). Shadows are classes in `index.css` (or Tailwind `@utility`), NOT stored shadow variables, so a local override of `--lx/--ly` on one section really changes that section's shadows.
 
-### Level 1: Outer Extrusion (Main Section Wrappers)
+```css
+.neu-raise-lg {
+  box-shadow:
+    calc(var(--lx) * -12px) calc(var(--ly) * -12px) 24px var(--shade),
+    calc(var(--lx) * 12px) calc(var(--ly) * 12px) 24px var(--light);
+}
+.neu-raise-sm {
+  box-shadow:
+    calc(var(--lx) * -4px) calc(var(--ly) * -4px) 10px var(--shade),
+    calc(var(--lx) * 4px) calc(var(--ly) * 4px) 10px var(--light);
+}
+.neu-inset-lg {
+  box-shadow:
+    inset calc(var(--lx) * -6px) calc(var(--ly) * -6px) 12px var(--shade),
+    inset calc(var(--lx) * 6px) calc(var(--ly) * 6px) 12px var(--light);
+}
+.neu-inset-sm {
+  box-shadow:
+    inset calc(var(--lx) * -2px) calc(var(--ly) * -2px) 4px var(--shade),
+    inset calc(var(--lx) * 2px) calc(var(--ly) * 2px) 4px var(--light);
+}
+```
 
-- **Concept:** Pops out directly from the base page canvas.
-- **Class:** `bg-[#E7E7E7] shadow-[12px_12px_24px_#b6b6b6,-12px_-12px_24px_#ffffff] rounded-[2.5rem] p-8 mb-10`
+Below 640px, scale offsets and blur down by about 30% (use a `--depth-scale` multiplier) so raised sections do not eat the side margins.
 
-### Level 2: Inner Inset (Recessed Tracks & Content Panels)
+Forbidden: pure black or `rgba(0,0,0,...)` shadows, Tailwind `shadow-*` utilities, gradients, glass/blur, neon, emoji, mixed icon families.
+Borders: none for structure. Exception: keyboard focus uses `outline: 2px solid var(--ink); outline-offset: 3px` on `:focus-visible`.
 
-- **Concept:** Carved/pressed DOWN into a Level 1 container. Used to group lists, grids, or interactive zones.
-- **Class:** `bg-[#E7E7E7] shadow-[inset_6px_6px_12px_#b6b6b6,inset_-6px_-6px_12px_#ffffff] rounded-3xl p-6`
+## 3. Depth roles
 
-### Level 3: Inner Extrusion (Interactive Controls inside Insets)
+Depth means a role. If you cannot name the role, do not add a shadow.
 
-- **Concept:** Small buttons or tags that pop back UP from inside a Level 2 recessed panel.
-- **Class (Resting):** `bg-[#E7E7E7] text-[#333333] shadow-[4px_4px_10px_#b6b6b6,-4px_-4px_10px_#ffffff] rounded-full px-5 py-2 font-medium transition-all duration-200`
-- **Class (Active / Pressed):** `active:shadow-[inset_3px_3px_6px_#b6b6b6,inset_-3px_-3px_6px_#ffffff] active:scale-95 text-[#333333]`
+| Role               | Look                                                    | Use ONLY for                                |
+| :----------------- | :------------------------------------------------------ | :------------------------------------------ |
+| L1 Raised section  | `neu-raise-lg`, large radius                            | Main section wrappers                       |
+| L2 Tray            | `neu-inset-lg` (optional `--recess` fill)               | A group of related content inside L1        |
+| L3a Control        | `neu-raise-sm`, pressed = `neu-inset-sm` + `scale(.97)` | Things you can click or toggle              |
+| L3b Engraved label | `neu-inset-sm`, no hover, no press                      | Static tags: tech chips, skill chips, roles |
+| Pointer            | `--led`, tiny                                           | Status                                      |
 
----
+Rules:
 
-## 4. Component-Level Style Rules
+- Raised means clickable. Engraved means information. Never swap them.
+- Max 3 physical layers stacked in any area (L1 > L2 > L3).
+- An engraved chip inside a tray must be clearly shallower than the tray (about one third of the depth).
+- Stretched full-width chips look like text inputs. Use natural-width chips that wrap, and use a grid only when columns must align.
 
-### Buttons & Action CTAs
+## 4. Variation rules (anti-slop)
 
-- **Primary CTA:** Fully rounded pill button (`rounded-full`). Must feel heavy and clickable.
-- **Quick Contact Items:** Rectangular extruded rows with rounded corners (`rounded-2xl`). Must depress into an inset shadow on click.
+Slop is sameness, not tidiness. Check these on every section:
 
-### Badges & Tags (Skills & Roles)
+- Use a radius scale tied to size: pill (controls), 16px (rows), 24px (trays), 40px (sections), full circle (dials, avatar). Do not put one radius on everything.
+- Panels of different sizes. Never more than two identical sibling panels in a row. Prefer 2:1 or 3:2 cells.
+- Each section has a different composition. Do not repeat "heading + one-line subtitle + right-aligned meta label" on every section.
+- Each section includes at least one object that is not a card: dial, switch, slider groove, tick scale, LED, avatar circle.
+- Decoration must carry information. If it signals nothing, delete it.
+- No fake precision: no skill-level percentages, no star ratings.
+- One signature moment on the whole page (section 7). Everything else stays quiet.
+- Remove unnecessary labels above content (eyebrows, "Four categories" style counters). A label must change what the reader understands.
 
-- Must be housed inside a Level 2 Recessed Track.
-- Individual skill tags use Level 3 Extrusion (`rounded-full`, text size `text-sm`, color `#333333`).
+## 5. Type and copy
 
-### Status Indicators
+- One family, or two clearly different. Body 15 to 16px on mobile, labels at least 12px. Sentence case. No all-caps labels.
+- Use scale contrast: large display text or numerals against small labels.
+- Display face: an expanded/wide face is allowed ONLY for the owner's name and large numerals (36px or bigger, one weight). Never for labels, chips, buttons, or body. Prefer one family with a width axis (for example Archivo with `font-stretch` up to 125%) so display and body share a family; Unbounded is a more characterful alternative. Latin glyphs only, so keep those elements English. Load Latin subset only, with `font-display: swap`.
+- Do not accent a single word in a headline with color or italics.
+- Copy is specific: a number, a tool, a decision, a result. Replace adjectives with evidence.
+- Avoid: passionate, seamless, leverage, robust, cutting-edge, "quality mindset", "practical toolkit", "delivery on track", and any sentence that would fit any developer's portfolio.
+- Every skill, tool, or claim shown must be something the owner can discuss in an interview. Never invent numbers, counts, or results; use only facts supplied by the owner.
 
-- **Available for Work Badge:** Recessed pill (`shadow-[inset_3px_3px_6px_#b6b6b6,inset_-3px_-3px_6px_#ffffff]`) with a pulsing green dot (`bg-green-500 animate-pulse`).
+## 6. Mobile-first
 
----
+Most visitors arrive on a phone. Design at 390px first, then enhance at 768px and 1024px+, with a 1440px max width. In Tailwind, unprefixed classes are mobile; add `md:` and `lg:` for larger.
 
-## 5. Section Structure Blueprint Reference
+- First screen on mobile must show: the name (display face), the availability LED, and the primary action, without scrolling.
+- Touch targets at least 44 by 44px with at least 8px between controls. Nothing is reachable only by hover.
+- Layout collapses to one column; the most important cell comes first. Bento cells stack, they are not just shrunk.
+- Navigation: mobile uses a fixed bottom dock (inset groove with a raised knob that slides to the active section, respects `safe-area-inset-bottom`). Desktop uses the top header.
+- Switches and segmented controls are full-width on mobile.
+- Long text wraps; no horizontal scroll at 360px.
+- Test at 360, 390, 768, 1024, 1440.
 
-All page content must follow `portfolio_content_structure_blueprint.md`:
+## 7. Motion and interaction (level: clearly visible)
 
-1. **Section 1 (Hero):** Two-column layout (Bio on Left, Status + Quick Contact on Right).
-2. **Section 2 (Featured Project):** Level 1 Card -> Level 2 Details Grid -> Level 3 Tech Tags & Action Links.
-3. **Section 3 (Work Experience):** Level 1 Card -> Level 2 Timeline Panel for each position.
-4. **Section 4 (Technical Skills):** Level 1 Card -> Level 2 Categorized Inset Containers -> Level 3 Skill Pills.
-5. **Section 5 (Contact):** Level 1 Card -> Level 2 Form/Links -> Level 3 Action Buttons.
+Motion follows physics: surfaces extrude, controls press in, light shifts. Never decorative. The owner wants motion that is clearly noticeable, so keep moments bold but few.
+
+Scroll moments (budget: these four only):
+
+1. Section extrude: a Level 1 section rises from the surface as it enters the viewport (shadow strength 0 to 1, plus a small scale from .97 to 1). Do NOT use fade-and-slide-up on every section.
+2. Hero depth layers: name, panels, and controls move at different speeds. Travel up to 40px on desktop, 16 to 20px on mobile. The light direction shifts slightly in the hero: follows the pointer on desktop, follows scroll progress on touch (scoped to the hero, range about 0.4).
+3. Inset window: an image inside a tray shifts 8 to 12 percent while the tray stays still.
+4. Scroll rail: the timeline groove fills like an LED strip as you scroll; the progress indicator is a raised knob in an inset groove.
+
+User-triggered feedback (always allowed): press-in on controls, copy-to-clipboard confirmation as a pressed state, accordion open/close, the Build/Test switch, the bottom dock knob.
+
+Technical rules:
+
+- Animate only `transform`, `opacity`, and CSS variables on small scopes. For shadow changes on large elements, crossfade the opacity of two layers (pseudo-elements) instead of animating `box-shadow`.
+- Prefer CSS scroll-driven animations (`animation-timeline: view()`) inside `@supports`. Fallback: IntersectionObserver with a static final state. No scroll listeners that read layout.
+- Respect `prefers-reduced-motion: reduce`: no parallax, no extrude animation, no knob travel; state changes are instant.
+- Mobile keeps parallax at reduced travel. If frame rate drops on a mid-range phone, fall back to extrude plus press feedback only. Never use gyroscope or device-orientation effects.
+- Duration 150 to 350 ms for feedback; 400 to 600 ms for switches and scroll reveals. Easing `cubic-bezier(.2,.7,.2,1)`; a slight overshoot is allowed on knobs only. No looping animation except the status LED pulse.
+- Never change `--lx/--ly` on `:root`; scope to a section.
+- Hover must never be the only way to reach content (timeline details open by tap and keyboard, with `aria-expanded`).
+
+## 8. Signature moment: Build / Test switch
+
+Location: Featured project, in the "What I built" panel.
+
+- Control: a two-position physical switch (inset groove, raised knob), labelled "Build" and "Test", with the LED lit on the active side. Knob slides 400 to 500 ms with a slight overshoot. On mobile it is full-width.
+- Behavior: panel content crossfades; the panel keeps a stable height (set a min-height) so nothing jumps.
+- Accessibility: segmented radio group (arrow keys move between options), `aria-live="polite"` on the content region.
+- Build side: what the owner built (authentication and security, admin dashboard, core UI).
+- Test side: the testing method and bugs found and fixed, each as symptom, cause, fix. Facts come only from the owner (`src/data/portfolio.js`).
+- This is the one memorable moment. Do not add a second showpiece elsewhere.
+
+## 9. Accessibility floor
+
+- Text contrast at least 4.5:1 (`--ink-3` or darker on `--surface`).
+- Visible `:focus-visible` on every control. Real `<button>` and `<a>` for interactive things; `<ul>/<li>` for tag groups.
+- Images have meaningful `alt`. Layout does not shift on load.
+
+## 10. Default compositions (change only with owner approval)
+
+- Hero: mobile first screen as in section 6. Desktop: two columns; left name and role, right status LED and quick-contact rows (raised controls).
+- Featured project: unequal bento: title and role tile, screens in a tray (inset window), the Build/Test panel, tech stack, links.
+- Experience: vertical groove with LED nodes; rows expand by tap or keyboard; company name visible when collapsed.
+- Skills: one control-panel layout with uneven modules; tags are engraved labels.
+- Contact: the email address as the single large focal element; actions as raised controls.
+
+## 11. Review gate (run before saying "done")
+
+Answer each item in the final summary. If any fails, fix it first.
+
+1. Could this section be dropped into another portfolio unchanged? If yes, what is specific to this owner?
+2. Is any role mismatched (raised static info, engraved clickable thing)?
+3. Does any section repeat another section's structure?
+4. Is there a non-card object in each section, and does it carry meaning?
+5. Any hardcoded hex, pure black, `shadow-*` utility, border, or gradient?
+6. Is each moving thing inside the motion budget and reduced-motion safe?
+7. Is any copy generic enough to belong to anyone? List it for the owner.
+8. 390px first screen shows name, availability, primary action? No horizontal scroll at 360px?
+9. `inspect.mjs` run at 1440, 768, 390: resting-shadow failures on `neu-*` are expected and waived; every other failure fixed.
+10. Contrast, focus, and touch-target check done.
