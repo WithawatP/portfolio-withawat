@@ -1,7 +1,7 @@
 import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
-import Pill from './ui/Pill'
+import SkillChip from './ui/SkillChip'
 import { skillGroups } from '../data/portfolio'
 
 export default function Skills() {
@@ -27,39 +27,72 @@ export default function Skills() {
             </div>
           </div>
 
-          <div className="mt-5 grid gap-5 sm:grid-cols-3">
-            {primary.groups.map((group) => (
-              <div key={group.label}>
-                <p className="text-[13px] font-medium text-[#333333]">
-                  {group.label}
-                </p>
-                <ul className="mt-2 flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <li key={item}>
-                      <Pill>{item}</Pill>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="mt-5 grid items-start gap-5 lg:grid-cols-3">
+            {primary.groups.map((group, groupIndex) => {
+              const labelId = `skill-sub-${groupIndex}`
+              return (
+                <div key={group.label} className="@container">
+                  <p id={labelId} className="text-[13px] font-medium text-[#333333]">
+                    {group.label}
+                  </p>
+                  <ul
+                    aria-labelledby={labelId}
+                    className="mt-2 grid grid-cols-2 gap-2 @max-[360px]:grid-cols-1"
+                  >
+                    {group.items.map((item, itemIndex) => {
+                      const spansBoth =
+                        group.items.length % 2 === 1 &&
+                        itemIndex === group.items.length - 1
+                      return (
+                        <SkillChip
+                          key={item}
+                          className={spansBoth ? 'col-span-2 @max-[360px]:col-span-1' : ''}
+                        >
+                          {item}
+                        </SkillChip>
+                      )
+                    })}
+                  </ul>
+                </div>
+              )
+            })}
           </div>
         </InsetPanel>
 
-        {secondary.map((group) => (
-          <InsetPanel key={group.title} className="rise rise-delay-2">
-            <h3 className="text-xl font-bold text-[#333333]">{group.title}</h3>
-            <p className="mt-1 text-base leading-relaxed text-[#333333]">
-              {group.summary}
-            </p>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {group.items.map((item) => (
-                <li key={item}>
-                  <Pill>{item}</Pill>
-                </li>
-              ))}
-            </ul>
-          </InsetPanel>
-        ))}
+        {secondary.map((group, groupIndex) => {
+          const labelId = `skill-cat-${groupIndex}`
+          return (
+            <InsetPanel
+              key={group.title}
+              className="@container rise rise-delay-2"
+            >
+              <h3 id={labelId} className="text-xl font-bold text-[#333333]">
+                {group.title}
+              </h3>
+              <p className="mt-1 text-base leading-relaxed text-[#333333]">
+                {group.summary}
+              </p>
+              <ul
+                aria-labelledby={labelId}
+                className="mt-5 grid grid-cols-2 gap-2 @max-[360px]:grid-cols-1"
+              >
+                {group.items.map((item, itemIndex) => {
+                  const spansBoth =
+                    group.items.length % 2 === 1 &&
+                    itemIndex === group.items.length - 1
+                  return (
+                    <SkillChip
+                      key={item}
+                      className={spansBoth ? 'col-span-2 @max-[360px]:col-span-1' : ''}
+                    >
+                      {item}
+                    </SkillChip>
+                  )
+                })}
+              </ul>
+            </InsetPanel>
+          )
+        })}
       </div>
     </SectionCard>
   )

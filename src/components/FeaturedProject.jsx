@@ -4,7 +4,7 @@ import { EffectCoverflow } from 'swiper/modules'
 import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
-import Pill from './ui/Pill'
+import SkillChip from './ui/SkillChip'
 import Icon from './ui/Icon'
 import { FOCUS, LEVEL_3, LEVEL_3_ACTIVE, LEVEL_3_HOVER } from '../lib/styles'
 import { featuredProject } from '../data/portfolio'
@@ -131,7 +131,7 @@ export default function FeaturedProject() {
             centeredSlides={true}
             slidesPerView={'auto'}
             spaceBetween={16}
-            initialSlide={0}
+            initialSlide={1}
             coverflowEffect={{
               rotate: 0,
               stretch: 0,
@@ -188,19 +188,37 @@ export default function FeaturedProject() {
         <div className="rise rise-delay-4 flex min-w-0 flex-col gap-6 lg:col-span-5">
           <InsetPanel>
             <h3 className="text-base font-bold text-[#333333]">Tech stack</h3>
-            <div className="mt-4 flex flex-col gap-4">
-              {project.stack.map((group) => (
-                <div key={group.label}>
-                  <p className="text-[13px] font-medium text-[#333333]">{group.label}</p>
-                  <ul className="mt-2 flex flex-wrap gap-2">
-                    {group.items.map((item) => (
-                      <li key={item}>
-                        <Pill>{item}</Pill>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <div className="mt-4 flex flex-col gap-5">
+              {project.stack.map((group, groupIndex) => {
+                const onePerRow = group.items.length <= 2
+                const labelId = `stack-label-${groupIndex}`
+                return (
+                  <div key={group.label}>
+                    <p id={labelId} className="text-[13px] font-medium text-[#333333]">
+                      {group.label}
+                    </p>
+                    <ul
+                      aria-labelledby={labelId}
+                      className="mt-2 grid grid-cols-2 gap-2"
+                    >
+                      {group.items.map((item, itemIndex) => {
+                        const spansBoth =
+                          onePerRow ||
+                          (group.items.length % 2 === 1 &&
+                            itemIndex === group.items.length - 1)
+                        return (
+                          <SkillChip
+                            key={item}
+                            className={spansBoth ? 'col-span-2' : ''}
+                          >
+                            {item}
+                          </SkillChip>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                )
+              })}
             </div>
           </InsetPanel>
 
