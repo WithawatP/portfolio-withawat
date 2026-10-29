@@ -3,11 +3,14 @@
 Content, order, and copy live in `portfolio_content_structure_blueprint.md`. This file governs how the page looks, feels, and moves.
 
 **Precedence.** This file overrides any installed skill (including `design-taste-frontend`) wherever they conflict.
+Known conflicts and how to treat them:
 
-- Neumorphic depth is made of resting shadows, so the skill's "no resting shadows" check is waived for the `neu-*` classes below.
-- The art direction is fixed here. Do not run the skill's direction dealer (`draw.mjs`) to pick a different one.
-- Keep every other check from the skill: no eyebrow labels, no gradients, no covered text, no empty screens, headlines at most two lines. Run its `inspect.mjs` at 1440, 768 and 390 px and fix what it reports.
-- Do not add photographs or stock imagery. The only real images are the owner's project screenshots.
+- "No shadows on things at rest": waived for the `neu-*` classes. Depth is the design. `inspect.mjs` will report `FAIL shadow` at 1440, 768 and 390; that is expected and not to be "fixed".
+- "No floating pill navigation": the mobile bottom bar must be attached to the bottom edge of the screen, full width, never a floating pill.
+- "Entrance for every section, rising 16 to 32px, at least 8 moving elements": replaced by the motion plan in section 7. If the inspector complains about the count of moving elements, report it; do not add fade-ups to satisfy it.
+- `draw.mjs` (direction dealer), `assets.mjs` (found pictures), and the "add a video or photographs" advice: do not use. The direction is fixed here, and the only images are the owner's project screenshots and, optionally, one portrait supplied by the owner (never stock or AI-generated). `WARN no-footage` is accepted.
+- Everything else in the skill still applies and must pass: no eyebrow labels, no gradients, no thin rules or outlined boxes, no icon-topped feature cards or rows of identical cards, no covered text, headlines at most two lines, and no empty screens (`FAIL empty-screens` is a real design problem to fix).
+- Run `inspect.mjs` at 1440, 768 and 390 px and `lint.mjs`; fix everything except the waivers above.
 
 ## 1. Concept
 
@@ -103,7 +106,7 @@ Slop is sameness, not tidiness. Check these on every section:
 
 - One family, or two clearly different. Body 15 to 16px on mobile, labels at least 12px. Sentence case. No all-caps labels.
 - Use scale contrast: large display text or numerals against small labels.
-- Display face: an expanded/wide face is allowed ONLY for the owner's name and large numerals (36px or bigger, one weight). Never for labels, chips, buttons, or body. Prefer one family with a width axis (for example Archivo with `font-stretch` up to 125%) so display and body share a family; Unbounded is a more characterful alternative. Latin glyphs only, so keep those elements English. Load Latin subset only, with `font-display: swap`.
+- Display face: an expanded/wide face is allowed ONLY for the owner's name and large numerals (36px or bigger, one weight). Never for labels, chips, buttons, or body. Manrope (the current face) has no width axis, so keep it for everything else and add exactly ONE display family for these cases (candidates: Archivo with `font-stretch` up to 125%, or Unbounded; the owner picks after a side-by-side test). Two typefaces in total. Latin glyphs only, so keep those elements English. Load Latin subset only, with `font-display: swap`.
 - Do not accent a single word in a headline with color or italics.
 - Copy is specific: a number, a tool, a decision, a result. Replace adjectives with evidence.
 - Avoid: passionate, seamless, leverage, robust, cutting-edge, "quality mindset", "practical toolkit", "delivery on track", and any sentence that would fit any developer's portfolio.
@@ -116,7 +119,7 @@ Most visitors arrive on a phone. Design at 390px first, then enhance at 768px an
 - First screen on mobile must show: the name (display face), the availability LED, and the primary action, without scrolling.
 - Touch targets at least 44 by 44px with at least 8px between controls. Nothing is reachable only by hover.
 - Layout collapses to one column; the most important cell comes first. Bento cells stack, they are not just shrunk.
-- Navigation: mobile uses a fixed bottom dock (inset groove with a raised knob that slides to the active section, respects `safe-area-inset-bottom`). Desktop uses the top header.
+- Navigation: mobile uses a fixed bottom bar attached to the screen edge, full width, not a floating pill (inset groove with a raised knob that slides to the active section; respects `safe-area-inset-bottom`). Desktop uses the top header.
 - Switches and segmented controls are full-width on mobile.
 - Long text wraps; no horizontal scroll at 360px.
 - Test at 360, 390, 768, 1024, 1440.
