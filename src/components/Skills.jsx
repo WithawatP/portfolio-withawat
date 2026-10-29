@@ -13,15 +13,14 @@ export default function Skills() {
         id="skills-title"
         title="Technical skills"
         intro="A practical toolkit for building, testing, and designing web applications, supported by the soft skills that keep delivery on track."
-        meta="Four categories"
       />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <InsetPanel className="rise rise-delay-1 md:col-span-2 lg:col-span-3">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
-              <h3 className="text-xl font-bold text-[#333333]">{primary.title}</h3>
-              <p className="mt-1 text-base leading-relaxed text-[#333333]">
+              <h3 className="text-xl font-bold text-ink">{primary.title}</h3>
+              <p className="mt-1 text-base leading-relaxed text-ink">
                 {primary.summary}
               </p>
             </div>
@@ -32,7 +31,7 @@ export default function Skills() {
               const labelId = `skill-sub-${groupIndex}`
               return (
                 <div key={group.label} className="@container">
-                  <p id={labelId} className="text-[13px] font-medium text-[#333333]">
+                  <p id={labelId} className="text-[13px] font-medium text-ink">
                     {group.label}
                   </p>
                   <ul
@@ -66,10 +65,10 @@ export default function Skills() {
               key={group.title}
               className="@container rise rise-delay-2"
             >
-              <h3 id={labelId} className="text-xl font-bold text-[#333333]">
+              <h3 id={labelId} className="text-xl font-bold text-ink">
                 {group.title}
               </h3>
-              <p className="mt-1 text-base leading-relaxed text-[#333333]">
+              <p className="mt-1 text-base leading-relaxed text-ink">
                 {group.summary}
               </p>
               <ul

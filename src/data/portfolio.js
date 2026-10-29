@@ -146,7 +146,7 @@ export const experiences = [
     role: 'Front-End Developer & Quality Control (QC)',
     highlights:
       'Developed responsive front-end templates and conducted rigorous Quality Control (QC), cross-browser testing, and visual debugging to guarantee UI/UX accuracy prior to client handoff.',
-    tags: ['Front-end', 'QC', 'Cross-browser testing'],
+    tags: ['Front-end', 'QC', 'Responsive testing'],
   },
   {
     company: 'Versatile Haus',
@@ -173,7 +173,7 @@ export const skillGroups = [
     groups: [
       {
         label: 'Languages',
-        items: ['JavaScript (ES6+)', 'HTML5', 'CSS3', 'PHP'],
+        items: ['JavaScript (ES6+)', 'HTML5', 'CSS3'],
       },
       {
         label: 'Frameworks & Libraries',
@@ -181,7 +181,7 @@ export const skillGroups = [
       },
       {
         label: 'Tools & Databases',
-        items: ['MongoDB', 'MySQL', 'PostgreSQL', 'Git', 'GitHub', 'Vite'],
+        items: ['MongoDB', 'PostgreSQL', 'Git', 'GitHub', 'Vite'],
       },
     ],
   },
@@ -191,7 +191,7 @@ export const skillGroups = [
     items: [
       'Manual Testing',
       'Exploratory Testing',
-      'Cross-Browser QC',
+      'Responsive Testing',
       'Visual Debugging',
       'Postman API Testing',
     ],

@@ -13,28 +13,28 @@ export default function Hero() {
         <div className="flex min-w-0 flex-col lg:col-span-7">
           <h1
             id="hero-title"
-            className="rise text-balance text-[clamp(3rem,9vw,5.75rem)] font-extrabold leading-[0.88] tracking-[-0.055em] text-[#333333]"
+            className="rise text-balance text-[clamp(3rem,9vw,5.75rem)] font-extrabold leading-[0.88] tracking-[-0.055em] text-ink"
           >
             Withawat
             <br />
             Phiraban
           </h1>
 
-          <p className="rise rise-delay-1 mt-5 text-xl font-semibold text-[#333333]">
+          <p className="rise rise-delay-1 mt-5 text-xl font-semibold text-ink">
             Junior Software Developer <span aria-hidden="true">·</span> QA / Software Tester
           </p>
 
-          <p className="rise rise-delay-2 mt-5 max-w-[42ch] text-xl leading-relaxed text-[#333333]">
+          <p className="rise rise-delay-2 mt-5 max-w-[42ch] text-xl leading-relaxed text-ink">
             {profile.headline}
           </p>
 
-          <p className="rise rise-delay-2 mt-4 max-w-[52ch] text-base leading-relaxed text-[#333333]">
+          <p className="rise rise-delay-2 mt-4 max-w-[52ch] text-base leading-relaxed text-ink">
             {profile.bio}
           </p>
 
           <div className="rise rise-delay-3 mt-8">
             <InsetPanel>
-              <p className="text-[13px] font-semibold text-[#333333]">
+              <p className="text-[13px] font-semibold text-ink">
                 Core stack
               </p>
               <ul
@@ -66,35 +66,35 @@ export default function Hero() {
         <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
           <InsetPanel className="rise rise-delay-1">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-base font-bold text-[#333333]">Availability</h2>
+              <h2 className="text-base font-bold text-ink">Availability</h2>
               <AvailabilityBadge />
             </div>
-            <p className="mt-4 text-base leading-relaxed text-[#333333]">
+            <p className="mt-4 text-base leading-relaxed text-ink">
               Open to junior developer and QA / tester roles. Remote or hybrid
               across Pathum Thani and northern Bangkok.
             </p>
             <dl className="mt-5 flex flex-col gap-3">
               <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-[13px] font-medium text-[#333333]">
+                <dt className="text-[13px] font-medium text-ink">
                   Location
                 </dt>
-                <dd className="text-right text-base font-semibold text-[#333333]">
+                <dd className="text-right text-base font-semibold text-ink">
                   {profile.location}
                 </dd>
               </div>
               <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-[13px] font-medium text-[#333333]">
+                <dt className="text-[13px] font-medium text-ink">
                   Expected salary
                 </dt>
-                <dd className="text-right text-base font-semibold text-[#333333]">
+                <dd className="text-right text-base font-semibold text-ink">
                   {profile.salary}
                 </dd>
               </div>
               <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-[13px] font-medium text-[#333333]">
+                <dt className="text-[13px] font-medium text-ink">
                   Work style
                 </dt>
-                <dd className="text-right text-base font-semibold text-[#333333]">
+                <dd className="text-right text-base font-semibold text-ink">
                   Remote / Hybrid
                 </dd>
               </div>
@@ -102,7 +102,7 @@ export default function Hero() {
           </InsetPanel>
 
           <InsetPanel className="rise rise-delay-2">
-            <h2 className="text-base font-bold text-[#333333]">Quick contact</h2>
+            <h2 className="text-base font-bold text-ink">Quick contact</h2>
             <div className="mt-4 flex flex-col gap-3">
               {quickContacts.map((item) => (
                 <QuickContactRow key={item.label} {...item} />

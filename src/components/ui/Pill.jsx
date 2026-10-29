@@ -35,7 +35,7 @@ export default function Pill({
           : `${LEVEL_3_RECESSED} cursor-default`
       } ${className}`}
     >
-      {icon ? <Icon name={icon} className="h-4 w-4 shrink-0 text-[#9B9B9B]" /> : null}
+      {icon ? <Icon name={icon} className="h-4 w-4 shrink-0 text-faint" /> : null}
       <span>{children}</span>
     </Component>
   )

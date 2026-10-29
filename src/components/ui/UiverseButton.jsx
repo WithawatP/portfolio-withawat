@@ -43,7 +43,7 @@ const StyledWrapper = styled.div`
     -webkit-tap-highlight-color: transparent;
     position: relative;
     border-radius: 100em;
-    background-color: #d1d1d1;
+    background-color: var(--color-recessed);
     display: inline-flex;
     box-shadow:
       -0.15em -0.15em 0.15em -0.075em rgba(240, 240, 240, 0.8),
@@ -150,7 +150,7 @@ const StyledWrapper = styled.div`
     letter-spacing: -0.01em;
     font-weight: 500;
     font-size: 13px;
-    color: #4A4A4A;
+    color: var(--color-ink-2);
     transition: transform 250ms ease, color 250ms ease;
     display: block;
     will-change: transform;
@@ -164,7 +164,7 @@ const StyledWrapper = styled.div`
 
   .button:hover .button-text,
   .button:hover .button-icon {
-    color: #333333;
+    color: var(--color-ink);
   }
 
   .button:active .button-outer {
@@ -173,7 +173,7 @@ const StyledWrapper = styled.div`
 
   .button:active .button-text,
   .button:active .button-icon {
-    color: #333333;
+    color: var(--color-ink);
   }
 `;
 
