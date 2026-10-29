@@ -44,31 +44,31 @@ export default function QuickContactRow({ href, label, value, icon }) {
   return (
     <Component
       {...componentProps}
-      className={`group flex min-w-0 items-center gap-3 rounded-2xl bg-[#E7E7E7] p-3 text-left shadow-[4px_4px_10px_#b6b6b6,-4px_-4px_10px_#ffffff] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[6px_6px_12px_#b6b6b6,-6px_-6px_12px_#ffffff] active:scale-[0.99] active:shadow-[inset_3px_3px_6px_#b6b6b6,inset_-3px_-3px_6px_#ffffff] cursor-pointer ${FOCUS}`}
+      className={`group flex min-w-0 items-center gap-3 rounded-2xl bg-surface p-3 text-left neu-raise-sm transition-all duration-300 hover:-translate-y-0.5 hover:neu-raise-lift active:scale-[0.99] active:neu-inset-press cursor-pointer ${FOCUS}`}
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E7E7E7] text-[#9B9B9B] shadow-[3px_3px_6px_#b6b6b6,-3px_-3px_6px_#ffffff]">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface text-faint neu-raise-xs">
         <Icon name={icon} className="h-4 w-4" />
       </span>
       <span className="min-w-0 flex-1">
         <span
           aria-live={isCopyable ? 'polite' : undefined}
-          className="block text-[13px] font-medium leading-snug text-[#333333]"
+          className="block text-[13px] font-medium leading-snug text-ink"
         >
           {statusLabel}
         </span>
-        <span className="block break-all text-base font-semibold leading-snug text-[#333333]">
+        <span className="block break-all text-base font-semibold leading-snug text-ink">
           {value}
         </span>
       </span>
       {isCopyable ? (
         <Icon
           name={copyState === 'copied' ? 'check' : 'copy'}
-          className="h-4 w-4 shrink-0 text-[#9B9B9B]"
+          className="h-4 w-4 shrink-0 text-faint"
         />
       ) : (
         <Icon
           name="arrowUpRight"
-          className="h-4 w-4 shrink-0 text-[#9B9B9B] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          className="h-4 w-4 shrink-0 text-faint transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
         />
       )}
     </Component>

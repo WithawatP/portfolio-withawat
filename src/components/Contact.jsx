@@ -1,7 +1,6 @@
 import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
-import Icon from './ui/Icon'
 import QuickContactRow from './ui/QuickContactRow'
 import UiverseButton from './ui/UiverseButton'
 import { FOCUS } from '../lib/styles'
@@ -22,17 +21,17 @@ export default function Contact() {
           <div>
             <a
               href={`mailto:${profile.email}`}
-              className={`block break-all rounded-lg text-[clamp(1.5rem,3.8vw,2.75rem)] font-extrabold leading-tight tracking-[-0.04em] text-[#333333] underline-offset-8 transition-all duration-200 hover:underline ${FOCUS}`}
+              className={`block break-all rounded-lg text-[clamp(1.5rem,3.8vw,2.75rem)] font-extrabold leading-tight tracking-[-0.04em] text-ink underline-offset-8 transition-all duration-200 hover:underline ${FOCUS}`}
             >
               {profile.email}
             </a>
-            <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-[#333333]">
+            <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-ink">
               Based in Pathum Thani, Thailand. Open to remote and hybrid roles
               across Bangkok and Pathum Thani.
             </p>
             <a
               href={profile.phoneHref}
-              className={`mt-2 inline-block rounded-lg text-base font-semibold text-[#333333] underline-offset-4 transition-all duration-200 hover:underline ${FOCUS}`}
+              className={`mt-2 inline-block rounded-lg text-base font-semibold text-ink underline-offset-4 transition-all duration-200 hover:underline ${FOCUS}`}
             >
               {profile.phone}
             </a>
@@ -53,7 +52,7 @@ export default function Contact() {
 
         <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
           <InsetPanel className="rise rise-delay-3">
-            <h3 className="text-base font-bold text-[#333333]">
+            <h3 className="text-base font-bold text-ink">
               Professional profiles
             </h3>
             <div className="mt-4 flex flex-col gap-3">

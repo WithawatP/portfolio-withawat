@@ -1,15 +1,102 @@
 @import "tailwindcss";
 
-@theme {
+@theme static {
   --color-surface: #e7e7e7;
   --color-highlight: #ffffff;
   --color-recessed: #d1d1d1;
   --color-shadow: #b6b6b6;
   --color-ink: #333333;
-  --color-muted: #9b9b9b;
+  --color-ink-2: #4a4a4a;
+  --color-muted: #666666;
+  --color-faint: #9b9b9b;
+  --color-led: #22c55e;
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --lx: -1;
+  --ly: -1;
+  --depth-scale: 1;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --depth-scale: 0.7;
+  }
+}
+
+@utility neu-raise-xs {
+  box-shadow:
+    calc(var(--lx) * -3px * var(--depth-scale)) calc(var(--ly) * -3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 3px * var(--depth-scale)) calc(var(--ly) * 3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-raise-node {
+  box-shadow:
+    calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-raise-sm {
+  box-shadow:
+    calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(10px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(10px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-raise-hover {
+  box-shadow:
+    calc(var(--lx) * -5px * var(--depth-scale)) calc(var(--ly) * -5px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 5px * var(--depth-scale)) calc(var(--ly) * 5px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-raise-lift {
+  box-shadow:
+    calc(var(--lx) * -6px * var(--depth-scale)) calc(var(--ly) * -6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 6px * var(--depth-scale)) calc(var(--ly) * 6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-raise-md {
+  box-shadow:
+    calc(var(--lx) * -8px * var(--depth-scale)) calc(var(--ly) * -8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 8px * var(--depth-scale)) calc(var(--ly) * 8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-raise-lg {
+  box-shadow:
+    calc(var(--lx) * -12px * var(--depth-scale)) calc(var(--ly) * -12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-shadow),
+    calc(var(--lx) * 12px * var(--depth-scale)) calc(var(--ly) * 12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-inset-sm {
+  box-shadow:
+    inset calc(var(--lx) * -2px * var(--depth-scale)) calc(var(--ly) * -2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-shadow),
+    inset calc(var(--lx) * 2px * var(--depth-scale)) calc(var(--ly) * 2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-inset-press {
+  box-shadow:
+    inset calc(var(--lx) * -3px * var(--depth-scale)) calc(var(--ly) * -3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-shadow),
+    inset calc(var(--lx) * 3px * var(--depth-scale)) calc(var(--ly) * 3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-inset-md {
+  box-shadow:
+    inset calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-shadow),
+    inset calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-inset-lg {
+  box-shadow:
+    inset calc(var(--lx) * -6px * var(--depth-scale)) calc(var(--ly) * -6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
+    inset calc(var(--lx) * 6px * var(--depth-scale)) calc(var(--ly) * 6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
+}
+
+@utility neu-inset-xl {
+  box-shadow:
+    inset calc(var(--lx) * -8px * var(--depth-scale)) calc(var(--ly) * -8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-shadow),
+    inset calc(var(--lx) * 8px * var(--depth-scale)) calc(var(--ly) * 8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-highlight);
 }
 
 @layer base {
@@ -95,4 +182,20 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.atelier-coverflow .swiper-slide {
+  transition: transform 400ms ease, filter 400ms ease;
+}
+
+.atelier-coverflow .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.atelier-coverflow .swiper-slide-shadow-left,
+.atelier-coverflow .swiper-slide-shadow-right {
+  background-image: none !important;
 }
