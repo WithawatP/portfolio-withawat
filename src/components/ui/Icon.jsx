@@ -12,6 +12,7 @@ const icons = {
     </>
   ),
   check: <path d="m5 13 4 4L19 7" />,
+  chevronDown: <path d="m6 9 6 6 6-6" />,
   copy: (
     <>
       <rect x="9" y="9" width="11" height="11" rx="2" />

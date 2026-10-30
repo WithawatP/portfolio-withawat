@@ -44,9 +44,9 @@ export default function QuickContactRow({ href, label, value, icon }) {
   return (
     <Component
       {...componentProps}
-      className={`group flex min-w-0 items-center gap-3 rounded-2xl bg-surface p-3 text-left neu-raise-sm transition-all duration-300 hover:-translate-y-0.5 hover:neu-raise-lift active:scale-[0.99] active:neu-inset-press cursor-pointer ${FOCUS}`}
+      className={`group flex min-w-0 items-center gap-3 rounded-2xl bg-surface p-2.5 text-left neu-raise-sm transition-all duration-300 hover:-translate-y-0.5 hover:neu-raise-lift active:scale-[0.99] active:neu-inset-press cursor-pointer sm:p-3 ${FOCUS}`}
     >
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface text-faint neu-raise-xs">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface text-faint neu-inset-sm max-[399px]:hidden">
         <Icon name={icon} className="h-4 w-4" />
       </span>
       <span className="min-w-0 flex-1">
@@ -56,7 +56,7 @@ export default function QuickContactRow({ href, label, value, icon }) {
         >
           {statusLabel}
         </span>
-        <span className="block break-all text-base font-semibold leading-snug text-ink">
+        <span className="block text-[15px] font-semibold leading-snug text-ink [overflow-wrap:anywhere] sm:text-base">
           {value}
         </span>
       </span>

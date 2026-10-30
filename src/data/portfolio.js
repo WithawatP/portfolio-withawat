@@ -128,40 +128,49 @@ export const experiences = [
     company: 'Generation Thailand',
     period: 'July 2026 – October 2026',
     role: 'Junior Software Developer Student',
-    highlights:
+    highlights: [
       'Completed an intensive 4-month software engineering bootcamp focusing on MERN Stack, Agile methodologies, Git/GitHub collaborative workflows, and team-based software delivery.',
+    ],
     tags: ['MERN', 'Agile', 'Git / GitHub'],
   },
   {
     company: 'PH Capital Company Limited',
     period: 'June 2023 – September 2024',
     role: 'Shift Manager',
-    highlights:
-      'Managed shift operations and inventory control under high-pressure seasonal demands while maintaining zero customer complaints. Coached team members and resolved operational bottlenecks efficiently.',
+    highlights: [
+      'Rotated as one of three shift managers at a restaurant and built the schedule for a team of 5.',
+      'Ran inventory control through festival-day peaks, including a weekly Monday stock count to the gram.',
+      'Resolved wrong orders on the spot without stalling the line and trained staff on first-line fixes. No complaint reports reached me in this role.',
+    ],
     tags: ['Operations', 'Inventory control', 'Team coaching'],
   },
   {
     company: 'Versatile Haus',
     period: 'March 2023 – May 2023',
     role: 'Front-End Developer & Quality Control (QC)',
-    highlights:
-      'Developed responsive front-end templates and conducted rigorous Quality Control (QC), cross-browser testing, and visual debugging to guarantee UI/UX accuracy prior to client handoff.',
+    highlights: [
+      'Developed responsive front-end templates.',
+      "Tested 20 of the company's client-facing templates in Chrome, Edge, and Brave, mostly through DevTools, before handoff; most defects were responsive-layout issues.",
+    ],
     tags: ['Front-end', 'QC', 'Responsive testing'],
   },
   {
     company: 'Versatile Haus',
     period: 'March 2021 – September 2021',
     role: 'Graphic Design Intern',
-    highlights:
+    highlights: [
       'Designed web layouts, banners, and digital marketing assets for e-commerce clients using Adobe Illustrator, applying core UI/UX visual hierarchy principles.',
+    ],
     tags: ['Adobe Illustrator', 'UI/UX', 'E-commerce'],
   },
   {
     company: 'Topview Point Co., Ltd.',
     period: 'October 2019 – February 2020',
     role: 'IT Support Intern',
-    highlights:
-      'Delivered comprehensive IT troubleshooting and hardware maintenance; successfully provisioned, upgraded, and maintained enterprise workstation fleets to ensure seamless daily operations and minimize technical downtime.',
+    highlights: [
+      'Looked after 80+ machines at an IT outsourcing company serving offices and schools: diagnosed faults, repaired and upgraded units, and sent them back out.',
+      'Carried out on-site installations at customer offices and homes.',
+    ],
     tags: ['IT support', 'Hardware', 'Troubleshooting'],
   },
 ]

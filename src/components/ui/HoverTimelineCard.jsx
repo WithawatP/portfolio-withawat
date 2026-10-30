@@ -1,42 +1,161 @@
-import React from 'react';
-import Pill from './Pill';
+import { useEffect, useId, useRef, useState } from 'react'
+import Icon from './Icon'
+import Pill from './Pill'
+import { FOCUS } from '../../lib/styles'
 
-export default function HoverTimelineCard({ role, company, period, description, skills = [], isLast }) {
+const HOVER_OPEN_DELAY = 100
+const HOVER_CLOSE_DELAY = 120
+
+export default function HoverTimelineCard({
+  role,
+  company,
+  period,
+  highlights = [],
+  skills = [],
+  isLast,
+  defaultOpen = false,
+}) {
+  const [hovered, setHovered] = useState(false)
+  const [pinned, setPinned] = useState(
+    () =>
+      defaultOpen &&
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 639px)').matches,
+  )
+  const open = hovered || pinned
+  const openTimer = useRef(null)
+  const closeTimer = useRef(null)
+  const id = useId()
+  const buttonId = `${id}-button`
+  const panelId = `${id}-panel`
+
+  const clearTimers = () => {
+    window.clearTimeout(openTimer.current)
+    window.clearTimeout(closeTimer.current)
+  }
+
+  useEffect(() => clearTimers, [])
+
+  const handlePointerEnter = (event) => {
+    if (event.pointerType !== 'mouse') return
+    clearTimers()
+    openTimer.current = window.setTimeout(
+      () => setHovered(true),
+      HOVER_OPEN_DELAY,
+    )
+  }
+
+  const handlePointerLeave = (event) => {
+    if (event.pointerType !== 'mouse') return
+    clearTimers()
+    closeTimer.current = window.setTimeout(
+      () => setHovered(false),
+      HOVER_CLOSE_DELAY,
+    )
+  }
+
+  const handleClick = () => {
+    if (hovered && !pinned) {
+      setPinned(true)
+      return
+    }
+    setPinned((value) => !value)
+  }
+
   return (
-    <div className="group flex gap-4 sm:gap-6 w-full mb-2">
-      <div className="flex flex-col items-center mt-2">
-        <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-surface neu-raise-node transition-all duration-300 group-hover:neu-inset-sm">
-          <div className="h-2 w-2 rounded-full bg-faint transition-opacity duration-300 group-hover:opacity-0" />
-          <span className="absolute flex h-2.5 w-2.5 items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
-          </span>
+    <li className="flex w-full gap-4 sm:gap-6">
+      <div aria-hidden="true" className="mt-2 flex flex-col items-center">
+        <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-surface neu-inset-sm">
+          {open ? (
+            <span className="relative flex h-2 w-2">
+              {pinned ? (
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-led opacity-75" />
+              ) : null}
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-led" />
+            </span>
+          ) : (
+            <span className="h-2 w-2 rounded-full bg-faint" />
+          )}
         </div>
-        {!isLast && <div className="w-[2px] flex-1 bg-recessed mt-3 mb-1 rounded-full opacity-50" />}
+        {!isLast ? (
+          <div className="mb-1 mt-3 w-[2px] flex-1 rounded-full bg-recessed opacity-50" />
+        ) : null}
       </div>
 
-      <div className="flex-1 bg-surface rounded-[2rem] neu-inset-lg p-6 mb-8 cursor-pointer transition-all duration-300 hover:neu-inset-xl">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-          <h3 className="text-lg font-bold text-ink">{role}</h3>
-          <span className="text-sm font-medium text-muted">{period}</span>
-        </div>
+      <div
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        className={`mb-3 min-w-0 flex-1 rounded-[2rem] bg-surface p-4 transition-transform duration-200 sm:mb-8 sm:p-6 ${
+          open ? 'neu-inset-lg' : 'neu-raise-md'
+        }`}
+      >
+        <h3 className="text-lg font-bold text-ink">
+          <button
+            id={buttonId}
+            type="button"
+            aria-expanded={open}
+            aria-controls={panelId}
+            onClick={handleClick}
+            className={`${FOCUS} flex min-h-14 w-full cursor-pointer flex-col gap-2 rounded-2xl text-left active:scale-[0.99] sm:flex-row sm:items-center sm:justify-between`}
+          >
+            <span className="min-w-0">
+              <span className="block text-lg font-bold leading-snug text-ink">
+                {role}
+              </span>
+              <span className="mt-1 block text-sm font-medium text-muted">
+                {company}
+              </span>
+            </span>
+            <span className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
+              <span className="text-[13px] font-medium text-muted sm:text-sm">
+                {period}
+              </span>
+              <Icon
+                name="chevronDown"
+                className={`h-4 w-4 text-faint transition-transform duration-300 ${
+                  open ? 'rotate-180' : ''
+                }`}
+              />
+            </span>
+          </button>
+        </h3>
 
-        <div className="grid grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100 transition-all duration-500 ease-in-out">
+        <div
+          id={panelId}
+          role="region"
+          aria-labelledby={buttonId}
+          inert={!open}
+          className={`grid transition-[grid-template-rows,opacity] duration-500 ease-in-out ${
+            open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+          }`}
+        >
           <div className="overflow-hidden">
-            <div className="pt-4 mt-4 border-t border-recessed/50">
-              <p className="text-base font-semibold text-ink mb-3">{company}</p>
-              <p className="text-[14px] leading-relaxed text-ink mb-5">{description}</p>
-              <div className="flex flex-wrap gap-2">
-                {skills?.map((skill, index) => (
-                  <Pill key={index} className="neu-inset-press! !cursor-default px-4 py-1.5 text-[12px]">
-                    {skill}
-                  </Pill>
+            <div className="pt-4">
+              <ul className="mb-5 flex flex-col gap-2">
+                {highlights.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="flex gap-2.5 text-[14px] leading-relaxed text-ink"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="mt-2 h-2 w-2 shrink-0 rounded-full bg-surface neu-inset-sm"
+                    />
+                    <span>{highlight}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
+              <ul className="flex flex-wrap gap-2">
+                {skills.map((skill) => (
+                  <li key={skill}>
+                    <Pill>{skill}</Pill>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </li>
+  )
 }

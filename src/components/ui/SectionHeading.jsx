@@ -1,6 +1,6 @@
 export default function SectionHeading({ id, title, intro, meta }) {
   return (
-    <header className="rise mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <header className="rise mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
         <h2
           id={id}

@@ -9,7 +9,7 @@ const navLinks = [
 
 export default function Header({ className = '' }) {
   return (
-    <header className={`sticky top-6 z-50 mx-auto w-full rounded-full bg-surface/85 px-8 py-3 neu-raise-md backdrop-blur-md transition-all duration-300 ${className}`}>
+    <header className={`sticky top-6 z-50 mx-auto w-full rounded-full bg-surface/85 px-4 py-3 neu-raise-md backdrop-blur-md transition-all duration-300 sm:px-8 ${className}`}>
       <div className="mx-auto flex w-full items-center justify-between gap-4">
         <a
           href="#home"

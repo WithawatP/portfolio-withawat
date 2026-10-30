@@ -21,7 +21,7 @@ export default function Contact() {
           <div>
             <a
               href={`mailto:${profile.email}`}
-              className={`block break-all rounded-lg text-[clamp(1.5rem,3.8vw,2.75rem)] font-extrabold leading-tight tracking-[-0.04em] text-ink underline-offset-8 transition-all duration-200 hover:underline ${FOCUS}`}
+              className={`block rounded-lg text-[clamp(1.5rem,3.8vw,2.75rem)] font-extrabold leading-tight tracking-[-0.04em] text-ink underline-offset-8 transition-all duration-200 hover:underline [overflow-wrap:anywhere] ${FOCUS}`}
             >
               {profile.email}
             </a>
