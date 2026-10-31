@@ -1,12 +1,9 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import Icon from './Icon'
 import Pill from './Pill'
 import { FOCUS } from '../../lib/styles'
 
-const HOVER_OPEN_DELAY = 100
-const HOVER_CLOSE_DELAY = 120
-
-export default function HoverTimelineCard({
+export default function TimelineItem({
   role,
   company,
   period,
@@ -15,51 +12,19 @@ export default function HoverTimelineCard({
   isLast,
   defaultOpen = false,
 }) {
-  const [hovered, setHovered] = useState(false)
-  const [pinned, setPinned] = useState(
-    () =>
-      defaultOpen &&
-      typeof window !== 'undefined' &&
-      window.matchMedia('(max-width: 639px)').matches,
-  )
-  const open = hovered || pinned
-  const openTimer = useRef(null)
-  const closeTimer = useRef(null)
+  const [open, setOpen] = useState(defaultOpen)
   const id = useId()
   const buttonId = `${id}-button`
   const panelId = `${id}-panel`
+  const headerButtonRef = useRef(null)
 
-  const clearTimers = () => {
-    window.clearTimeout(openTimer.current)
-    window.clearTimeout(closeTimer.current)
-  }
-
-  useEffect(() => clearTimers, [])
-
-  const handlePointerEnter = (event) => {
-    if (event.pointerType !== 'mouse') return
-    clearTimers()
-    openTimer.current = window.setTimeout(
-      () => setHovered(true),
-      HOVER_OPEN_DELAY,
-    )
-  }
-
-  const handlePointerLeave = (event) => {
-    if (event.pointerType !== 'mouse') return
-    clearTimers()
-    closeTimer.current = window.setTimeout(
-      () => setHovered(false),
-      HOVER_CLOSE_DELAY,
-    )
-  }
-
-  const handleClick = () => {
-    if (hovered && !pinned) {
-      setPinned(true)
-      return
-    }
-    setPinned((value) => !value)
+  function handleCardClick(event) {
+    if (window.getSelection()?.toString()) return
+    const target = event.target
+    if (!(target instanceof Element)) return
+    const blocker = target.closest('[data-no-toggle], a, button')
+    if (blocker && blocker !== headerButtonRef.current) return
+    setOpen((value) => !value)
   }
 
   return (
@@ -68,9 +33,7 @@ export default function HoverTimelineCard({
         <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-surface neu-inset-sm">
           {open ? (
             <span className="relative flex h-2 w-2">
-              {pinned ? (
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-led opacity-75" />
-              ) : null}
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-led opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-led" />
             </span>
           ) : (
@@ -83,20 +46,21 @@ export default function HoverTimelineCard({
       </div>
 
       <div
-        onPointerEnter={handlePointerEnter}
-        onPointerLeave={handlePointerLeave}
-        className={`mb-3 min-w-0 flex-1 rounded-[2rem] bg-surface p-4 transition-transform duration-200 sm:mb-8 sm:p-6 ${
-          open ? 'neu-inset-lg' : 'neu-raise-md'
+        onClick={handleCardClick}
+        className={`mb-3 min-w-0 flex-1 cursor-pointer rounded-2xl bg-surface p-4 transition-transform duration-200 active:scale-[0.99] sm:mb-8 sm:rounded-[2rem] sm:p-6 ${
+          open
+            ? 'neu-inset-lg'
+            : 'neu-raise-md hover:-translate-y-px'
         }`}
       >
         <h3 className="text-lg font-bold text-ink">
           <button
+            ref={headerButtonRef}
             id={buttonId}
             type="button"
             aria-expanded={open}
             aria-controls={panelId}
-            onClick={handleClick}
-            className={`${FOCUS} flex min-h-14 w-full cursor-pointer flex-col gap-2 rounded-2xl text-left active:scale-[0.99] sm:flex-row sm:items-center sm:justify-between`}
+            className={`${FOCUS} flex min-h-14 w-full cursor-pointer flex-col gap-2 rounded-2xl text-left sm:flex-row sm:items-center sm:justify-between`}
           >
             <span className="min-w-0">
               <span className="block text-lg font-bold leading-snug text-ink">

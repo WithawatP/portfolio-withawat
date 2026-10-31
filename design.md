@@ -120,6 +120,7 @@ Most visitors arrive on a phone. Design at 390px first, then enhance at 768px an
 - First screen on mobile must show: the name (display face), the availability LED, and the primary action, without scrolling.
 - Touch targets at least 44 by 44px with at least 8px between controls. Nothing is reachable only by hover.
 - Layout collapses to one column; the most important cell comes first. Bento cells stack, they are not just shrunk.
+- Mobile section labels in the bottom bar: Home, Project, Work, Skills, Contact (12px minimum, 48px touch height).
 - Navigation: mobile uses a fixed bottom bar attached to the screen edge, full width, not a floating pill (inset groove with a raised knob that slides to the active section; respects `safe-area-inset-bottom`). Desktop uses the top header.
 - Switches and segmented controls are full-width on mobile.
 - Long text wraps; no horizontal scroll at 360px.
@@ -183,7 +184,7 @@ The primary action buttons are keys on an old remote control: chunky plastic or 
 - Hero: mobile first screen as in section 6. Desktop: two columns; left name and role, right status LED and quick-contact rows (raised controls).
 - Featured project: unequal bento: title and role tile, screens in a tray (inset window), the Build/Test panel, tech stack, links.
 - Experience: vertical groove with LED nodes. Each row is a real `<button>` toggle (`aria-expanded`, `aria-controls`). Collapsed = raised key; open = pressed-in tray with the details revealed. The company name is visible when collapsed. The node LED is lit (with the status pulse) while the row is open.
-  - One state only: `open`. Click, tap, or Enter/Space toggles it. There is NO hover expansion on any device, and focus alone never opens a row.
+  - One state only: `open`. Click, tap, or Enter/Space toggles it. The whole card surface is the click target: one handler on the card container toggles `open`, while the inner header `<button>` provides keyboard and screen-reader access (its click bubbles to the container, so nothing toggles twice). Clicks made while text is selected are ignored. There is NO hover expansion on any device, and focus alone never opens a row.
   - On hover-capable devices a closed row may lift by 1px as a hint (Tailwind's `hover:` variant already applies only to hover-capable devices). Never change the content on hover.
   - The latest role starts open at every screen width; the others start closed. Details animate with `grid-template-rows` 0fr to 1fr, instant under reduced motion. Highlights render as a list of up to 3 short bullets.
 - Skills: one control-panel layout with uneven modules; tags are engraved labels.

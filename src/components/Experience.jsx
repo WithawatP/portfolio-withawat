@@ -1,6 +1,6 @@
 import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
-import HoverTimelineCard from './ui/HoverTimelineCard'
+import TimelineItem from './ui/TimelineItem'
 import { experiences } from '../data/portfolio'
 
 export default function Experience() {
@@ -15,7 +15,7 @@ export default function Experience() {
 
       <ol className="flex flex-col">
         {experiences.map((experience, index) => (
-          <HoverTimelineCard
+          <TimelineItem
             key={`${experience.company}-${experience.period}`}
             role={experience.role}
             company={experience.company}

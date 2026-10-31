@@ -69,6 +69,11 @@
     calc(var(--lx) * 12px * var(--depth-scale)) calc(var(--ly) * 12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-highlight);
 }
 
+@utility neu-raise-bar {
+  box-shadow:
+    0 calc(-6px * var(--depth-scale)) calc(14px * var(--depth-scale)) calc(-4px * var(--depth-scale)) var(--color-shadow);
+}
+
 @utility neu-inset-sm {
   box-shadow:
     inset calc(var(--lx) * -2px * var(--depth-scale)) calc(var(--ly) * -2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-shadow),
@@ -103,11 +108,17 @@
   html {
     background-color: var(--color-surface);
     color-scheme: light;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 1rem;
     scrollbar-gutter: stable both-edges;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      scroll-padding-top: 6rem;
+    }
   }
 
   body {
