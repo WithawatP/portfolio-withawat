@@ -15,7 +15,7 @@ export default function Hero() {
   )
 
   return (
-    <SectionCard id="home" labelledBy="hero-title">
+    <SectionCard id="home" labelledBy="hero-title" extrude={false}>
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-6">
         <div className="flex min-w-0 flex-col lg:col-span-7">
           <h1

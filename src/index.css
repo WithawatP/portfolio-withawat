@@ -144,6 +144,79 @@
   }
 }
 
+/* Motion moment 1: a section rises from the surface as it enters the viewport.
+   The shadow lives on a layer whose opacity changes, so box-shadow is never animated.
+   Scrubbed by scroll, so the progress is linear and has no duration. */
+@keyframes extrude-rise {
+  from {
+    scale: 0.97;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+@keyframes extrude-shadow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .extrude {
+    position: relative;
+    isolation: isolate;
+    box-shadow: none;
+    /* Keeps the top edge in place while scaled, so anchor navigation lands correctly. */
+    transform-origin: 50% 0;
+  }
+
+  .extrude::before {
+    @apply neu-raise-lg;
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  @supports (animation-timeline: view()) {
+    .extrude {
+      view-timeline-name: --extrude;
+      animation: extrude-rise linear both;
+      animation-timeline: --extrude;
+      animation-range: entry 0px entry 240px;
+    }
+
+    .extrude::before {
+      animation: extrude-shadow linear both;
+      animation-timeline: --extrude;
+      animation-range: entry 0px entry 240px;
+    }
+  }
+
+  @supports not (animation-timeline: view()) {
+    .extrude,
+    .extrude::before {
+      transition:
+        scale 500ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        opacity 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .extrude[data-extrude="pending"] {
+      scale: 0.97;
+    }
+
+    .extrude[data-extrude="pending"]::before {
+      opacity: 0;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
