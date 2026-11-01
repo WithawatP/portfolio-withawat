@@ -8,8 +8,11 @@ export default function KnobSwitch({
   ariaLabel,
   role = 'tablist',
   idPrefix,
+  showLed = false,
+  knobMotion = 'duration-[350ms] ease-[cubic-bezier(0.2,0.7,0.2,1)]',
   className = '',
 }) {
+  const isRadio = role === 'radiogroup'
   const buttonRefs = useRef([])
   const activeIndex = Math.max(
     0,
@@ -26,9 +29,9 @@ export default function KnobSwitch({
   const handleKeyDown = (event, index) => {
     let nextIndex = index
 
-    if (event.key === 'ArrowLeft') {
+    if (event.key === 'ArrowLeft' || (isRadio && event.key === 'ArrowUp')) {
       nextIndex = (index - 1 + options.length) % options.length
-    } else if (event.key === 'ArrowRight') {
+    } else if (event.key === 'ArrowRight' || (isRadio && event.key === 'ArrowDown')) {
       nextIndex = (index + 1) % options.length
     } else if (event.key === 'Home') {
       nextIndex = 0
@@ -46,12 +49,12 @@ export default function KnobSwitch({
     <div
       role={role}
       aria-label={ariaLabel}
-      aria-orientation="horizontal"
+      aria-orientation={isRadio ? undefined : 'horizontal'}
       className={`relative rounded-2xl bg-surface p-1 neu-inset-md ${className}`}
     >
       <span
         aria-hidden="true"
-        className="absolute left-1 top-1 bottom-1 rounded-xl bg-surface neu-raise-sm transition-transform duration-[350ms] ease-[cubic-bezier(0.2,0.7,0.2,1)]"
+        className={`absolute left-1 top-1 bottom-1 rounded-xl bg-surface neu-raise-sm transition-transform ${knobMotion}`}
         style={{
           width: `calc((100% - 0.5rem) / ${options.length})`,
           transform: `translate3d(${activeIndex * 100}%, 0, 0)`,
@@ -71,8 +74,9 @@ export default function KnobSwitch({
               }}
               id={idPrefix ? `${idPrefix}-tab-${option.id}` : undefined}
               type="button"
-              role="tab"
-              aria-selected={isActive}
+              role={isRadio ? 'radio' : 'tab'}
+              aria-checked={isRadio ? isActive : undefined}
+              aria-selected={isRadio ? undefined : isActive}
               aria-controls={idPrefix ? `${idPrefix}-panel-${option.id}` : undefined}
               tabIndex={isActive ? 0 : -1}
               onClick={() => select(index)}
@@ -81,6 +85,14 @@ export default function KnobSwitch({
                 isActive ? 'text-ink' : 'text-muted'
               }`}
             >
+              {showLed && (
+                <span
+                  aria-hidden="true"
+                  className={`mr-2 h-2 w-2 shrink-0 rounded-full transition-colors duration-200 ${
+                    isActive ? 'bg-led' : 'bg-faint'
+                  }`}
+                />
+              )}
               <span className="truncate">{option.label}</span>
             </button>
           )

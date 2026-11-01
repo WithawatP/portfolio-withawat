@@ -125,6 +125,49 @@ export const featuredProject = {
       icon: 'presentation',
     },
   ],
+  testing: {
+    title: 'How I tested',
+    method:
+      'Manual API testing in Postman: I sent requests one endpoint at a time and checked the status code and response myself.',
+    requestCount: '14',
+    requestLabel: 'requests in one Postman collection, grouped in 2 folders',
+    folders: [
+      {
+        label: 'Auth',
+        items: [
+          'Login',
+          'Admin login',
+          'Register',
+          'Logout',
+          'Refresh token',
+          'Forget password',
+          'Reset password',
+          'Edit password',
+          'Get data',
+          'Get admin data',
+        ],
+      },
+      {
+        label: 'Products',
+        items: ['Get', 'Add', 'Update', 'Delete'],
+      },
+    ],
+    bugsTitle: 'Bugs I found and fixed',
+    bugs: [
+      {
+        label: 'Bug 1',
+        symptom: "The userId was sent in the URL, so anyone could view another user's data.",
+        cause: 'The server trusted the userId coming from the client.',
+        fix: 'Read the userId from the JWT instead (req.user.userId).',
+      },
+      {
+        label: 'Bug 2',
+        symptom: 'The token expired after 15 minutes, and plain fetch calls then broke.',
+        cause: 'The client had no mechanism to renew the token.',
+        fix: 'Moved to an axios instance with a refresh-token interceptor.',
+      },
+    ],
+  },
 }
 
 export const experiences = [

@@ -5,6 +5,7 @@ import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
 import SkillChip from './ui/SkillChip'
+import KnobSwitch from './ui/KnobSwitch'
 import Icon from './ui/Icon'
 import { FOCUS, LEVEL_3_ACTIVE, LEVEL_3_COMPACT, LEVEL_3_HOVER } from '../lib/styles'
 import { useMediaQuery } from '../lib/useMediaQuery'
@@ -62,9 +63,87 @@ function FlowerMark({ className = '' }) {
   )
 }
 
+const projectViews = [
+  { id: 'build', label: 'Build' },
+  { id: 'test', label: 'Test' },
+]
+
+function BuildView({ contributions }) {
+  return (
+    <>
+      <h3 className="text-base font-bold text-ink">What I built</h3>
+      <ul className="mt-5 flex flex-col gap-5">
+        {contributions.map((contribution) => (
+          <li key={contribution.title} className="flex gap-4">
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface text-ink neu-raise-xs">
+              <Icon name="check" className="h-4 w-4" />
+            </span>
+            <div className="min-w-0">
+              <h4 className="text-base font-bold text-ink">{contribution.title}</h4>
+              <p className="mt-1 text-base leading-relaxed text-ink">{contribution.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
+
+function TermList({ rows, className = '' }) {
+  return (
+    <dl className={`flex flex-col gap-2 ${className}`}>
+      {rows.map(([term, detail]) => (
+        <div key={term} className="sm:grid sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-3">
+          <dt className="mr-2 inline text-[13px] font-bold leading-6 text-ink sm:mr-0">{term}</dt>
+          <dd className="inline text-base leading-relaxed text-ink">{detail}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+function TestView({ testing }) {
+  return (
+    <>
+      <h3 className="text-base font-bold text-ink">{testing.title}</h3>
+      <p className="mt-3 text-base leading-relaxed text-ink">{testing.method}</p>
+
+      <div className="mt-5 flex items-center gap-4">
+        <span className="font-display text-[2.25rem] font-bold leading-none text-ink">
+          {testing.requestCount}
+        </span>
+        <p className="text-[13px] font-medium text-ink">{testing.requestLabel}</p>
+      </div>
+
+      <TermList
+        className="mt-4"
+        rows={testing.folders.map((folder) => [folder.label, folder.items.join(', ')])}
+      />
+
+      <h4 className="mt-6 text-base font-bold text-ink">{testing.bugsTitle}</h4>
+      <ul className="mt-4 flex flex-col gap-5">
+        {testing.bugs.map((bug) => (
+          <li key={bug.label}>
+            <p className="text-[13px] font-medium text-ink">{bug.label}</p>
+            <TermList
+              className="mt-2"
+              rows={[
+                ['Symptom', bug.symptom],
+                ['Cause', bug.cause],
+                ['Fix', bug.fix],
+              ]}
+            />
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
+
 export default function FeaturedProject() {
   const project = featuredProject
   const [techOpen, setTechOpen] = useState(false)
+  const [projectView, setProjectView] = useState('build')
   const isSmall = useMediaQuery('(max-width: 639px)')
   const techPanelId = useId()
 
@@ -154,20 +233,37 @@ export default function FeaturedProject() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-12">
         <InsetPanel className="lg:col-span-7">
-          <h3 className="text-base font-bold text-ink">What I built</h3>
-          <ul className="mt-5 flex flex-col gap-5">
-            {project.contributions.map((contribution) => (
-              <li key={contribution.title} className="flex gap-4">
-                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface text-ink neu-raise-xs">
-                  <Icon name="check" className="h-4 w-4" />
-                </span>
-                <div className="min-w-0">
-                  <h4 className="text-base font-bold text-ink">{contribution.title}</h4>
-                  <p className="mt-1 text-base leading-relaxed text-ink">{contribution.body}</p>
+          <KnobSwitch
+            options={projectViews}
+            value={projectView}
+            onChange={setProjectView}
+            ariaLabel="Project view"
+            role="radiogroup"
+            showLed
+            knobMotion="duration-[450ms] ease-[cubic-bezier(0.3,1.3,0.5,1)]"
+            className="sm:max-w-xs"
+          />
+          {/* Both views share one grid cell, so the panel keeps the taller height. */}
+          <div aria-live="polite" className="mt-6 grid">
+            {projectViews.map((view) => {
+              const isActive = view.id === projectView
+              return (
+                <div
+                  key={view.id}
+                  inert={!isActive}
+                  className={`col-start-1 row-start-1 min-w-0 transition-[opacity,visibility] duration-[400ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${
+                    isActive ? 'visible opacity-100' : 'invisible opacity-0'
+                  }`}
+                >
+                  {view.id === 'build' ? (
+                    <BuildView contributions={project.contributions} />
+                  ) : (
+                    <TestView testing={project.testing} />
+                  )}
                 </div>
-              </li>
-            ))}
-          </ul>
+              )
+            })}
+          </div>
         </InsetPanel>
 
         <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
