@@ -9,6 +9,7 @@ export default function TimelineItem({
   period,
   highlights = [],
   skills = [],
+  isLast,
   defaultOpen = false,
 }) {
   const [open, setOpen] = useState(defaultOpen)
@@ -39,6 +40,9 @@ export default function TimelineItem({
             <span className="h-2 w-2 rounded-full bg-faint" />
           )}
         </div>
+        {!isLast ? (
+          <div className="mb-1 mt-3 w-[2px] flex-1 rounded-full bg-recessed opacity-50" />
+        ) : null}
       </div>
 
       <div

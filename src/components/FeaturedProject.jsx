@@ -107,7 +107,7 @@ export default function FeaturedProject() {
       </InsetPanel>
 
       <div className="mt-6">
-        <div className="rounded-2xl bg-surface p-3 neu-inset-lg sm:rounded-3xl sm:p-4">
+        <div className="inset-window-tray rounded-2xl bg-surface p-3 neu-inset-lg sm:rounded-3xl sm:p-4">
           <Swiper
             effect={'coverflow'}
             grabCursor={true}
@@ -129,15 +129,17 @@ export default function FeaturedProject() {
               <SwiperSlide key={shot.caption} className="!w-[78%] sm:!w-[58%] lg:!w-[38%]">
                 <figure className="min-w-0">
                   <div className="rounded-2xl bg-surface p-2 neu-raise-sm sm:rounded-3xl">
-                    <img
-                      src={shot.src}
-                      alt={shot.alt}
-                      width="1440"
-                      height="900"
-                      loading="lazy"
-                      decoding="async"
-                      className="aspect-[16/10] w-full rounded-xl object-cover sm:rounded-2xl"
-                    />
+                    <div className="overflow-hidden rounded-xl sm:rounded-2xl">
+                      <img
+                        src={shot.src}
+                        alt={shot.alt}
+                        width="1440"
+                        height="900"
+                        loading="lazy"
+                        decoding="async"
+                        className="inset-window-img aspect-[16/10] w-full object-cover"
+                      />
+                    </div>
                   </div>
                   <figcaption className="mt-2 px-2 text-center text-[13px] font-medium text-ink">
                     {shot.caption}

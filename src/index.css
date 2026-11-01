@@ -177,32 +177,15 @@
   }
 }
 
-/* Motion moment 4: the timeline groove fills as an LED strip, led by a raised knob. */
-@keyframes rail-fill {
+/* Motion moment 2: the screenshot shifts inside its frame while the tray stays still.
+   Translate stays within the 7% margin that the scale adds on each side. */
+@keyframes inset-window {
   from {
-    scale: 1 0;
+    translate: 0 -6%;
   }
   to {
-    scale: 1 1;
+    translate: 0 6%;
   }
-}
-
-@keyframes rail-knob {
-  from {
-    translate: 0 0;
-  }
-  to {
-    translate: 0 100%;
-  }
-}
-
-.rail-fill {
-  transform-origin: 50% 0;
-}
-
-/* Without scroll-driven animations or with reduced motion: the final state, a full strip. */
-.rail-knob {
-  translate: 0 100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -251,21 +234,17 @@
       animation-range: entry 80px entry 480px;
     }
 
-    /* Range: the knob holds at 60% of the viewport height for the whole list. */
-    .rail-timeline {
-      view-timeline-name: --rail;
+    /* Named on the tray: Swiper's overflow would otherwise become the image's scrollport. */
+    .inset-window-tray {
+      view-timeline-name: --inset-window;
     }
 
-    .rail-fill {
-      animation: rail-fill linear both;
-      animation-timeline: --rail;
-      animation-range: cover 40vh cover calc(100% - 60vh);
-    }
-
-    .rail-knob {
-      animation: rail-knob linear both;
-      animation-timeline: --rail;
-      animation-range: cover 40vh cover calc(100% - 60vh);
+    /* Only scaled here, so without this motion the whole screenshot shows uncropped. */
+    .inset-window-img {
+      scale: 1.14;
+      animation: inset-window linear both;
+      animation-timeline: --inset-window;
+      animation-range: cover 20% cover 80%;
     }
   }
 
