@@ -26,6 +26,6 @@ Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `
 - One task at a time. If a task touches more than about 3 files, propose a plan first and wait for approval.
 - Do not add dependencies without asking.
 - Verify at 360, 390, 768 and 1440 px: no horizontal overflow. Report the page height at 390.
-- The skill's `inspect.mjs` is for measuring. Waived findings: `shadow`, `gradient` / `button-fx` / `text-shadow` from UiverseButton, `few-pictures`, `font-fallback`, and `small-text` for text of 12px or larger.
+- The skill's `inspect.mjs` is for measuring. Waived findings: `shadow`, `gradient` / `button-fx` / `text-shadow` from UiverseButton, `few-pictures`, `font-fallback`, `empty-screens`, and `small-text` for text of 12px or larger.
 - End each task with a short report: files changed, measurements, anything uncertain.
 - The roadmap and decisions are in `ROADMAP.md`. Read it at the start of a session and update it at the end of each phase.

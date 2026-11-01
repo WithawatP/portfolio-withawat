@@ -11,7 +11,8 @@ Known conflicts and how to treat them:
 - `draw.mjs` (direction dealer), `assets.mjs` (found pictures), and the "add a video or photographs" advice: do not use. The direction is fixed here, and the only images are the owner's project screenshots and, optionally, one portrait supplied by the owner (never stock or AI-generated). `WARN no-footage` is accepted.
 - `UiverseButton` is the one deliberate exception (section 8b): the skill's `gradient`, `button-fx`, and `text-shadow` findings are waived for that component only. `few-pictures` is waived too.
 - `font-fallback` (the Inter warning from `UiverseButton`) and `small-text` for text of 12px or larger (the minimum in section 5) are waived.
-- Everything else in the skill still applies and must pass: no eyebrow labels, no gradients, no thin rules or outlined boxes, no icon-topped feature cards or rows of identical cards, no covered text, headlines at most two lines, and no empty screens (`FAIL empty-screens` is a real design problem to fix).
+- `empty-screens` is waived (owner decision, Phase 4). The rule counts panels in `--surface` as empty because it cannot see `neu-*` depth, so a panel the eye reads as solid scores zero. Do not add `--recess` fills only to raise this score.
+- Everything else in the skill still applies and must pass: no eyebrow labels, no gradients, no thin rules or outlined boxes, no icon-topped feature cards or rows of identical cards, no covered text, and headlines at most two lines.
 - Run `inspect.mjs` at 1440, 768 and 390 px and `lint.mjs`; fix everything except the waivers above.
 
 ## 1. Concept

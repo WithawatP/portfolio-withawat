@@ -37,6 +37,22 @@ const chipSpanClass = (items, index) => {
     : "col-span-2 @max-[260px]:col-span-1 sm:@max-[360px]:col-span-1";
 };
 
+// Dev tray from 1024px: every group ends on three rows at 1280px and up. Between 1024px and 1279px
+// three groups across would clip the half-width chips, so Languages takes its own row.
+// Important is needed to win over the container rules in chipGridClass and chipSpanClass.
+const devGroupClass = (groupIndex) =>
+  groupIndex === 0 ? "lg:col-span-2 xl:col-span-1" : "";
+
+const devGridClass = (groupIndex) =>
+  groupIndex === 0 ? "lg:grid-cols-3! xl:grid-cols-1!" : "lg:grid-cols-2!";
+
+const devChipClass = (items, groupIndex, itemIndex) => {
+  if (groupIndex === 0) return "lg:col-span-1!";
+  return items.length % 2 === 1 && itemIndex === items.length - 1
+    ? "lg:col-span-2!"
+    : "";
+};
+
 export default function Skills() {
   const [primary, ...secondary] = skillGroups;
   const [activeTab, setActiveTab] = useState("dev");
@@ -85,22 +101,25 @@ export default function Skills() {
             </div>
           </div>
 
-          <div className="mt-5 grid items-start gap-5 lg:grid-cols-3">
+          <div className="mt-5 grid items-start gap-5 lg:grid-cols-2 xl:grid-cols-[3fr_4fr_4fr]">
             {primary.groups.map((group, groupIndex) => {
               const labelId = `skill-sub-${groupIndex}`;
               return (
-                <div key={group.label} className="@container">
+                <div
+                  key={group.label}
+                  className={`@container ${devGroupClass(groupIndex)}`}
+                >
                   <p id={labelId} className="text-[13px] font-medium text-ink">
                     {group.label}
                   </p>
                   <ul
                     aria-labelledby={labelId}
-                    className={`mt-2 grid gap-2 ${chipGridClass(group.items)}`}
+                    className={`mt-2 grid gap-2 ${chipGridClass(group.items)} ${devGridClass(groupIndex)}`}
                   >
                     {group.items.map((item, itemIndex) => (
                       <SkillChip
                         key={item}
-                        className={` ${chipSpanClass(group.items, itemIndex)}`}
+                        className={`${chipSpanClass(group.items, itemIndex)} ${devChipClass(group.items, groupIndex, itemIndex)}`}
                       >
                         {item}
                       </SkillChip>
@@ -131,12 +150,18 @@ export default function Skills() {
               </p>
               <ul
                 aria-labelledby={labelId}
-                className={`mt-5 grid gap-2 ${chipGridClass(group.items)}`}
+                className={`mt-5 grid gap-2 ${chipGridClass(group.items)} ${
+                  tab.id === "qa" ? "xl:grid-cols-2!" : ""
+                }`}
               >
                 {group.items.map((item, itemIndex) => (
                   <SkillChip
                     key={item}
-                    className={chipSpanClass(group.items, itemIndex)}
+                    className={`${chipSpanClass(group.items, itemIndex)} ${
+                      tab.id === "qa" && itemIndex === group.items.length - 1
+                        ? "xl:col-span-2!"
+                        : ""
+                    }`}
                   >
                     {item}
                   </SkillChip>
