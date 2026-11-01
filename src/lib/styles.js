@@ -7,6 +7,9 @@ export const LEVEL_2 =
 export const LEVEL_3 =
   'bg-surface text-ink neu-raise-sm rounded-full px-5 py-2 font-medium transition-all duration-200 cursor-pointer'
 
+export const LEVEL_3_COMPACT =
+  'bg-surface text-ink neu-raise-sm rounded-full px-3 py-2 font-medium transition-all duration-200 cursor-pointer sm:px-5'
+
 export const LEVEL_3_RECESSED =
   'bg-surface text-ink neu-inset-md rounded-full px-5 py-2 font-medium'
 

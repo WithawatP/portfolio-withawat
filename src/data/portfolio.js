@@ -102,21 +102,25 @@ export const featuredProject = {
   links: [
     {
       label: 'Live demo',
+      shortLabel: 'Live demo',
       href: 'https://jsd-13-group-project2-mc-kraken-spr.vercel.app',
       icon: 'external',
     },
     {
       label: 'Frontend repository',
+      shortLabel: 'Frontend',
       href: 'https://github.com/JittrinP/JSD13_Group_Project2_McKraken_sprint2',
       icon: 'github',
     },
     {
       label: 'Backend repository',
+      shortLabel: 'Backend',
       href: 'https://github.com/JittrinP/McKraken_sprint3_Backend',
       icon: 'github',
     },
     {
       label: 'Presentation deck',
+      shortLabel: 'Deck',
       href: 'https://gp-02-data-system.vercel.app',
       icon: 'presentation',
     },

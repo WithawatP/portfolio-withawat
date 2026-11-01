@@ -47,7 +47,7 @@ export default function TimelineItem({
 
       <div
         onClick={handleCardClick}
-        className={`mb-3 min-w-0 flex-1 cursor-pointer rounded-2xl bg-surface p-4 transition-transform duration-200 active:scale-[0.99] sm:mb-8 sm:rounded-[2rem] sm:p-6 ${
+        className={`mb-3 min-w-0 flex-1 cursor-pointer rounded-2xl bg-surface p-3 transition-transform duration-200 active:scale-[0.99] sm:mb-8 sm:rounded-[2rem] sm:p-6 ${
           open
             ? 'neu-inset-lg'
             : 'neu-raise-md hover:-translate-y-px'
@@ -63,14 +63,25 @@ export default function TimelineItem({
             className={`${FOCUS} flex min-h-14 w-full cursor-pointer flex-col gap-2 rounded-2xl text-left sm:flex-row sm:items-center sm:justify-between`}
           >
             <span className="min-w-0">
-              <span className="block text-lg font-bold leading-snug text-ink">
-                {role}
+              <span className="flex items-start justify-between gap-2 sm:block">
+                <span className="min-w-0 text-base font-bold leading-snug text-ink sm:text-lg">
+                  {role}
+                </span>
+                <Icon
+                  name="chevronDown"
+                  className={`mt-0.5 h-4 w-4 shrink-0 text-faint transition-transform duration-300 sm:hidden ${
+                    open ? 'rotate-180' : ''
+                  }`}
+                />
               </span>
-              <span className="mt-1 block text-sm font-medium text-muted">
+              <span className="mt-1 block text-[13px] font-medium leading-snug text-muted sm:hidden">
+                {company} · {period}
+              </span>
+              <span className="mt-1 hidden text-sm font-medium text-muted sm:block">
                 {company}
               </span>
             </span>
-            <span className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
+            <span className="hidden shrink-0 items-center gap-2 self-start sm:flex sm:self-auto">
               <span className="text-[13px] font-medium text-muted sm:text-sm">
                 {period}
               </span>

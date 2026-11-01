@@ -7,6 +7,13 @@ import UiverseButton from './ui/UiverseButton'
 import { coreStack, profile, quickContacts } from '../data/portfolio'
 
 export default function Hero() {
+  const copyContacts = quickContacts.filter(
+    (item) => item.href.startsWith('mailto:') || item.href.startsWith('tel:')
+  )
+  const compactContacts = quickContacts.filter(
+    (item) => !item.href.startsWith('mailto:') && !item.href.startsWith('tel:')
+  )
+
   return (
     <SectionCard id="home" labelledBy="hero-title">
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-6">
@@ -28,7 +35,7 @@ export default function Hero() {
             {profile.headline}
           </p>
 
-          <p className="rise rise-delay-2 mt-4 max-w-[52ch] text-base leading-relaxed text-ink">
+          <p className="rise rise-delay-2 mt-4 hidden max-w-[52ch] text-base leading-relaxed text-ink sm:block">
             {profile.bio}
           </p>
 
@@ -50,15 +57,22 @@ export default function Hero() {
             </InsetPanel>
           </div>
 
-          <div className="rise rise-delay-4 mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <UiverseButton href={profile.cvHref} download icon="download">
+          <div className="rise rise-delay-4 mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
+            <UiverseButton
+              href={profile.cvHref}
+              download
+              icon="download"
+              primary
+              mobileBlock
+              className="col-span-2 sm:col-auto"
+            >
               Download CV (PDF)
             </UiverseButton>
-            <UiverseButton href="#featured" icon="arrowRight">
-              View Portfolio / Projects
+            <UiverseButton href="#featured" icon="arrowRight" mobileBlock>
+              View projects
             </UiverseButton>
-            <UiverseButton href="#contact" icon="mail">
-              Contact Me
+            <UiverseButton href="#contact" icon="mail" mobileBlock>
+              Contact me
             </UiverseButton>
           </div>
         </div>
@@ -104,9 +118,14 @@ export default function Hero() {
           <InsetPanel className="rise rise-delay-2">
             <h2 className="text-base font-bold text-ink">Quick contact</h2>
             <div className="mt-4 flex flex-col gap-3">
-              {quickContacts.map((item) => (
+              {copyContacts.map((item) => (
                 <QuickContactRow key={item.label} {...item} />
               ))}
+              <div className="flex gap-3 sm:flex-col">
+                {compactContacts.map((item) => (
+                  <QuickContactRow key={item.label} {...item} compact />
+                ))}
+              </div>
             </div>
           </InsetPanel>
         </div>

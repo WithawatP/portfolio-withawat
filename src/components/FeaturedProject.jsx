@@ -1,3 +1,4 @@
+import { useId, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { EffectCoverflow } from 'swiper/modules'
 import SectionCard from './ui/SectionCard'
@@ -5,7 +6,8 @@ import SectionHeading from './ui/SectionHeading'
 import InsetPanel from './ui/InsetPanel'
 import SkillChip from './ui/SkillChip'
 import Icon from './ui/Icon'
-import { FOCUS, LEVEL_3, LEVEL_3_ACTIVE, LEVEL_3_HOVER } from '../lib/styles'
+import { FOCUS, LEVEL_3_ACTIVE, LEVEL_3_COMPACT, LEVEL_3_HOVER } from '../lib/styles'
+import { useMediaQuery } from '../lib/useMediaQuery'
 import { featuredProject } from '../data/portfolio'
 import atelierHome from '../assets/atelier-home.jpg'
 import atelierProducts from '../assets/atelier-products.jpg'
@@ -62,6 +64,9 @@ function FlowerMark({ className = '' }) {
 
 export default function FeaturedProject() {
   const project = featuredProject
+  const [techOpen, setTechOpen] = useState(false)
+  const isSmall = useMediaQuery('(max-width: 639px)')
+  const techPanelId = useId()
 
   return (
     <SectionCard id="featured" labelledBy="featured-title">
@@ -165,55 +170,85 @@ export default function FeaturedProject() {
 
         <div className="rise rise-delay-4 flex min-w-0 flex-col gap-6 lg:col-span-5">
           <InsetPanel>
-            <h3 className="text-base font-bold text-ink">Tech stack</h3>
-            <div className="mt-4 flex flex-col gap-5">
-              {project.stack.map((group, groupIndex) => {
-                const onePerRow = group.items.length <= 2
-                const labelId = `stack-label-${groupIndex}`
-                return (
-                  <div key={group.label}>
-                    <p id={labelId} className="text-[13px] font-medium text-ink">
-                      {group.label}
-                    </p>
-                    <ul
-                      aria-labelledby={labelId}
-                      className="mt-2 grid grid-cols-2 gap-2"
-                    >
-                      {group.items.map((item, itemIndex) => {
-                        const spansBoth =
-                          onePerRow ||
-                          (group.items.length % 2 === 1 &&
-                            itemIndex === group.items.length - 1)
-                        return (
-                          <SkillChip
-                            key={item}
-                            className={spansBoth ? 'col-span-2' : ''}
-                          >
-                            {item}
-                          </SkillChip>
-                        )
-                      })}
-                    </ul>
-                  </div>
-                )
-              })}
+            <button
+              type="button"
+              aria-expanded={techOpen}
+              aria-controls={techPanelId}
+              onClick={() => setTechOpen((value) => !value)}
+              className={`${FOCUS} flex min-h-11 w-full items-center justify-between rounded-2xl bg-surface px-4 text-base font-bold text-ink neu-raise-sm sm:hidden`}
+            >
+              <span>Tech stack</span>
+              <Icon
+                name="chevronDown"
+                className={`h-4 w-4 text-faint transition-transform duration-300 ${
+                  techOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+            <h3 className="hidden text-base font-bold text-ink sm:block">
+              Tech stack
+            </h3>
+            <div
+              id={techPanelId}
+              inert={isSmall && !techOpen}
+              className={`grid transition-[grid-template-rows,opacity] duration-[400ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${
+                techOpen
+                  ? 'grid-rows-[1fr] opacity-100'
+                  : 'grid-rows-[0fr] opacity-0'
+              } sm:grid-rows-[1fr] sm:opacity-100`}
+            >
+              <div className="overflow-hidden">
+                <div className="mt-4 flex flex-col gap-5">
+                  {project.stack.map((group, groupIndex) => {
+                    const onePerRow = group.items.length <= 2
+                    const labelId = `stack-label-${groupIndex}`
+                    return (
+                      <div key={group.label}>
+                        <p id={labelId} className="text-[13px] font-medium text-ink">
+                          {group.label}
+                        </p>
+                        <ul
+                          aria-labelledby={labelId}
+                          className="mt-2 grid grid-cols-2 gap-2"
+                        >
+                          {group.items.map((item, itemIndex) => {
+                            const spansBoth =
+                              onePerRow ||
+                              (group.items.length % 2 === 1 &&
+                                itemIndex === group.items.length - 1)
+                            return (
+                              <SkillChip
+                                key={item}
+                                className={spansBoth ? 'col-span-2' : ''}
+                              >
+                                {item}
+                              </SkillChip>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
           </InsetPanel>
 
           <InsetPanel>
             <h3 className="text-base font-bold text-ink">Project links</h3>
-            <div className="mt-4 flex flex-col gap-3">
+            <div className="mt-4 grid grid-cols-2 gap-3 sm:flex sm:flex-col">
               {project.links.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className={`${LEVEL_3} ${LEVEL_3_HOVER} ${LEVEL_3_ACTIVE} ${FOCUS} group flex w-full items-center gap-3 text-[13px]`}
+                  className={`${LEVEL_3_COMPACT} ${LEVEL_3_HOVER} ${LEVEL_3_ACTIVE} ${FOCUS} group flex min-h-11 w-full items-center justify-center gap-2 text-[13px] sm:min-h-0 sm:justify-start sm:gap-3`}
                 >
                   <Icon name={link.icon} className="h-4 w-4 shrink-0 text-faint" />
-                  <span className="flex-1 text-left">{link.label}</span>
-                  <Icon name="arrowUpRight" className="h-4 w-4 shrink-0 text-faint transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  <span className="text-center sm:hidden">{link.shortLabel}</span>
+                  <span className="hidden flex-1 text-left sm:inline">{link.label}</span>
+                  <Icon name="arrowUpRight" className="hidden h-4 w-4 shrink-0 text-faint transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:block" />
                 </a>
               ))}
             </div>

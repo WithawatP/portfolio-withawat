@@ -10,6 +10,7 @@ Known conflicts and how to treat them:
 - "Entrance for every section, rising 16 to 32px, at least 8 moving elements": replaced by the motion plan in section 7. If the inspector complains about the count of moving elements, report it; do not add fade-ups to satisfy it.
 - `draw.mjs` (direction dealer), `assets.mjs` (found pictures), and the "add a video or photographs" advice: do not use. The direction is fixed here, and the only images are the owner's project screenshots and, optionally, one portrait supplied by the owner (never stock or AI-generated). `WARN no-footage` is accepted.
 - `UiverseButton` is the one deliberate exception (section 8b): the skill's `gradient`, `button-fx`, and `text-shadow` findings are waived for that component only. `few-pictures` is waived too.
+- `font-fallback` (the Inter warning from `UiverseButton`) and `small-text` for text of 12px or larger (the minimum in section 5) are waived.
 - Everything else in the skill still applies and must pass: no eyebrow labels, no gradients, no thin rules or outlined boxes, no icon-topped feature cards or rows of identical cards, no covered text, headlines at most two lines, and no empty screens (`FAIL empty-screens` is a real design problem to fix).
 - Run `inspect.mjs` at 1440, 768 and 390 px and `lint.mjs`; fix everything except the waivers above.
 
@@ -161,17 +162,15 @@ Location: Featured project, in the "What I built" panel.
 - Test side: the testing method and bugs found and fixed, each as symptom, cause, fix. Facts come only from the owner (`src/data/portfolio.js`).
 - This is the one memorable moment. Do not add a second showpiece elsewhere.
 
-## 8b. The remote key (`UiverseButton`): the one allowed exception
+## 8b. The remote key (`UiverseButton`): keep the original look
 
-The primary action buttons are keys on an old remote control: chunky plastic or rubber keys with real travel. The component was taken from uiverse.io and the owner wants to keep it.
+The primary action buttons are keys on an old remote control. The owner likes the ORIGINAL visual style of this component (taken from uiverse.io and softened to the grey palette) and wants it kept exactly as it was before Phase 3B.
 
-- Keep the layered structure (`button-outer`, `button-inner`, clip-path, stacked shadows). Gradients, layered highlights, and blend effects are allowed here and nowhere else.
-- The palette stays soft grey. Every color and shadow derives from `--color-surface`, `--color-highlight`, `--color-shadow`, `--color-ink`. No near-black such as `rgba(5,5,5,...)`, and no pure black.
-- Press: the whole key sinks (`scale(.96)` plus inset shadows) with 1 to 2px of visible travel. Hover only darkens the label.
-- Typography: inherit the project font (remove `Inter`), label at least 13px, sentence case.
-- Small gimmicks are allowed, at most two, chosen in Phase 3: a one-time LED blink on press (uses `--color-led`), a concave "dish" on the key top, a short haptic tick (`navigator.vibrate(8)`, only where supported, never required). No sound.
+- Do not restyle it: no new palette mapping, no concave dish, no haptics, no font change. Its gradients and layered shadows stay as they are.
+- Allowed changes are layout and invisible usability only: the `mobileBlock` prop (full width below 640px), the `primary` prop (taller key), a `:focus-visible` outline (the component uses `all: unset`, which removes the ring), and hover rules gated with `@media (hover: hover)` so a tap never leaves a stuck hover look.
+- Cluster below 640px: one full-width primary key, then two equal half-width keys. Keys in the cluster are at least 44px tall.
 - Use it for primary actions only (download CV, contact, view projects). Never for tags, toggles, or navigation.
-- Respect `prefers-reduced-motion`, visible `:focus-visible`, and a 44px minimum touch target.
+- Respect `prefers-reduced-motion`.
 
 ## 9. Accessibility floor
 

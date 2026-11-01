@@ -1,8 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Icon from './Icon';
 
-const UiverseButton = ({ children, onClick, className = '', href, type = 'button', icon, download = false }) => {
+const UiverseButton = ({
+  children,
+  onClick,
+  className = '',
+  href,
+  type = 'button',
+  icon,
+  download = false,
+  mobileBlock = false,
+  primary = false,
+}) => {
   const content = (
     <div className="button-outer">
       <div className="button-inner">
@@ -16,7 +26,11 @@ const UiverseButton = ({ children, onClick, className = '', href, type = 'button
 
   if (href) {
     return (
-      <StyledWrapper className={className}>
+      <StyledWrapper
+        className={className}
+        $mobileBlock={mobileBlock}
+        $primary={primary}
+      >
         <a href={href} className="button" {...(download ? { download: true } : {})}>
           {content}
         </a>
@@ -25,7 +39,11 @@ const UiverseButton = ({ children, onClick, className = '', href, type = 'button
   }
 
   return (
-    <StyledWrapper className={className}>
+    <StyledWrapper
+      className={className}
+      $mobileBlock={mobileBlock}
+      $primary={primary}
+    >
       <button type={type} className="button" onClick={onClick}>
         {content}
       </button>
@@ -48,6 +66,11 @@ const StyledWrapper = styled.div`
     box-shadow:
       -0.15em -0.15em 0.15em -0.075em rgba(240, 240, 240, 0.8),
       0.05em 0.05em 0.1em 0 rgba(140, 140, 140, 0.4);
+  }
+
+  .button:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
   }
 
   .button::after {
@@ -82,11 +105,13 @@ const StyledWrapper = styled.div`
       0.15em 0.3em 0.1em -0.01em rgba(160, 160, 160, 0.25);
   }
 
-  .button:hover .button-outer {
-    box-shadow:
-      0 0 0 0 rgba(160, 160, 160, 0.8),
-      0 0 0 0 rgba(160, 160, 160, 0.5),
-      0 0 0 0 rgba(160, 160, 160, 0.25);
+  @media (hover: hover) {
+    .button:hover .button-outer {
+      box-shadow:
+        0 0 0 0 rgba(160, 160, 160, 0.8),
+        0 0 0 0 rgba(160, 160, 160, 0.5),
+        0 0 0 0 rgba(160, 160, 160, 0.25);
+    }
   }
 
   .button-inner {
@@ -121,19 +146,21 @@ const StyledWrapper = styled.div`
       -0.075em -0.25em 0.25em 0.1em inset rgba(160, 160, 160, 0.25);
   }
 
-  .button:hover .button-inner {
-    clip-path: inset(
-      clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
-        clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 100em
-    );
-    box-shadow:
-      0.1em 0.15em 0.05em 0 inset rgba(160, 160, 160, 0.7),
-      -0.025em -0.03em 0.05em 0.025em inset rgba(160, 160, 160, 0.5),
-      0.25em 0.25em 0.2em 0 inset rgba(160, 160, 160, 0.4),
-      0 0 0.05em 0.5em inset rgba(255, 255, 255, 0.3),
-      0 0 0 0 inset rgba(255, 255, 255, 1),
-      0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.5),
-      -0.075em -0.12em 0.2em 0.1em inset rgba(160, 160, 160, 0.25);
+  @media (hover: hover) {
+    .button:hover .button-inner {
+      clip-path: inset(
+        clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px)
+          clamp(1px, 0.0625em, 2px) clamp(1px, 0.0625em, 2px) round 100em
+      );
+      box-shadow:
+        0.1em 0.15em 0.05em 0 inset rgba(160, 160, 160, 0.7),
+        -0.025em -0.03em 0.05em 0.025em inset rgba(160, 160, 160, 0.5),
+        0.25em 0.25em 0.2em 0 inset rgba(160, 160, 160, 0.4),
+        0 0 0.05em 0.5em inset rgba(255, 255, 255, 0.3),
+        0 0 0 0 inset rgba(255, 255, 255, 1),
+        0.12em 0.12em 0.12em inset rgba(255, 255, 255, 0.5),
+        -0.075em -0.12em 0.2em 0.1em inset rgba(160, 160, 160, 0.25);
+    }
   }
 
   .button-content {
@@ -162,9 +189,11 @@ const StyledWrapper = styled.div`
     transition: transform 250ms ease, color 250ms ease;
   }
 
-  .button:hover .button-text,
-  .button:hover .button-icon {
-    color: var(--color-ink);
+  @media (hover: hover) {
+    .button:hover .button-text,
+    .button:hover .button-icon {
+      color: var(--color-ink);
+    }
   }
 
   .button:active .button-outer {
@@ -175,6 +204,42 @@ const StyledWrapper = styled.div`
   .button:active .button-icon {
     color: var(--color-ink);
   }
+
+  ${({ $mobileBlock }) =>
+    $mobileBlock &&
+    css`
+      @media (max-width: 639px) {
+        width: 100%;
+
+        .button,
+        .button-outer,
+        .button-inner {
+          width: 100%;
+        }
+
+        .button {
+          display: flex;
+        }
+
+        .button-outer {
+          display: flex;
+        }
+
+        .button-inner {
+          justify-content: center;
+          min-height: 2.75rem;
+          padding-inline: 0.625rem;
+        }
+      }
+    `}
+
+  ${({ $primary }) =>
+    $primary &&
+    css`
+      .button-inner {
+        min-height: 3rem;
+      }
+    `}
 `;
 
 export default UiverseButton;

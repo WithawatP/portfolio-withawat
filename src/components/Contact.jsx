@@ -10,11 +10,7 @@ export default function Contact() {
 
   return (
     <SectionCard id="contact" labelledBy="contact-title">
-      <SectionHeading
-        id="contact-title"
-        title="Contact"
-        intro="Open to junior developer and QA / tester roles. If your team values careful building, clear communication, and a quality mindset, let's talk."
-      />
+      <SectionHeading id="contact-title" title="Contact" />
 
       <div className="grid gap-6 lg:grid-cols-12">
         <InsetPanel className="rise rise-delay-1 flex flex-col justify-between gap-8 lg:col-span-7">
@@ -37,20 +33,31 @@ export default function Contact() {
             </a>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <UiverseButton href="mailto:withawat1201@gmail.com" icon="mail">
+          <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
+            <UiverseButton
+              href={`mailto:${profile.email}`}
+              icon="mail"
+              primary
+              mobileBlock
+              className="col-span-2 sm:col-auto"
+            >
               Send an email
             </UiverseButton>
-            <UiverseButton href={profile.phoneHref} icon="phone">
+            <UiverseButton href={profile.phoneHref} icon="phone" mobileBlock>
               Call me
             </UiverseButton>
-            <UiverseButton href={profile.cvHref} download icon="download">
+            <UiverseButton
+              href={profile.cvHref}
+              download
+              icon="download"
+              mobileBlock
+            >
               Download CV
             </UiverseButton>
           </div>
         </InsetPanel>
 
-        <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
+        <div className="hidden min-w-0 flex-col gap-6 sm:flex lg:col-span-5">
           <InsetPanel className="rise rise-delay-3">
             <h3 className="text-base font-bold text-ink">
               Professional profiles
