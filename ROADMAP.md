@@ -17,9 +17,9 @@ Goal: a neumorphic portfolio for a junior dev / QA job seeker. Tidy, mobile firs
 | 3c | Shorten mobile page further. Page 390px: ~8,035 -> 5,997px with the Dev tab open (longest Skills tab). Skills knob switch, compact Quick contact, collapsed Tech stack, shorter timeline rows, bio hidden below 640px | Done |
 | 3d | Hero first screen + display font (Unbounded 700, name only). Keys follow the role below 640px; role shortened to one line on mobile. Skills chips 2 columns on mobile (Design stays 1). Page 390px: 5,997 -> 5,760px with the Dev tab open | Done |
 | 4 | Skills as unequal-size modules from 768px (1024+: 8:4 then 5:7); Contact with one large email as the single focal point. Dev and QA chips split to equal rows from 1024px / 1280px. Owner tested a `--recess` fill on the Dev and email trays and removed it, then waived `empty-screens`. Page 390px: 5,760 -> 5,815px with the Dev tab open | Done |
-| 5 | Motion (4 scroll moments, reduced-motion) | **Next** |
+| 5 | Motion: section extrude (pressed in, flat, raised; scale .95), inset window on project screenshots, hero depth layers + scoped light. Removed `RevealOnScroll` and `.rise`. Scroll rail built, then removed by owner. Page 390px unchanged at 5,815px with the Dev tab open | Done. Owner check on a real phone and in Firefox still open |
 | 6 | Build/Test switch in the featured project | Blocked on owner content (see "Needs from owner") |
-| 7 | Copy rewrite, inspector, Lighthouse, meta/OG | Todo |
+| 7 | Copy rewrite, inspector, Lighthouse, meta/OG | **Next** (6 stays blocked until owner content arrives) |
 
 ## Locked decisions (do not reopen without asking)
 
@@ -43,11 +43,14 @@ Content in `src/data/portfolio.js` (owner-supplied facts only)
 - Removed: PHP/MySQL. "Cross-Browser QC" is now "Responsive Testing"; tag "Cross-browser testing" is now "Responsive testing". No "Four categories" claim.
 - No personal photo in the hero.
 
-## Next task: Phase 5 (Motion)
+## Next task: Phase 7, unless the Phase 6 owner content arrives first
 
-Four scroll moments, clearly visible but limited. Respect `prefers-reduced-motion`. Consider installing the Emil Kowalski motion skill before this phase and run its animation review afterwards.
+Open from Phase 5:
+- Not tested on a real phone or in a browser without `animation-timeline` (Firefox). The extrude fallback code has never run.
+- If frame rate drops on a mid-range phone: remove the touch scroll light first, then the hero parallax (design.md section 7).
+- The scroll rail was rejected by the owner: it did not suit the page and competed with the click-to-open LED. Do not add it back.
 
-Page heights after 4 (Dev tab open): 360px 6,025; 390px 5,815; 768px 7,174; 1440px 5,463.
+Page heights after 5 (Dev tab open): 360px 6,025; 390px 5,815; 768px 7,174; 1440px 5,463.
 
 Known from Phase 4: between 1024px and 1279px the QA tray stays at one column (5 rows), so the Dev tray has a little empty space at the bottom.
 
@@ -55,7 +58,7 @@ Known from Phase 4: between 1024px and 1279px the QA tray stays at one column (5
 
 6: Build/Test switch in the featured project (design.md section 8). Needs the owner content below.
 
-7: Interview-safe copy rewrite, run `inspect.mjs`, Lighthouse, meta tags and OG image. Optionally run Impeccable `critique` on a separate branch as a second opinion (report only, design.md wins). Open inspector FAILs that are not waived and predate 3d: `eyebrow` ("IT support" pill above "Technical skills"), `covered-text` (390).
+7: Interview-safe copy rewrite, run `inspect.mjs`, Lighthouse, meta tags and OG image. Optionally run Impeccable `critique` on a separate branch as a second opinion (report only, design.md wins). Open inspector FAILs that are not waived and predate 3d: `eyebrow` (at 390 now reports chips from the previous section: "Stripe PromptPay QR" above "Work experience", "E-commerce" above "Technical skills"), `covered-text` (390). Generic copy to rewrite: "quality mindset" (hero), "practical toolkit" and "keep delivery on track" (Skills).
 
 ## Needs from owner
 
