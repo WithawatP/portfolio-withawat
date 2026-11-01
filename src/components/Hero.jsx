@@ -5,8 +5,11 @@ import QuickContactRow from './ui/QuickContactRow'
 import AvailabilityBadge from './ui/AvailabilityBadge'
 import UiverseButton from './ui/UiverseButton'
 import { coreStack, profile, quickContacts } from '../data/portfolio'
+import { useHeroLight } from '../lib/useHeroLight'
 
 export default function Hero() {
+  useHeroLight('home')
+
   const copyContacts = quickContacts.filter(
     (item) => item.href.startsWith('mailto:') || item.href.startsWith('tel:')
   )
@@ -15,19 +18,19 @@ export default function Hero() {
   )
 
   return (
-    <SectionCard id="home" labelledBy="hero-title" extrude={false}>
+    <SectionCard id="home" labelledBy="hero-title" extrude={false} className="hero-light-scroll">
       <div className="grid gap-8 lg:grid-cols-12 lg:gap-6">
         <div className="flex min-w-0 flex-col lg:col-span-7">
           <h1
             id="hero-title"
-            className="text-balance font-display text-[clamp(2.875rem,9vw,5.75rem)] font-bold leading-none tracking-[-0.03em] text-ink"
+            className="hero-layer-name text-balance font-display text-[clamp(2.875rem,9vw,5.75rem)] font-bold leading-none tracking-[-0.03em] text-ink"
           >
             Withawat
             <br />
             Phiraban
           </h1>
 
-          <p className="mt-5 text-base font-semibold text-ink max-sm:whitespace-nowrap sm:text-xl">
+          <p className="hero-layer-name mt-5 text-base font-semibold text-ink max-sm:whitespace-nowrap sm:text-xl">
             Junior Software Developer <span aria-hidden="true">·</span> QA <span className="hidden sm:inline">/ Software </span>Tester
           </p>
 
@@ -57,7 +60,7 @@ export default function Hero() {
             </InsetPanel>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 gap-3 max-sm:mt-5 sm:flex sm:flex-wrap">
+          <div className="hero-layer-keys mt-8 grid grid-cols-2 gap-3 max-sm:mt-5 sm:flex sm:flex-wrap">
             <UiverseButton
               href={profile.cvHref}
               download
@@ -77,7 +80,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
+        <div className="hero-layer-panels flex min-w-0 flex-col gap-6 lg:col-span-5">
           <InsetPanel>
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-base font-bold text-ink">Availability</h2>

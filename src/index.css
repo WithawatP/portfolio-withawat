@@ -177,6 +177,40 @@
   }
 }
 
+/* Motion moment 3: hero layers travel at different speeds. Upper layers move up and lower layers
+   move down, so the gaps between them only widen and text never overlaps. */
+@property --lx {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: -1;
+}
+
+@property --ly {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: -1;
+}
+
+@keyframes hero-travel {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 var(--hero-travel);
+  }
+}
+
+@keyframes hero-light {
+  from {
+    --lx: -1.2;
+    --ly: -1.2;
+  }
+  to {
+    --lx: -0.8;
+    --ly: -0.8;
+  }
+}
+
 /* Motion moment 2: the screenshot shifts inside its frame while the tray stays still.
    Translate stays within the 7% margin that the scale adds on each side. */
 @keyframes inset-window {
@@ -245,6 +279,49 @@
       animation: inset-window linear both;
       animation-timeline: --inset-window;
       animation-range: cover 20% cover 80%;
+    }
+
+    /* Below 640px the keys sit above the headline, so they move up with the name. */
+    .hero-layer-name {
+      --hero-travel: -16px;
+    }
+
+    .hero-layer-keys {
+      --hero-travel: -8px;
+    }
+
+    .hero-layer-panels {
+      --hero-travel: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .hero-layer-name {
+        --hero-travel: -28px;
+      }
+
+      .hero-layer-keys {
+        --hero-travel: 16px;
+      }
+
+      .hero-layer-panels {
+        --hero-travel: 28px;
+      }
+    }
+
+    .hero-layer-name,
+    .hero-layer-keys,
+    .hero-layer-panels {
+      animation: hero-travel linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 60vh;
+    }
+
+    @media (hover: none) {
+      .hero-light-scroll {
+        animation: hero-light linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 60vh;
+      }
     }
   }
 
