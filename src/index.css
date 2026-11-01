@@ -13,6 +13,7 @@
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Unbounded", var(--font-sans);
 }
 
 :root {

@@ -20,18 +20,18 @@ export default function Hero() {
         <div className="flex min-w-0 flex-col lg:col-span-7">
           <h1
             id="hero-title"
-            className="rise text-balance text-[clamp(3rem,9vw,5.75rem)] font-extrabold leading-[0.88] tracking-[-0.055em] text-ink"
+            className="rise text-balance font-display text-[clamp(2.875rem,9vw,5.75rem)] font-bold leading-none tracking-[-0.03em] text-ink"
           >
             Withawat
             <br />
             Phiraban
           </h1>
 
-          <p className="rise rise-delay-1 mt-5 text-xl font-semibold text-ink">
-            Junior Software Developer <span aria-hidden="true">·</span> QA / Software Tester
+          <p className="rise rise-delay-1 mt-5 text-base font-semibold text-ink max-sm:whitespace-nowrap sm:text-xl">
+            Junior Software Developer <span aria-hidden="true">·</span> QA <span className="hidden sm:inline">/ Software </span>Tester
           </p>
 
-          <p className="rise rise-delay-2 mt-5 max-w-[42ch] text-xl leading-relaxed text-ink">
+          <p className="rise rise-delay-2 mt-5 max-w-[42ch] text-xl leading-relaxed text-ink max-sm:order-1">
             {profile.headline}
           </p>
 
@@ -39,7 +39,7 @@ export default function Hero() {
             {profile.bio}
           </p>
 
-          <div className="rise rise-delay-3 mt-8">
+          <div className="rise rise-delay-3 mt-8 max-sm:order-1">
             <InsetPanel>
               <p className="text-[13px] font-semibold text-ink">
                 Core stack
@@ -57,7 +57,7 @@ export default function Hero() {
             </InsetPanel>
           </div>
 
-          <div className="rise rise-delay-4 mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
+          <div className="rise rise-delay-4 mt-8 grid grid-cols-2 gap-3 max-sm:mt-5 sm:flex sm:flex-wrap">
             <UiverseButton
               href={profile.cvHref}
               download
