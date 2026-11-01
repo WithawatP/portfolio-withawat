@@ -175,7 +175,7 @@ export default function FeaturedProject() {
               aria-expanded={techOpen}
               aria-controls={techPanelId}
               onClick={() => setTechOpen((value) => !value)}
-              className={`${FOCUS} flex min-h-11 w-full items-center justify-between rounded-2xl bg-surface px-4 text-base font-bold text-ink neu-raise-sm sm:hidden`}
+              className={`${FOCUS} ${LEVEL_3_ACTIVE} flex min-h-11 w-full items-center justify-between rounded-2xl bg-surface px-4 text-base font-bold text-ink neu-raise-sm transition-all duration-200 sm:hidden`}
             >
               <span>Tech stack</span>
               <Icon
