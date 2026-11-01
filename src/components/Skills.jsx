@@ -14,6 +14,21 @@ const skillTabs = [
   { id: 'soft', label: 'Soft' },
 ]
 
+// Below 640px a half-width chip holds about 19 characters at 360px; longer labels need one column.
+const hasLongLabel = (items) => items.some((item) => item.length > 19)
+
+const chipGridClass = (items) =>
+  hasLongLabel(items)
+    ? 'grid-cols-1 sm:grid-cols-2 sm:@max-[360px]:grid-cols-1'
+    : 'grid-cols-2 @max-[260px]:grid-cols-1 sm:@max-[360px]:grid-cols-1'
+
+const chipSpanClass = (items, index) => {
+  if (items.length % 2 === 0 || index !== items.length - 1) return ''
+  return hasLongLabel(items)
+    ? 'sm:col-span-2 sm:@max-[360px]:col-span-1'
+    : 'col-span-2 @max-[260px]:col-span-1 sm:@max-[360px]:col-span-1'
+}
+
 export default function Skills() {
   const [primary, ...secondary] = skillGroups
   const [activeTab, setActiveTab] = useState('dev')
@@ -72,21 +87,16 @@ export default function Skills() {
                   </p>
                   <ul
                     aria-labelledby={labelId}
-                    className="mt-2 grid grid-cols-2 gap-2 @max-[360px]:grid-cols-1"
+                    className={`mt-2 grid gap-2 ${chipGridClass(group.items)}`}
                   >
-                    {group.items.map((item, itemIndex) => {
-                      const spansBoth =
-                        group.items.length % 2 === 1 &&
-                        itemIndex === group.items.length - 1
-                      return (
-                        <SkillChip
-                          key={item}
-                          className={spansBoth ? 'col-span-2 @max-[360px]:col-span-1' : ''}
-                        >
-                          {item}
-                        </SkillChip>
-                      )
-                    })}
+                    {group.items.map((item, itemIndex) => (
+                      <SkillChip
+                        key={item}
+                        className={chipSpanClass(group.items, itemIndex)}
+                      >
+                        {item}
+                      </SkillChip>
+                    ))}
                   </ul>
                 </div>
               )
@@ -113,21 +123,16 @@ export default function Skills() {
               </p>
               <ul
                 aria-labelledby={labelId}
-                className="mt-5 grid grid-cols-2 gap-2 @max-[360px]:grid-cols-1"
+                className={`mt-5 grid gap-2 ${chipGridClass(group.items)}`}
               >
-                {group.items.map((item, itemIndex) => {
-                  const spansBoth =
-                    group.items.length % 2 === 1 &&
-                    itemIndex === group.items.length - 1
-                  return (
-                    <SkillChip
-                      key={item}
-                      className={spansBoth ? 'col-span-2 @max-[360px]:col-span-1' : ''}
-                    >
-                      {item}
-                    </SkillChip>
-                  )
-                })}
+                {group.items.map((item, itemIndex) => (
+                  <SkillChip
+                    key={item}
+                    className={chipSpanClass(group.items, itemIndex)}
+                  >
+                    {item}
+                  </SkillChip>
+                ))}
               </ul>
             </InsetPanel>
           )
