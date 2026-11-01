@@ -19,7 +19,7 @@ Goal: a neumorphic portfolio for a junior dev / QA job seeker. Tidy, mobile firs
 | 4 | Skills as unequal-size modules from 768px (1024+: 8:4 then 5:7); Contact with one large email as the single focal point. Dev and QA chips split to equal rows from 1024px / 1280px. Owner tested a `--recess` fill on the Dev and email trays and removed it, then waived `empty-screens`. Page 390px: 5,760 -> 5,815px with the Dev tab open | Done |
 | 5 | Motion: section extrude (pressed in, flat, raised; scale .95), inset window on project screenshots, hero depth layers + scoped light. Removed `RevealOnScroll` and `.rise`. Scroll rail built, then removed by owner. Page 390px unchanged at 5,815px with the Dev tab open | Done. Owner check on a real phone and in Firefox still open |
 | 6 | Build/Test switch in the featured project (`KnobSwitch` radio mode, shared grid cell for stable height, owner's Postman method and 2 bugs). Page 390px: 5,815 -> 6,197px with the Dev tab open | Done. Not tested with a real screen reader or on a real phone |
-| 7 | Copy rewrite, inspector, Lighthouse, meta/OG | **Next** |
+| 7 | Copy rewrite from owner facts, inspector, Lighthouse (mobile 87/100/100/100, desktop 100/100/100/100), meta/OG, robots.txt, 960px WebP screenshots. Removed chips "Crisis Management" and "Fast Learner" (owner decision). Page 390px unchanged at 6,197px with the Dev tab open | Done except `og:image` and `og:url`, which need the production URL |
 
 ## Locked decisions (do not reopen without asking)
 
@@ -43,7 +43,14 @@ Content in `src/data/portfolio.js` (owner-supplied facts only)
 - Removed: PHP/MySQL. "Cross-Browser QC" is now "Responsive Testing"; tag "Cross-browser testing" is now "Responsive testing". No "Four categories" claim.
 - No personal photo in the hero.
 
-## Next task: Phase 7
+## Next task: add `og:image` and `og:url` to `index.html` when the owner supplies the production URL
+
+`public/og-image.jpg` (1200x630, name, role and headline only; salary, email and phone kept out on purpose) is ready. Both tags need absolute URLs.
+
+Inspector findings checked in Phase 7, both false positives, so no layout change: `eyebrow` at 390 counts the last chip of one section as a label above the next section's heading; `covered-text` at 390 is "Atelier De Flora" passing under the fixed bottom nav while scrolling.
+Lighthouse `label-content-name-mismatch` still appears on desktop for the header home link, with no score impact.
+Mobile performance is held back mainly by render-blocking Google Fonts. Self-hosting them would add a step or dependency, so ask first.
+
 
 Open from Phase 6:
 - `aria-live` wraps both views. Announcements were not tested with a real screen reader. If they read badly, move `aria-live` to a short status message.
@@ -55,13 +62,9 @@ Open from Phase 5:
 - If frame rate drops on a mid-range phone: remove the touch scroll light first, then the hero parallax (design.md section 7).
 - The scroll rail was rejected by the owner: it did not suit the page and competed with the click-to-open LED. Do not add it back.
 
-Page heights after 6 (Dev tab open): 360px 6,329; 390px 6,197; 768px 7,551; 1440px 5,463.
+Page heights after 7 (Dev tab open): 360px 6,342; 390px 6,197; 768px 7,537; 1440px 5,449.
 
 Known from Phase 4: between 1024px and 1279px the QA tray stays at one column (5 rows), so the Dev tray has a little empty space at the bottom.
-
-## After that
-
-7: Interview-safe copy rewrite, run `inspect.mjs`, Lighthouse, meta tags and OG image. Optionally run Impeccable `critique` on a separate branch as a second opinion (report only, design.md wins). Open inspector FAILs that are not waived and predate 3d: `eyebrow` (at 390 now reports chips from the previous section: "Google Gemini AI API" above "Work experience", "E-commerce" above "Technical skills"), `covered-text` (390). Generic copy to rewrite: "quality mindset" (hero), "practical toolkit" and "keep delivery on track" (Skills).
 
 ## Needs from owner
 

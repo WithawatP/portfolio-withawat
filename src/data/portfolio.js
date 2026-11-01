@@ -254,18 +254,16 @@ export const skillGroups = [
   },
   {
     title: 'Design & UI/UX',
-    summary: 'Visual decisions that keep layouts clear and responsive.',
+    summary: 'Web layouts, banners, and marketing assets for e-commerce clients.',
     items: ['Visual Hierarchy', 'Responsive Web Layouts', 'Adobe Illustrator'],
   },
   {
     title: 'Soft Skills & Management',
-    summary: 'How I work with people when pressure and deadlines arrive.',
+    summary: 'From running restaurant shifts as one of three shift managers and training staff.',
     items: [
       'Problem-Solving',
       'Team Leadership',
-      'Crisis Management',
       'Communication',
-      'Fast Learner',
     ],
   },
 ]

@@ -14,7 +14,7 @@ export default function Header({ className = '' }) {
       <div className="mx-auto flex w-full items-center justify-between gap-4">
         <a
           href="#home"
-          aria-label="Withawat Phiraban — back to top"
+          aria-label="WP Withawat Phiraban — back to top"
           className={`flex items-center gap-3 rounded-full ${FOCUS}`}
         >
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-surface text-[13px] font-extrabold tracking-tight text-ink neu-raise-sm">
