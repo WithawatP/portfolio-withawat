@@ -15,8 +15,8 @@ Goal: a neumorphic portfolio for a junior dev / QA job seeker. Tidy, mobile firs
 | 3b | Shorter mobile page (8,145 -> ~8,035px); key cluster layout for UiverseButton | Done |
 | 3b-fix | Restore original UiverseButton look; remove intro text under Contact heading | Done (via OpenCode) |
 | 3c | Shorten mobile page further. Page 390px: ~8,035 -> 5,997px with the Dev tab open (longest Skills tab). Skills knob switch, compact Quick contact, collapsed Tech stack, shorter timeline rows, bio hidden below 640px | Done |
-| 3d | Hero first screen + display font | **Next** |
-| 5 | Motion (4 scroll moments, reduced-motion) | Todo |
+| 3d | Hero first screen + display font (Unbounded 700, name only). Keys follow the role below 640px; role shortened to one line on mobile. Skills chips 2 columns on mobile (Design stays 1). Page 390px: 5,997 -> 5,760px with the Dev tab open | Done |
+| 5 | Motion (4 scroll moments, reduced-motion) | **Next** |
 | 6 | Build/Test switch in the featured project | Blocked on owner content (see "Needs from owner") |
 | 7 | Copy rewrite, inspector, Lighthouse, meta/OG | Todo |
 
@@ -33,7 +33,7 @@ Look and feel
 - Strict neumorphism, soft grey surface `#E7E7E7`, no pure black. Raised = clickable, inset = information.
 - No borders, gradients or glass, except `UiverseButton`.
 - `UiverseButton` keeps its ORIGINAL uiverse.io look (a deliberate "remote control" gimmick). Only layout props (mobileBlock, primary), focus-visible outline and `@media (hover: hover)` gating may differ.
-- Display font only for the name and large numerals.
+- Display font only for the name and large numerals. Owner picked Unbounded 700 over Archivo.
 
 Content in `src/data/portfolio.js` (owner-supplied facts only)
 - Shift Manager: 3 bullets. Rotated as one of three shift managers; built the schedule for a team of 5; inventory control through festival peaks including a weekly Monday stock count to the gram; resolved wrong orders on the spot without stalling the line, trained staff, no complaint reports reached me.
@@ -42,19 +42,17 @@ Content in `src/data/portfolio.js` (owner-supplied facts only)
 - Removed: PHP/MySQL. "Cross-Browser QC" is now "Responsive Testing"; tag "Cross-browser testing" is now "Responsive testing". No "Four categories" claim.
 - No personal photo in the hero.
 
-## Next task: Phase 3d (Hero first screen)
+## Next task: Phase 5 (Motion)
 
-At 390px the first screen must show name, one-line role, availability and the primary action without scrolling. Introduce the display font for the name only.
+Four scroll moments, clearly visible but limited. Respect `prefers-reduced-motion`. Consider installing the Emil Kowalski motion skill before this phase and run its animation review afterwards.
 
-Page heights after 3c: 360px 6,211; 390px 5,997; 768px 7,280; 1440px 5,283.
+Page heights after 3d (Dev tab open): 360px 5,975; 390px 5,760; 768px 7,297; 1440px 5,283.
 
 ## After that
 
-5: Motion. Four scroll moments, clearly visible but limited. Respect `prefers-reduced-motion`. Consider installing the Emil Kowalski motion skill before this phase and run its animation review afterwards.
-
 6: Build/Test switch in the featured project (design.md section 8). Needs the owner content below.
 
-7: Interview-safe copy rewrite, run `inspect.mjs`, Lighthouse, meta tags and OG image. Optionally run Impeccable `critique` on a separate branch as a second opinion (report only, design.md wins).
+7: Interview-safe copy rewrite, run `inspect.mjs`, Lighthouse, meta tags and OG image. Optionally run Impeccable `critique` on a separate branch as a second opinion (report only, design.md wins). Open inspector FAILs that are not waived and predate 3d: `empty-screens` (1440), `eyebrow` ("IT support" pill above "Technical skills"), `covered-text` (390).
 
 ## Needs from owner
 
