@@ -6,7 +6,6 @@ import Skills from './components/Skills'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import BottomNav from './components/BottomNav'
-import RevealOnScroll from './components/ui/RevealOnScroll'
 
 export default function App() {
   return (
@@ -15,18 +14,10 @@ export default function App() {
         <Header />
         <main className="flex flex-col gap-4 pt-4 sm:gap-10">
           <Hero />
-          <RevealOnScroll>
-            <FeaturedProject />
-          </RevealOnScroll>
-          <RevealOnScroll>
-            <Experience />
-          </RevealOnScroll>
-          <RevealOnScroll>
-            <Skills />
-          </RevealOnScroll>
-          <RevealOnScroll>
-            <Contact />
-          </RevealOnScroll>
+          <FeaturedProject />
+          <Experience />
+          <Skills />
+          <Contact />
         </main>
         <Footer />
       </div>

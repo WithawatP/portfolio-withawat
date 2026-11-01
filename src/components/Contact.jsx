@@ -14,7 +14,7 @@ export default function Contact() {
       <SectionHeading id="contact-title" title="Contact" />
 
       <div className="grid gap-6 lg:grid-cols-12">
-        <InsetPanel className="rise rise-delay-1 lg:col-span-12">
+        <InsetPanel className="lg:col-span-12">
           <a
             href={`mailto:${profile.email}`}
             className={`block rounded-lg text-[clamp(2rem,9.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.04em] text-ink underline-offset-8 transition-all duration-200 hover:underline [overflow-wrap:anywhere] sm:text-[clamp(2.25rem,5.8vw,4.5rem)] ${FOCUS}`}
@@ -34,7 +34,7 @@ export default function Contact() {
           </a>
         </InsetPanel>
 
-        <div className="rise rise-delay-2 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap lg:col-span-7 lg:content-center lg:items-center">
+        <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap lg:col-span-7 lg:content-center lg:items-center">
           <UiverseButton
             href={`mailto:${profile.email}`}
             icon="mail"
@@ -58,7 +58,7 @@ export default function Contact() {
         </div>
 
         <div className="hidden min-w-0 flex-col gap-6 sm:flex lg:col-span-5">
-          <InsetPanel className="rise rise-delay-3">
+          <InsetPanel>
             <h3 className="text-base font-bold text-ink">
               Professional profiles
             </h3>

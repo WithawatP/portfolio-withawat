@@ -77,7 +77,7 @@ export default function FeaturedProject() {
         meta={project.context}
       />
 
-      <InsetPanel className="rise rise-delay-1">
+      <InsetPanel>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="text-[13px] font-medium text-ink">{project.type}</p>
@@ -151,7 +151,7 @@ export default function FeaturedProject() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-12">
-        <InsetPanel className="rise rise-delay-3 lg:col-span-7">
+        <InsetPanel className="lg:col-span-7">
           <h3 className="text-base font-bold text-ink">What I built</h3>
           <ul className="mt-5 flex flex-col gap-5">
             {project.contributions.map((contribution) => (
@@ -168,7 +168,7 @@ export default function FeaturedProject() {
           </ul>
         </InsetPanel>
 
-        <div className="rise rise-delay-4 flex min-w-0 flex-col gap-6 lg:col-span-5">
+        <div className="flex min-w-0 flex-col gap-6 lg:col-span-5">
           <InsetPanel>
             <button
               type="button"

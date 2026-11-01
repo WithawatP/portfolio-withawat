@@ -89,8 +89,8 @@ export default function Skills() {
         <InsetPanel
           {...tabPanelProps(skillTabs[0])}
           className={`${moduleClass.dev} ${
-            isMobile ? "" : "rise rise-delay-1"
-          } ${activeTab === "dev" ? "" : "max-md:hidden"}`}
+            activeTab === "dev" ? "" : "max-md:hidden"
+          }`}
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
@@ -139,8 +139,8 @@ export default function Skills() {
               key={group.title}
               {...tabPanelProps(tab)}
               className={`@container ${moduleClass[tab.id]} ${
-                isMobile ? "" : "rise rise-delay-2"
-              } ${activeTab === tab.id ? "" : "max-md:hidden"}`}
+                activeTab === tab.id ? "" : "max-md:hidden"
+              }`}
             >
               <h3 id={labelId} className="text-xl font-bold text-ink">
                 {group.title}
