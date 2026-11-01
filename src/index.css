@@ -149,7 +149,7 @@
    Scrubbed by scroll, so the progress is linear and has no duration. */
 @keyframes extrude-rise {
   from {
-    scale: 0.97;
+    scale: 0.95;
   }
   to {
     scale: 1;
@@ -157,12 +157,52 @@
 }
 
 @keyframes extrude-shadow {
-  from {
+  0%,
+  45% {
     opacity: 0;
   }
-  to {
+  100% {
     opacity: 1;
   }
+}
+
+/* The section starts pressed into the surface, goes flat, then rises. */
+@keyframes extrude-dent {
+  0% {
+    opacity: 1;
+  }
+  45%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Motion moment 4: the timeline groove fills as an LED strip, led by a raised knob. */
+@keyframes rail-fill {
+  from {
+    scale: 1 0;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes rail-knob {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 100%;
+  }
+}
+
+.rail-fill {
+  transform-origin: 50% 0;
+}
+
+/* Without scroll-driven animations or with reduced motion: the final state, a full strip. */
+.rail-knob {
+  translate: 0 100%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -189,13 +229,43 @@
       view-timeline-name: --extrude;
       animation: extrude-rise linear both;
       animation-timeline: --extrude;
-      animation-range: entry 0px entry 240px;
+      animation-range: entry 80px entry 480px;
     }
 
     .extrude::before {
       animation: extrude-shadow linear both;
       animation-timeline: --extrude;
-      animation-range: entry 0px entry 240px;
+      animation-range: entry 80px entry 480px;
+    }
+
+    .extrude::after {
+      @apply neu-inset-lg;
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      pointer-events: none;
+      animation: extrude-dent linear both;
+      animation-timeline: --extrude;
+      animation-range: entry 80px entry 480px;
+    }
+
+    /* Range: the knob holds at 60% of the viewport height for the whole list. */
+    .rail-timeline {
+      view-timeline-name: --rail;
+    }
+
+    .rail-fill {
+      animation: rail-fill linear both;
+      animation-timeline: --rail;
+      animation-range: cover 40vh cover calc(100% - 60vh);
+    }
+
+    .rail-knob {
+      animation: rail-knob linear both;
+      animation-timeline: --rail;
+      animation-range: cover 40vh cover calc(100% - 60vh);
     }
   }
 

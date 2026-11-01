@@ -135,7 +135,7 @@ Motion follows physics: surfaces extrude, controls press in, light shifts. Never
 
 Scroll moments (budget: these four only):
 
-1. Section extrude: a Level 1 section rises from the surface as it enters the viewport (shadow strength 0 to 1, plus a small scale from .97 to 1). Do NOT use fade-and-slide-up on every section.
+1. Section extrude: a Level 1 section rises from the surface as it enters the viewport (starts pressed in, goes flat, then raised by crossfading inset and raised shadow layers, plus a scale from .95 to 1; owner asked for stronger motion in Phase 5). Do NOT use fade-and-slide-up on every section.
 2. Hero depth layers: name, panels, and controls move at different speeds. Travel up to 40px on desktop, 16 to 20px on mobile. The light direction shifts slightly in the hero: follows the pointer on desktop, follows scroll progress on touch (scoped to the hero, range about 0.4).
 3. Inset window: an image inside a tray shifts 8 to 12 percent while the tray stays still.
 4. Scroll rail: the timeline groove fills like an LED strip as you scroll; the progress indicator is a raised knob in an inset groove.
