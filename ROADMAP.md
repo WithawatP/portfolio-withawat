@@ -16,7 +16,7 @@ Goal: a neumorphic portfolio for a junior dev / QA job seeker. Tidy, mobile firs
 | 3b-fix | Restore original UiverseButton look; remove intro text under Contact heading | Done (via OpenCode) |
 | 3c | Shorten mobile page further. Page 390px: ~8,035 -> 5,997px with the Dev tab open (longest Skills tab). Skills knob switch, compact Quick contact, collapsed Tech stack, shorter timeline rows, bio hidden below 640px | Done |
 | 3d | Hero first screen + display font (Unbounded 700, name only). Keys follow the role below 640px; role shortened to one line on mobile. Skills chips 2 columns on mobile (Design stays 1). Page 390px: 5,997 -> 5,760px with the Dev tab open | Done |
-| 4 | Skills as unequal-size modules on desktop (Partial); Contact with one large email as the single focal point (Partial); inspect.mjs empty-screens must pass (Todo) | **Next** |
+| 4 | Skills as unequal-size modules from 768px (1024+: 8:4 then 5:7); Contact with one large email as the single focal point. Owner tested the `--recess` fill on the Dev and email trays and removed it. Page 390px: 5,760 -> 5,815px with the Dev tab open | Partial. Layout done; `empty-screens` still FAILS at 1440 (screens 3, 6, 7 of 7: 0.14, 0.11, 0.10). **Next** |
 | 5 | Motion (4 scroll moments, reduced-motion) | Todo |
 | 6 | Build/Test switch in the featured project | Blocked on owner content (see "Needs from owner") |
 | 7 | Copy rewrite, inspector, Lighthouse, meta/OG | Todo |
@@ -44,6 +44,8 @@ Content in `src/data/portfolio.js` (owner-supplied facts only)
 - No personal photo in the hero.
 
 ## Next task: Phase 4 (Skills, Contact, empty-screens)
+
+Open item: `empty-screens` at 1440. With the `--recess` fill on the Dev and email trays it passed (one screen under 0.20); the owner removed that fill, so another way is needed or the owner decides how to treat this rule. The audit below predates the Phase 4 layout work.
 
 Audit of the code at `bd11a76`:
 
