@@ -2,8 +2,8 @@ export const profile = {
   name: 'Withawat Phiraban',
   roles: ['Junior Software Developer', 'Quality Assurance / Software Tester'],
   headline:
-    'Combining a MERN-stack foundation, a UI/UX eye, and a quality mindset to build and test reliable web applications.',
-  bio: 'A bootcamp-trained full-stack developer with a QA mindset, shaped by front-end QC, graphic design, IT support, and shift management experience.',
+    'I build MERN apps and test them: 14 API requests in Postman on a team storefront, 20 client templates across three browsers.',
+  bio: 'Bootcamp-trained full-stack developer with earlier work in front-end QC, graphic design, IT support, and shift management.',
   email: 'withawat1201@gmail.com',
   phone: '(+66) 84-229-9742',
   phoneHref: 'tel:+66842299742',
@@ -243,7 +243,7 @@ export const skillGroups = [
   },
   {
     title: 'Quality Assurance & Testing',
-    summary: 'A testing mindset applied across interfaces, APIs, and browsers.',
+    summary: 'Used on interfaces, on APIs through Postman, and across Chrome, Edge, and Brave.',
     items: [
       'Manual Testing',
       'Exploratory Testing',

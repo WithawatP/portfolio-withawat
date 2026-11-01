@@ -72,7 +72,7 @@ export default function Skills() {
       <SectionHeading
         id="skills-title"
         title="Technical skills"
-        intro="A practical toolkit for building, testing, and designing web applications, supported by the soft skills that keep delivery on track."
+        intro="The tools and methods I have used to build, test, and design web applications, plus the people skills from running restaurant shifts."
       />
 
       <div className="mb-4 md:hidden">
