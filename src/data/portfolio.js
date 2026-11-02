@@ -259,11 +259,11 @@ export const skillGroups = [
         items: ['JavaScript (ES6+)', 'HTML5', 'CSS3'],
       },
       {
-        label: 'Frameworks & Libraries',
+        label: 'Frameworks',
         items: ['React', 'Node.js', 'Express.js', 'Tailwind CSS', 'REST APIs'],
       },
       {
-        label: 'Tools & Databases',
+        label: 'Tools & Data',
         items: ['MongoDB', 'PostgreSQL', 'Git', 'GitHub', 'Vite'],
       },
     ],

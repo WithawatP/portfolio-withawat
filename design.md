@@ -14,9 +14,9 @@ The mockup shows the Build side selected; the Test side is the hidden `[data-sid
 
 Neumorphism works as an accent, not as the whole page. So:
 
-- **Flat ground by default.** Headings, paragraphs, lists and labels sit directly on the page ground. No cards around text.
-- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob) or "this is the one device" (the Featured project panel). Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill).
-- **One container level inside a section, at most.** The device panel may hold a screen. Nothing else nests.
+- **Flat ground by default.** Headings, paragraphs, lists and labels sit directly on the page ground. No cards around text. The Skills tray (section 8) is the one exception.
+- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob) or "this is the one device" (the Featured project panel); the small icon circle in the Skills tray is raised too. Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill, the Skills tray).
+- **One container level inside a section, at most.** The device panel may hold a screen. The Skills tray may hold its icon circle. Nothing else nests.
 - **One peak.** The hero contour is the single big visual moment of the page. Nothing else competes with it.
 - **One accent colour,** used in four places only (section 3).
 
@@ -48,6 +48,9 @@ Neumorphism works as an accent, not as the whole page. So:
   --knob: #C9C9C9;
   --led-glow: 0 0 7px 2px rgba(101,28,50,.6);
   --led: #22C55E;           /* status pill LED only */
+  --sh-tray: inset 6px 6px 13px #B3B3B3, inset -6px -6px 13px #F8F8F8;      /* Skills tray, mobile; --sh-screen at >= 900px */
+  --sh-icon: 4px 4px 9px #B6B6B6, -4px -4px 9px #FBFBFB;                    /* Skills icon circle, mobile */
+  --sh-icon-lg: 5px 5px 10px #B6B6B6, -5px -5px 10px #FBFBFB;               /* Skills icon circle, >= 900px */
 }
 ```
 
@@ -59,7 +62,7 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 
 `#651C32` appears only on:
 1. the primary key (Download CV, Send email),
-2. LEDs (the selected side of the Build/Test switch, the open row on the timeline),
+2. LEDs (the selected side of every knob switch, the open row on the timeline),
 3. one large numeral per section (for example "14" on the Test side),
 4. the active gallery dot.
 
@@ -82,7 +85,7 @@ Nowhere else: not on links, headings, borders, icons or hover states.
 | Item title | 15–16px | 600 |
 | Secondary line | 13–14px | 400, `--muted` |
 | Eyebrow label | 11–12px, uppercase, tracking 0.2–0.22em | 600, `--label` |
-| Large numeral | `clamp(42px, 4vw, 56px)` | Michroma, `--accent` |
+| Large numeral | `clamp(42px, 4vw, 56px)`; 72px in the Skills tray | Michroma, `--accent` |
 
 Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 
@@ -162,7 +165,12 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 Build these after Hero and Featured project are approved on the real site.
 
 - **Experience:** the timeline on flat ground, no cards. Each role is one row (title 15–16px 600; company and dates in `--muted`). The whole row toggles its details (keep the existing accordion logic: click only, single open, latest role open). The rail is an inset groove; the open row's node has the accent LED with `animate-ping`, and closed rows show the off LED.
-- **Skills:** four groups (Programming & Web, QA & Testing, Design, Soft skills) as plain-text lists under eyebrow labels. Mobile may keep the existing switch between groups, restyled like the Build/Test switch.
+- **Skills:** approved mockups: `docs/mockup/skills-desktop.html` and `docs/mockup/skills-mobile.html` (both show the Development group). One knob switch selects one group, shown in one sunken tray. The tray is `--ground` with no lighter fill inside. Groups swap instantly.
+  - **Tray content:** a raised icon circle that changes with the group, the group title as an eyebrow, and the summary in `--muted`. The Development group has three rows (11px label, skills in `--ink` separated by " · "). The other groups are lists with a 6px `--faint` dot.
+  - **>= 900px:** heading left and intro right in one row. Below them, a vertical switch 240px wide with 56px options and a knob that slides up and down, beside a tray of the same height: 236px when the text fits, as it does from 1280px up. Icon circle 44px, summary 14px, skills 17px, lists in 3 columns. To the right of the tray content is the section's one large numeral: 72px Michroma in `--accent`, counted from `portfolio.js` for the selected group, never hard-coded, with the label "SKILLS IN GROUP".
+  - **900–1279px:** no extra breakpoint; the content reflows. Row labels move above their skills, lists drop to 2 columns, and the numeral moves under the content when there is no room beside it. The tray grows and the switch stretches with it, so they stay the same height.
+  - **< 900px:** a horizontal switch (Dev, QA, Design, Soft) up to 340px wide, with 13px labels and 7px LEDs, then the same tray at the height of its content. Icon circle 40px, summary 13px, skills 16px, lists in one column, labels above their skills, no numeral.
+  - **Keyboard:** `role="tablist"` with `aria-orientation`. Up and Down on the vertical switch, Left and Right on the horizontal one, Home and End on both.
 - **Contact:** the email large (Manrope 600, `clamp(28px, 4vw, 48px)`, wraps with `overflow-wrap: anywhere`), one line of location and availability, then keys: Send email (primary), Call, Download CV, and icon keys for GitHub and LinkedIn.
 - **Footer:** one line of plain text on the ground.
 
@@ -178,7 +186,7 @@ Borders used for structure · gradients · glass or blur panels · pure black ·
 ## 11. Review gate (answer before calling a task done)
 
 1. At 390px, does the first screen show the contour band, name, role, claim and both keys with little or no scrolling?
-2. Is any text sitting inside a box that is not a key, the device panel, the screen or a well?
+2. Is any text sitting inside a box that is not a key, the device panel, the screen, a well or the Skills tray?
 3. Is the accent used anywhere outside the four allowed places?
 4. Does the name overlap the contour at any width from 900 to 1440?
 5. Do keys press in (inset) on `:active` and show a focus ring on keyboard focus?

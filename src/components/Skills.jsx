@@ -1,176 +1,131 @@
-import { useState } from "react";
-import SectionCard from "./ui/SectionCard";
-import SectionHeading from "./ui/SectionHeading";
-import InsetPanel from "./ui/InsetPanel";
-import KnobSwitch from "./ui/KnobSwitch";
-import SkillChip from "./ui/SkillChip";
-import { useMediaQuery } from "../lib/useMediaQuery";
-import { skillGroups } from "../data/portfolio";
+import { useState } from 'react'
+import Icon from './ui/Icon'
+import KnobSwitch from './ui/KnobSwitch'
+import { useMediaQuery } from '../lib/useMediaQuery'
+import { skillGroups } from '../data/portfolio'
 
-const skillTabs = [
-  { id: "dev", label: "Dev" },
-  { id: "qa", label: "QA" },
-  { id: "design", label: "Design" },
-  { id: "soft", label: "Soft" },
-];
+// In the order of skillGroups in portfolio.js.
+const tabs = [
+  { id: 'dev', label: 'Development', short: 'Dev', icon: 'code' },
+  { id: 'qa', label: 'QA & Testing', short: 'QA', icon: 'check' },
+  { id: 'design', label: 'Design', short: 'Design', icon: 'monitor' },
+  { id: 'soft', label: 'Soft skills', short: 'Soft', icon: 'users' },
+]
 
-// Below 640px a half-width chip holds about 19 characters at 360px; longer labels need one column.
-const hasLongLabel = (items) => items.some((item) => item.length > 19);
+const SKILL_TEXT = 'text-base font-medium leading-normal text-ink wide:text-[17px]'
 
-// Uneven modules from 768px up, in the order Dev, QA, Design, Soft.
-const moduleClass = {
-  dev: "md:col-span-2 lg:col-span-8",
-  qa: "lg:col-span-4",
-  design: "lg:col-span-5",
-  soft: "md:col-span-2 lg:col-span-7",
-};
-
-const chipGridClass = (items) =>
-  hasLongLabel(items)
-    ? "grid-cols-1 sm:grid-cols-2 sm:@max-[360px]:grid-cols-1"
-    : "grid-cols-2 @max-[260px]:grid-cols-1 sm:@max-[360px]:grid-cols-1";
-
-const chipSpanClass = (items, index) => {
-  if (items.length % 2 === 0 || index !== items.length - 1) return "";
-  return hasLongLabel(items)
-    ? "sm:col-span-2 sm:@max-[360px]:col-span-1"
-    : "col-span-2 @max-[260px]:col-span-1 sm:@max-[360px]:col-span-1";
-};
-
-// Dev tray from 1024px: every group ends on three rows at 1280px and up. Between 1024px and 1279px
-// three groups across would clip the half-width chips, so Languages takes its own row.
-// Important is needed to win over the container rules in chipGridClass and chipSpanClass.
-const devGroupClass = (groupIndex) =>
-  groupIndex === 0 ? "lg:col-span-2 xl:col-span-1" : "";
-
-const devGridClass = (groupIndex) =>
-  groupIndex === 0 ? "lg:grid-cols-3! xl:grid-cols-1!" : "lg:grid-cols-2!";
-
-const devChipClass = (items, groupIndex, itemIndex) => {
-  if (groupIndex === 0) return "lg:col-span-1!";
-  return items.length % 2 === 1 && itemIndex === items.length - 1
-    ? "lg:col-span-2!"
-    : "";
-};
+const countSkills = (group) =>
+  group.groups
+    ? group.groups.reduce((total, subgroup) => total + subgroup.items.length, 0)
+    : group.items.length
 
 export default function Skills() {
-  const [primary, ...secondary] = skillGroups;
-  const [activeTab, setActiveTab] = useState("dev");
-  const isMobile = useMediaQuery("(max-width: 767px)");
-
-  const tabPanelProps = (tab) =>
-    isMobile
-      ? {
-          id: `skills-panel-${tab.id}`,
-          role: "tabpanel",
-          "aria-labelledby": `skills-tab-${tab.id}`,
-        }
-      : {};
+  const [activeId, setActiveId] = useState(tabs[0].id)
+  const isWide = useMediaQuery('(min-width: 900px)')
+  const activeIndex = tabs.findIndex((tab) => tab.id === activeId)
+  const activeTab = tabs[activeIndex]
+  const group = skillGroups[activeIndex]
 
   return (
-    <SectionCard id="skills" labelledBy="skills-title">
-      <SectionHeading
-        id="skills-title"
-        title="Technical skills"
-        intro="The tools and methods I have used to build, test, and design web applications, plus the people skills from running restaurant shifts."
-      />
-
-      <div className="mb-4 md:hidden">
-        <KnobSwitch
-          options={skillTabs}
-          value={activeTab}
-          onChange={setActiveTab}
-          ariaLabel="Skill categories"
-          idPrefix={isMobile ? "skills" : undefined}
-        />
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-12">
-        <InsetPanel
-          {...tabPanelProps(skillTabs[0])}
-          className={`${moduleClass.dev} ${
-            activeTab === "dev" ? "" : "max-md:hidden"
-          }`}
+    <section
+      id="skills"
+      aria-labelledby="skills-title"
+      className="flex flex-col gap-7 wide:gap-12"
+    >
+      <header className="flex flex-col gap-4 wide:flex-row wide:items-end wide:justify-between wide:gap-16">
+        <h2
+          id="skills-title"
+          className="text-[clamp(32px,3.4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-ink wide:shrink-0"
         >
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div className="min-w-0">
-              <h3 className="text-xl font-bold text-ink">{primary.title}</h3>
-              <p className="mt-1 text-base leading-relaxed text-ink">
-                {primary.summary}
-              </p>
+          Technical skills
+        </h2>
+        <p className="text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-body wide:max-w-[520px]">
+          The tools and methods I have used to build, test, and design web applications, plus the people skills from running restaurant shifts.
+        </p>
+      </header>
+
+      <div className="flex flex-col gap-6 wide:flex-row wide:items-stretch wide:gap-10">
+        <KnobSwitch
+          options={tabs.map((tab) => ({
+            id: tab.id,
+            label: isWide ? tab.label : tab.short,
+          }))}
+          value={activeId}
+          onChange={setActiveId}
+          ariaLabel="Skill group"
+          orientation={isWide ? 'vertical' : 'horizontal'}
+          idPrefix="skills"
+          showLed
+          className="w-full max-w-[340px] self-center wide:w-60 wide:max-w-none wide:shrink-0 wide:self-stretch"
+        />
+
+        {/* The tray is one sunken well; the switch stretches with it, so they stay the same height. */}
+        <div
+          id="skills-panel"
+          role="tabpanel"
+          aria-labelledby={`skills-tab-${activeId}`}
+          tabIndex={0}
+          className="flex min-w-0 flex-col gap-4 rounded-[26px] bg-ground px-5 py-[22px] sh-tray focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent wide:min-h-[236px] wide:flex-1 wide:flex-row wide:flex-wrap wide:gap-x-10 wide:gap-y-5 wide:rounded-[30px] wide:py-7 wide:pl-9 wide:pr-10 wide:sh-screen"
+        >
+          <div className="@container flex min-w-0 flex-col gap-4 wide:flex-[1_1_380px] wide:gap-5">
+            <div className="flex items-center gap-3.5 wide:gap-4">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ground text-ink-2 sh-icon wide:h-11 wide:w-11 wide:sh-icon-lg">
+                <Icon name={activeTab.icon} className="h-[17px] w-[17px] wide:h-[18px] wide:w-[18px]" />
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-label wide:text-xs wide:tracking-[0.22em]">
+                  {group.title}
+                </h3>
+                <p className="text-[13px] leading-[1.45] text-muted wide:text-sm wide:leading-normal">
+                  {group.summary}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="mt-5 grid items-start gap-5 lg:grid-cols-2 xl:grid-cols-[3fr_4fr_4fr]">
-            {primary.groups.map((group, groupIndex) => {
-              const labelId = `skill-sub-${groupIndex}`;
-              return (
-                <div
-                  key={group.label}
-                  className={`@container ${devGroupClass(groupIndex)}`}
-                >
-                  <p id={labelId} className="text-[13px] font-medium text-ink">
-                    {group.label}
-                  </p>
-                  <ul
-                    aria-labelledby={labelId}
-                    className={`mt-2 grid gap-2 ${chipGridClass(group.items)} ${devGridClass(groupIndex)}`}
+            {group.groups ? (
+              <dl className="flex flex-col gap-3.5 wide:gap-2.5">
+                {group.groups.map((subgroup) => (
+                  <div
+                    key={subgroup.label}
+                    className="flex flex-col gap-[3px] wide:flex-row wide:flex-wrap wide:items-baseline wide:gap-x-4"
                   >
-                    {group.items.map((item, itemIndex) => (
-                      <SkillChip
-                        key={item}
-                        className={`${chipSpanClass(group.items, itemIndex)} ${devChipClass(group.items, groupIndex, itemIndex)}`}
-                      >
-                        {item}
-                      </SkillChip>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        </InsetPanel>
-
-        {secondary.map((group, groupIndex) => {
-          const labelId = `skill-cat-${groupIndex}`;
-          const tab = skillTabs[groupIndex + 1];
-          return (
-            <InsetPanel
-              key={group.title}
-              {...tabPanelProps(tab)}
-              className={`@container ${moduleClass[tab.id]} ${
-                activeTab === tab.id ? "" : "max-md:hidden"
-              }`}
-            >
-              <h3 id={labelId} className="text-xl font-bold text-ink">
-                {group.title}
-              </h3>
-              <p className="mt-1 text-base leading-relaxed text-ink">
-                {group.summary}
-              </p>
-              <ul
-                aria-labelledby={labelId}
-                className={`mt-5 grid gap-2 ${chipGridClass(group.items)} ${
-                  tab.id === "qa" ? "xl:grid-cols-2!" : ""
-                }`}
-              >
-                {group.items.map((item, itemIndex) => (
-                  <SkillChip
-                    key={item}
-                    className={`${chipSpanClass(group.items, itemIndex)} ${
-                      tab.id === "qa" && itemIndex === group.items.length - 1
-                        ? "xl:col-span-2!"
-                        : ""
-                    }`}
-                  >
-                    {item}
-                  </SkillChip>
+                    <dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-label wide:w-[150px] wide:shrink-0">
+                      {subgroup.label}
+                    </dt>
+                    <dd className={`min-w-0 wide:flex-[1_1_300px] ${SKILL_TEXT}`}>
+                      {subgroup.items.join(' · ')}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : (
+              <ul className="flex flex-col gap-3 wide:grid wide:grid-cols-[repeat(2,auto)] wide:justify-start wide:gap-x-7 wide:gap-y-3.5 wide:@[570px]:grid-cols-[repeat(3,auto)]">
+                {group.items.map((item) => (
+                  <li key={item} className="flex gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="mt-[calc(0.75em-3px)] h-1.5 w-1.5 shrink-0 rounded-full bg-faint"
+                    />
+                    <span className={SKILL_TEXT}>{item}</span>
+                  </li>
                 ))}
               </ul>
-            </InsetPanel>
-          );
-        })}
+            )}
+          </div>
+
+          <div
+            aria-hidden="true"
+            className="ml-auto hidden w-[150px] shrink-0 flex-col items-end justify-center gap-2 wide:flex"
+          >
+            <span className="font-display text-[72px] leading-none text-accent">
+              {countSkills(group)}
+            </span>
+            <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.22em] text-label">
+              Skills in group
+            </span>
+          </div>
+        </div>
       </div>
-    </SectionCard>
-  );
+    </section>
+  )
 }

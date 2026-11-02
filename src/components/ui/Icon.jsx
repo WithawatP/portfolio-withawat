@@ -132,6 +132,14 @@ const icons = {
       <path d="M8 8h.01M8 16h.01" />
     </>
   ),
+  users: (
+    <>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M3 20a6 6 0 0 1 12 0" />
+      <path d="M16 4.8a3.5 3.5 0 0 1 0 6.4" />
+      <path d="M18 14.5a6 6 0 0 1 3 5.5" />
+    </>
+  ),
 }
 
 export default function Icon({ name, className = 'h-4 w-4', strokeWidth = 1.6 }) {

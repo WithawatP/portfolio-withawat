@@ -17,23 +17,23 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R1 | Hero (mobile first): nav row, status pill, contour band / right-side contour, name, role, claim, two keys | Done |
 | R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | Done |
 | R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | Done |
-| R4 | Skills: plain-text groups, no chips; mobile group switch restyled | **Next** |
-| R5 | Contact, footer, bottom nav restyle | Todo |
+| R4 | Skills: knob switch and one sunken tray, from `docs/mockup/skills-desktop.html` and `skills-mobile.html` | Done |
+| R5 | Contact, footer, bottom nav restyle | **Next** |
 | R6 | Motion: hero contour parallax, reduced-motion pass | Todo |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Todo |
 
-## Next task: R4
+## Next task: R5
 
-Restyle Skills from design.md section 8 and 6.6: four groups as plain-text lists under eyebrow labels, no chips; the mobile group switch sits on flat ground. Plan first if it touches more than about 3 files.
+Restyle Contact, the footer and the bottom nav from design.md sections 5 and 8. Plan first if it touches more than about 3 files.
 
 Carry over:
-- `Pill` has no users since R3; remove it in R7.
+- `Pill` has no users since R3 and `SkillChip` has none since R4; remove them in R7.
+- Inspector `small-text` is now a FAIL at every width because of the 11px and 12px labels in R4, which design.md section 4 allows. It is not waived; the owner decides.
 - Inspector `still-page` is a WARN, as it was before R3; the LED pings keep it there. Recheck after R5, when the last extrude goes, and after R6.
 - Inspector `covered-text` on "Work experience" at 768 is the bottom nav passing over the heading while it enters the screen. It was already there before R3. Review it in R5 with the bottom nav.
 - `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
 - v2 sections and `BottomNav` still use `surface` on the new `ground` page until their phases.
 - `scroll-padding-top` still allows for the old sticky header at 640px and up. At 1440 the Featured heading lands 96px below the top, which reads fine, so it stayed. Review it when the remaining sections are restyled.
-- The Skills tabs below 768px already use the restyled `KnobSwitch`, sitting on the old `surface` card until R4.
 
 ## Locked decisions (still valid from v2)
 
@@ -72,6 +72,12 @@ Carry over:
 - Row details open with a 0.3s height change and no fade.
 - Experience tags are a " · " text line; the intro and "2019 – 2026" keep their wording and stay in `Experience.jsx`.
 - The rail uses the existing `sh-well`; no new groove token was needed.
+- Skills follows the approved mockups and design.md section 8. Its wrapper stays 1144px wide at most, so its left edge lines up with Experience; the mockup was drawn at 1240px, so the tray is 864px wide at 1440, not 960px.
+- From 900 to 1279px the Skills tray reflows instead of adding a breakpoint, and the switch stretches to match it; its options grow past 56px there. The tray height changes between groups in this range.
+- Skills lists use columns sized to their content, not equal thirds, or "Responsive Web Layouts" would wrap.
+- The owner approved the labels "Frameworks" and "Tools & Data" in `portfolio.js`, to match the mockup and fit the 150px label column.
+- The mockup's `#5A5A5A` (labels) and `#4A4A4A` (icons) have no token; they use `label` and `ink-2`.
+- Every knob switch has LEDs, the Skills switch included, so they all look the same (the owner's decision; design.md section 3 changed to match). The switch stays a `tablist` on Skills.
 
 ## Needs from owner
 
