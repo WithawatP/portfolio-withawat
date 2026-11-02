@@ -66,9 +66,12 @@ export default function TimelineItem({
         aria-hidden="true"
         className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ground sh-well"
       >
+        {open && (
+          <span className="absolute h-2 w-2 animate-ping rounded-full bg-accent opacity-75" />
+        )}
         <span
-          className={`h-2 w-2 rounded-full [transition:all_.3s] ${
-            open ? 'animate-led-blink bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
+          className={`relative h-2 w-2 rounded-full [transition:all_.3s] ${
+            open ? 'bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
           }`}
         />
       </span>

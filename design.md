@@ -48,7 +48,6 @@ Neumorphism works as an accent, not as the whole page. So:
   --knob: #C9C9C9;
   --led-glow: 0 0 7px 2px rgba(101,28,50,.6);
   --led: #22C55E;           /* status pill LED only */
-  --led-glow-green: 0 0 7px 2px rgba(34,197,94,.6);
 }
 ```
 
@@ -65,7 +64,7 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 4. the active gallery dot.
 
 Plus the keyboard focus ring (section 6.1), which is an accessibility signal, not decoration.
-The status pill LED is green (`--led`) by the owner's decision. Green appears nowhere else.
+The status pill LED is green by the owner's decision. It is the one exception to the single-accent rule. Green appears nowhere else.
 Nowhere else: not on links, headings, borders, icons or hover states.
 
 ## 4. Typography
@@ -117,7 +116,8 @@ Based on "witty-wolverine-69" by javierBarroso on uiverse.io (MIT). Put a credit
 - The old `UiverseButton` (styled-components) is retired once every button uses the Key.
 
 ### 6.2 Status pill
-Inset (`--sh-well`), radius 999px, LED 7–8px in `--led` with `--led-glow-green`, text 12–13px 600 `--ink-2`.
+Inset (`--sh-well`), radius 999px, text 12–13px 600 `--ink-2`.
+The LED is the green light from before R1: a 10px dot in `--led` over a 10px `animate-ping` ring in `--led` at `opacity-75`, with no glow. It is used in the Hero and in the mobile nav. With reduced motion on, the ping stops and the dot stays still.
 
 ### 6.3 Device panel (Featured project only)
 - Radius 32px and padding 16px on mobile; radius 48px and padding 32px at >= 900px. `--sh-device` / `--sh-device-lg`.
@@ -153,15 +153,15 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 
 - **The peak: hero contour parallax.** While the hero scrolls out, the level groups move up at different speeds: outer level 0, middle level up to 12px, inner levels up to 24px on mobile and up to 40px on desktop. Use CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) on `transform` only; browsers without support show it static.
 - **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
-- **LED blink:** the status pill LED and the open timeline row's LED blink softly (`animate-led-blink`: 1.5s, opacity down to 0.7). The switch LEDs do not blink.
-- No entrance fades or slide-ups, no scroll cues, no looping animation other than the LED blink.
+- **LED ping:** `animate-ping` on the status pill LED (section 6.2) and on the open timeline row's LED are the only looping animations allowed. The switch LEDs stay still.
+- No entrance fades or slide-ups, no scroll cues, no other looping animation.
 - `prefers-reduced-motion: reduce`: everything static, transitions off.
 
 ## 8. Sections not in the mockup yet (apply the same rules)
 
 Build these after Hero and Featured project are approved on the real site.
 
-- **Experience:** the timeline on flat ground, no cards. Each role is one row (title 15–16px 600; company and dates in `--muted`). The whole row toggles its details (keep the existing accordion logic: click only, single open, latest role open). The rail is an inset groove; the open row's node has the blinking accent LED, and closed rows show the off LED.
+- **Experience:** the timeline on flat ground, no cards. Each role is one row (title 15–16px 600; company and dates in `--muted`). The whole row toggles its details (keep the existing accordion logic: click only, single open, latest role open). The rail is an inset groove; the open row's node has the accent LED with `animate-ping`, and closed rows show the off LED.
 - **Skills:** four groups (Programming & Web, QA & Testing, Design, Soft skills) as plain-text lists under eyebrow labels. Mobile may keep the existing switch between groups, restyled like the Build/Test switch.
 - **Contact:** the email large (Manrope 600, `clamp(28px, 4vw, 48px)`, wraps with `overflow-wrap: anywhere`), one line of location and availability, then keys: Send email (primary), Call, Download CV, and icon keys for GitHub and LinkedIn.
 - **Footer:** one line of plain text on the ground.
