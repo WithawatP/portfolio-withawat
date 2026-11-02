@@ -5,8 +5,8 @@ It overrides every installed skill (design-taste-frontend or any other) wherever
 Content and copy still come from `src/data/portfolio.js`.
 
 Visual reference: the approved mockup of Hero + Featured project, saved in the repo as
-`docs/mockup/hero-featured.html`. Match it. Where this file and the mockup differ, this file wins.
-In the mockup markup, `{{accent}}` means `#651C32`; the other `{{...}}` values are switch state (section 6.5).
+`docs/mockup/hero-featured.html` (plain static HTML; open it in a browser). Match it. Where this file and the mockup differ, this file wins.
+The mockup shows the Build side selected; the Test side is the hidden `[data-side="test"]` block.
 
 ---
 
@@ -62,6 +62,7 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 3. one large numeral per section (for example "14" on the Test side),
 4. the active gallery dot.
 
+Plus the keyboard focus ring (section 6.1), which is an accessibility signal, not decoration.
 Nowhere else: not on links, headings, borders, icons or hover states.
 
 ## 4. Typography
@@ -106,7 +107,7 @@ Based on "witty-wolverine-69" by javierBarroso on uiverse.io (MIT). Put a credit
 
 - Radius 10px, padding 14px 26px, 1px border in the same colour as the background, `--sh-key`, `transition: all .3s`.
 - `:active`: `--sh-key-pressed`, text `#5E5E5E`.
-- Primary: background and border `--accent`, text white, `--sh-primary`; `:active` uses `--sh-primary-pressed`.
+- Primary: background and border `--accent`, text white, `--sh-primary`; `:active` uses `--sh-primary-pressed` and text `#E6D3D9`.
 - Icon key: 52x52, radius 14px, icon 18px, label (12px, 600) underneath, outside the key.
 - Focus: `outline: 2px solid var(--accent); outline-offset: 4px` on `:focus-visible`.
 - Hover effects only inside `@media (hover: hover)`.
@@ -179,4 +180,5 @@ Borders used for structure · gradients · glass or blur panels · pure black ·
 8. With reduced motion on, does nothing move?
 9. `npm run lint` and `npm run build` pass.
 
-Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `few-pictures`, `font-fallback`.
+Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`.
+Until R7 removes them, findings caused by v2 leftovers (`UiverseButton` gradient, text-shadow and button-fx) are expected and are not blockers. Dev test pages under `dev/` are not inspected for content findings.
