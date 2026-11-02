@@ -90,11 +90,11 @@
 
 /* design.md 6.7: a mask, not a decorative gradient. Contour lines fade out instead of being cut. */
 @utility contour-fade {
-  mask-image: linear-gradient(to bottom, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 82%, transparent);
 
   @media (min-width: 56.25rem) {
     mask-image:
-      linear-gradient(to bottom, black 82%, transparent),
+      linear-gradient(to bottom, transparent, black 10%, black 82%, transparent),
       linear-gradient(to right, transparent, black 10%);
     mask-composite: intersect;
   }
@@ -188,7 +188,7 @@
     background-color: var(--color-ground);
     color-scheme: light;
     scroll-padding-top: 1rem;
-    scrollbar-gutter: stable both-edges;
+    scrollbar-width: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -208,6 +208,10 @@
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-tap-highlight-color: transparent;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   ::selection {

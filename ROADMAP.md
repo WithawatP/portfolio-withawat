@@ -52,6 +52,7 @@ Carry over:
 - Hero role line is "Junior Software Developer · QA Tester" (`profile.heroRole`); `profile.roles` is unchanged.
 - Hero bio and core stack are no longer shown; the data stays in `portfolio.js`.
 - Name clamp maximum is 64px, not 66px, so the name stays inside the 540px column and clear of the contour box up to 1920px (design.md section 5 allows shrinking it).
+- The page scrollbar is hidden on every page; scrolling still works.
 - Hero keys use 14px side padding below 900px, not 26px, so "Download CV" stays on one line in the 2-column grid.
 
 ## Needs from owner

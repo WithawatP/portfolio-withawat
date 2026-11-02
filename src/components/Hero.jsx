@@ -13,10 +13,10 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="relative flex flex-col wide:min-h-[760px] wide:justify-center"
     >
-      <ContourHero className="relative h-[300px] wide:absolute wide:inset-y-0 wide:right-0 wide:h-auto wide:w-[52%]" />
+      <ContourHero className="relative h-[230px] wide:absolute wide:inset-y-0 wide:right-0 wide:h-auto wide:w-[52%]" />
 
-      <div className="mx-auto w-full max-w-[1240px] px-4 wide:px-12">
-        <div className="relative z-10 flex flex-col gap-5 pt-2 wide:max-w-[540px] wide:gap-7 wide:pt-0">
+      <div className="mx-auto -mt-6 w-full max-w-[1240px] px-4 wide:mt-0 wide:px-12">
+        <div className="relative z-10 flex flex-col gap-5 wide:max-w-[540px] wide:gap-7">
           <div className="hidden wide:block">
             <AvailabilityBadge>{profile.statusLong}</AvailabilityBadge>
           </div>
