@@ -116,7 +116,7 @@ export default function FeaturedProject() {
       <div className="flex flex-col gap-6 rounded-[32px] bg-ground p-4 sh-device wide:grid wide:grid-cols-[55fr_45fr] wide:gap-10 wide:rounded-[48px] wide:p-8">
         <div className="flex min-w-0 flex-col justify-center gap-3.5">
           <div className="rounded-3xl p-2.5 sh-screen">
-            <div className="h-[210px] overflow-hidden rounded-2xl bg-screen wide:h-[400px]">
+            <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-screen">
               <Swiper
                 effect={'coverflow'}
                 grabCursor={true}
@@ -136,8 +136,7 @@ export default function FeaturedProject() {
                 className="atelier-coverflow h-full"
               >
                 {projectGallery.map((shot) => (
-                  // The cap keeps a 16:10 image inside the 210px screen on wide phones and tablets.
-                  <SwiperSlide key={shot.src} className="!w-[78%] max-wide:!max-w-[304px]">
+                  <SwiperSlide key={shot.src} className="!w-[88%]">
                     <img
                       src={shot.src}
                       alt={shot.alt}

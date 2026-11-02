@@ -121,8 +121,9 @@ Inset (`--sh-well`), radius 999px, LED 7–8px in `--accent` with `--led-glow`, 
 - Mobile: stacked (screen, switch, content, tech line, icon keys). Desktop: two columns, screen 55% left, side 45% right.
 
 ### 6.4 Screen (gallery)
-- Inset frame: radius 24px, padding 10px, `--sh-screen`. Inner area radius 16px, `--screen`, height 210px mobile / 400px desktop, vertically centred in its column.
+- Inset frame: radius 24px, padding 10px, `--sh-screen`. Inner area radius 16px, `--screen`, `aspect-ratio: 16 / 10` to match the screenshots, vertically centred in its column.
 - The existing Swiper lives inside the screen. Keep its configuration (no loop, no autoplay, no lightbox).
+- Slides are about 88% of the screen width: the main image is never cropped and the neighbouring images still show at the edges.
 - Pagination under the screen: inactive dots 6px `--faint`, active dot an 18x6px pill in `--accent`.
 
 ### 6.5 Build / Test switch
@@ -182,5 +183,5 @@ Borders used for structure · gradients · glass or blur panels · pure black ·
 8. With reduced motion on, does nothing move?
 9. `npm run lint` and `npm run build` pass.
 
-Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`.
+Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`, `eyebrow`, `micro-label`, `body-size` (the 11–12px labels and 15–17px body in section 4 are deliberate; `body-size` also counts section 4's 13–14px secondary lines as body).
 Until R7 removes them, findings caused by v2 leftovers (`UiverseButton` gradient, text-shadow and button-fx) are expected and are not blockers. Dev test pages under `dev/` are not inspected for content findings.

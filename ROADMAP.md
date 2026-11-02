@@ -57,11 +57,11 @@ Carry over:
 - Featured project shows the short copy the owner approved: `buildRows`, `techLine`, `testing.requestCaption`, `testing.bugs[].tag` and `.short`. The Admin and Customer-facing lines are condensed from `contributions`. `type`, `contributions`, `stack`, `method`, `folders`, `cause`, `requestLabel` and `bugsTitle` are no longer shown; the data stays in `portfolio.js`.
 - The summary comes from `portfolio.js` ("A full-stack storefront..."), not the mockup's wording.
 - Gallery captions and "Screens captured from the deployed demo." are removed; alt text stays.
-- Gallery slides are 78% wide at every width, capped at 304px below 900px so a 16:10 image fits the 210px screen. Swiper props are unchanged.
+- The gallery screen is `aspect-ratio: 16 / 10` instead of a fixed height, and slides are 88% wide at every width (design.md 6.4). Swiper props are unchanged.
 - Gallery dots are driven by `onSlideChange` state, so the Pagination module is not added.
 - Build and Test swap instantly: design.md section 7 lists no fade for them.
 - `--color-switch-off` (`#555555`) is a token for the unselected switch label that design.md 6.5 specifies.
-- Inspector findings `eyebrow`, `micro-label` and `body-size` come from type that design.md sections 4 and 6.5 require. They are not on the waived list in design.md yet.
+- Inspector findings `eyebrow`, `micro-label` and `body-size` are waived in design.md section 11: they come from type that section 4 sets deliberately.
 
 ## Needs from owner
 
