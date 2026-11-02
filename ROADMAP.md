@@ -36,7 +36,7 @@ Carry over:
 
 ## Locked decisions (still valid from v2)
 
-- Mobile bottom nav is a bar attached to the screen edge, labels Home, Project, Work, Skills, Contact. Scroll-spy with the navigation lock stays.
+- Mobile bottom nav labels are Home, Project, Work, Skills, Contact. Scroll-spy with the navigation lock stays. (Its shape changed in R5: see the v3 decisions.)
 - Experience timeline: click only, the whole row toggles, single open, latest role open by default.
 - Swiper config is not to be touched (coverflow, no loop, no autoplay, no lightbox).
 - No personal photo.
@@ -45,7 +45,7 @@ Carry over:
 
 ## New decisions (v3)
 
-- Ground `#DADADA`, accent `#651C32` in four places only.
+- Ground `#DADADA`, accent `#651C32` in five places only (the nav ball was added in R5).
 - Michroma for the name and large numerals; Manrope for everything else.
 - Buttons are the uiverse "witty-wolverine-69" key style (javierBarroso, MIT) adapted to the ground colour; the old UiverseButton look is retired.
 - No chips anywhere; tech and skills are " · " separated text.
@@ -77,6 +77,11 @@ Carry over:
 - The owner approved the labels "Frameworks" and "Tools & Data" in `portfolio.js`, to match the mockup and fit the 150px label column.
 - The mockup's `#5A5A5A` (labels) and `#4A4A4A` (icons) have no token; they use `label` and `ink-2`.
 - Every knob switch has LEDs, the Skills switch included, so they all look the same (the owner's decision; design.md section 3 changed to match). The switch stays a `tablist` on Skills.
+- The mobile nav is a floating capsule with a wine ball (design.md section 5), not a bar on the screen edge.
+- After testing on a real iPhone, the ball's easing changed from the mockup's `cubic-bezier(1, -0.4, 0, 1.4)`, which looked like a jump on long moves, to the design.md section 7 timing. The ball moves by `transform`, not the mockup's `left`, so it runs on the compositor. Gallery images load eagerly, so they are already downloaded when the page first reaches Project; they still decode on arrival (about 6ms each in throttled Chrome). Home in the bottom nav scrolls to `scrollY` 0 and clears the hash, because the `#home` anchor stopped with the WP row under the status bar.
+- Contact follows the approved mockups, with these differences the owner approved: nav labels are 12px, not 11px (section 4 keeps 11px for uppercase eyebrows); the status pill keeps its 10px pinging LED (section 6.2); the email is `clamp(40px, 4.45vw, 64px)` at >= 900px because the mockup only shows 1440; icon keys stay 52px and the Send email key keeps radius 10px (section 6.1); icons come from `Icon.jsx`; section spacing stays 96/160px and the wrapper lines up with Skills; "Copied!" / "Copy failed" shows under the copy key for 2 seconds.
+- The email is plain text, as in the mockup; Send email is the mailto link. The phone is plain text too, and the Call key is the tel link on mobile.
+- `profile.contactLine` holds the sentence that used to be hard-coded in `Contact.jsx`, word for word.
 
 ## Needs from owner
 

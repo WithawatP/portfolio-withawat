@@ -22,6 +22,7 @@
   --color-key-pressed: #5e5e5e;
   --color-on-accent-pressed: #e6d3d9;
   --color-switch-off: #555555;
+  --color-socket-ring: rgba(245, 245, 245, 0.6);
 
   --breakpoint-wide: 56.25rem;
 
@@ -49,6 +50,9 @@
   --sh-tray: inset 6px 6px 13px #B3B3B3, inset -6px -6px 13px #F8F8F8;
   --sh-icon: 4px 4px 9px #B6B6B6, -4px -4px 9px #FBFBFB;
   --sh-icon-lg: 5px 5px 10px #B6B6B6, -5px -5px 10px #FBFBFB;
+  --sh-capsule: 10px 10px 24px #B0B0B0, -8px -8px 20px #FBFBFB;
+  --sh-socket: 0 0 20px -12px #6E6E6E, inset 0 0 20px -13px #6E6E6E, inset 3px 3px 6px #BDBDBD;
+  --sh-ball: inset 0 -9px 10px 0 rgba(0,0,0,.28), inset 0 6px 8px 0 rgba(255,255,255,.22), 0 2px 1px rgba(0,0,0,.08), 0 4px 3px rgba(0,0,0,.1), 0 8px 6px rgba(0,0,0,.1), 0 14px 10px rgba(0,0,0,.08);
   --led-glow: 0 0 7px 2px rgba(101,28,50,.6);
 }
 
@@ -102,6 +106,18 @@
 
 @utility sh-icon-lg {
   box-shadow: var(--sh-icon-lg);
+}
+
+@utility sh-capsule {
+  box-shadow: var(--sh-capsule);
+}
+
+@utility sh-socket {
+  box-shadow: var(--sh-socket);
+}
+
+@utility sh-ball {
+  box-shadow: var(--sh-ball);
 }
 
 /* design.md 6.7: a mask, not a decorative gradient. Contour lines fade out instead of being cut. */
@@ -214,6 +230,11 @@
     html {
       scroll-padding-top: 6rem;
     }
+  }
+
+  /* Added to scroll-padding-top, so a section never lands under the status bar. */
+  section[id] {
+    scroll-margin-top: env(safe-area-inset-top);
   }
 
   body {

@@ -22,11 +22,12 @@ export default function App() {
         <div className="mx-auto max-w-[1240px] px-4 pt-24 wide:px-12 wide:pt-40">
           <Skills />
         </div>
-        <div className="mx-auto max-w-[1440px] px-3 pt-24 sm:px-8 wide:pt-40">
+        <div className="mx-auto max-w-[1240px] px-4 pt-24 wide:px-12 wide:pt-40">
           <Contact />
         </div>
       </main>
-      <div className="mx-auto max-w-[1440px] px-3 pb-28 sm:px-8 wide:pb-16">
+      {/* Below 900px the bottom padding keeps the footer clear of the floating nav. */}
+      <div className="mx-auto max-w-[1240px] px-4 pb-[calc(112px+env(safe-area-inset-bottom))] wide:px-12 wide:pb-9">
         <Footer />
       </div>
       <BottomNav />

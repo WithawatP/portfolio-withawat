@@ -142,7 +142,7 @@ export default function FeaturedProject() {
                       alt={shot.alt}
                       width="1440"
                       height="900"
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                       className="aspect-[16/10] w-full rounded-xl object-cover"
                     />

@@ -15,10 +15,10 @@ The mockup shows the Build side selected; the Test side is the hidden `[data-sid
 Neumorphism works as an accent, not as the whole page. So:
 
 - **Flat ground by default.** Headings, paragraphs, lists and labels sit directly on the page ground. No cards around text. The Skills tray (section 8) is the one exception.
-- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob) or "this is the one device" (the Featured project panel); the small icon circle in the Skills tray is raised too. Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill, the Skills tray).
+- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob, the mobile nav capsule) or "this is the one device" (the Featured project panel); the small icon circle in the Skills tray is raised too. Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill, the Skills tray, the nav sockets).
 - **One container level inside a section, at most.** The device panel may hold a screen. The Skills tray may hold its icon circle. Nothing else nests.
 - **One peak.** The hero contour is the single big visual moment of the page. Nothing else competes with it.
-- **One accent colour,** used in four places only (section 3).
+- **One accent colour,** used in five places only (section 3).
 
 ## 2. Tokens
 
@@ -51,6 +51,10 @@ Neumorphism works as an accent, not as the whole page. So:
   --sh-tray: inset 6px 6px 13px #B3B3B3, inset -6px -6px 13px #F8F8F8;      /* Skills tray, mobile; --sh-screen at >= 900px */
   --sh-icon: 4px 4px 9px #B6B6B6, -4px -4px 9px #FBFBFB;                    /* Skills icon circle, mobile */
   --sh-icon-lg: 5px 5px 10px #B6B6B6, -5px -5px 10px #FBFBFB;               /* Skills icon circle, >= 900px */
+  --sh-capsule: 10px 10px 24px #B0B0B0, -8px -8px 20px #FBFBFB;             /* mobile nav capsule */
+  --sh-socket: 0 0 20px -12px #6E6E6E, inset 0 0 20px -13px #6E6E6E, inset 3px 3px 6px #BDBDBD;  /* nav socket */
+  --sh-ball: inset 0 -9px 10px 0 rgba(0,0,0,.28), inset 0 6px 8px 0 rgba(255,255,255,.22), 0 2px 1px rgba(0,0,0,.08), 0 4px 3px rgba(0,0,0,.1), 0 8px 6px rgba(0,0,0,.1), 0 14px 10px rgba(0,0,0,.08);  /* nav ball */
+  --socket-ring: rgba(245,245,245,.6);                                      /* nav socket ring */
 }
 ```
 
@@ -64,7 +68,8 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 1. the primary key (Download CV, Send email),
 2. LEDs (the selected side of every knob switch, the open row on the timeline),
 3. one large numeral per section (for example "14" on the Test side),
-4. the active gallery dot.
+4. the active gallery dot,
+5. the ball of the mobile nav.
 
 Plus the keyboard focus ring (section 6.1), which is an accessibility signal, not decoration.
 The status pill LED is green by the owner's decision. It is the one exception to the single-accent rule. Green appears nowhere else.
@@ -86,6 +91,7 @@ Nowhere else: not on links, headings, borders, icons or hover states.
 | Secondary line | 13–14px | 400, `--muted` |
 | Eyebrow label | 11–12px, uppercase, tracking 0.2–0.22em | 600, `--label` |
 | Large numeral | `clamp(42px, 4vw, 56px)`; 72px in the Skills tray | Michroma, `--accent` |
+| Contact email | `clamp(19px, 5.9vw, 24px)` on one line below 900px; `clamp(40px, 4.45vw, 64px)` at >= 900px | 600, tracking -0.02em / -0.03em |
 
 Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 
@@ -103,7 +109,12 @@ Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 
 ### Navigation
 - Desktop: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em.
-- Mobile: keep the existing edge-attached bottom bar and its scroll-spy logic. Restyle it with these tokens: bar on `--ground` with an upward shadow, the active item as a pressed key with the accent LED.
+- Mobile: a floating raised capsule, approved in `docs/mockup/contact-mobile.html`. Ball and socket style adapted from "splendid-mole-76" by the404_1512 on uiverse.io (MIT); put a credit comment in the component.
+  - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 12px from the left and right of the screen, 16px plus `safe-area-inset-bottom` from the bottom.
+  - **Sockets:** five in a row (Home, Project, Work, Skills, Contact), 36px, `--sh-socket`, with a 12px 600 label underneath (`--muted`, `--ink` when active). Each link is at least 44px tall and wide.
+  - **Ball:** 36px, `--accent`, `--sh-ball`. It rolls to the socket of the active section with `transform: translateX()`, never `left`, so page work cannot stall it, and the timing in section 7. With reduced motion it moves at once.
+  - **Logic:** the existing scroll-spy and its navigation lock stay. The active link has `aria-current`. Home scrolls to `scrollY` 0, not to the Hero element, which starts below the WP row. Sections have a `scroll-margin-top` of `env(safe-area-inset-top)`, so they never land under the status bar.
+  - The page leaves enough space under the footer that the capsule never covers the last key or the footer at the end of the scroll.
 
 ## 6. Components
 
@@ -114,13 +125,14 @@ Based on "witty-wolverine-69" by javierBarroso on uiverse.io (MIT). Put a credit
 - `:active`: `--sh-key-pressed`, text `#5E5E5E`.
 - Primary: background and border `--accent`, text white, `--sh-primary`; `:active` uses `--sh-primary-pressed` and text `#E6D3D9`.
 - Icon key: 52x52, radius 14px, icon 18px, label (12px, 600) underneath, outside the key.
+- Pad key (Contact at >= 900px): 100px tall, radius 18px, padding 16px 18px, icon 19px top left, label bottom left (15px on the primary, 14px on the others).
 - Focus: `outline: 2px solid var(--accent); outline-offset: 4px` on `:focus-visible`.
 - Hover effects only inside `@media (hover: hover)`.
 - The old `UiverseButton` (styled-components) is retired once every button uses the Key.
 
 ### 6.2 Status pill
 Inset (`--sh-well`), radius 999px, text 12–13px 600 `--ink-2`.
-The LED is the green light from before R1: a 10px dot in `--led` over a 10px `animate-ping` ring in `--led` at `opacity-75`, with no glow. It is used in the Hero and in the mobile nav. With reduced motion on, the ping stops and the dot stays still.
+The LED is the green light from before R1: a 10px dot in `--led` over a 10px `animate-ping` ring in `--led` at `opacity-75`, with no glow. It is used in the Hero, the mobile nav row and Contact. With reduced motion on, the ping stops and the dot stays still.
 
 ### 6.3 Device panel (Featured project only)
 - Radius 32px and padding 16px on mobile; radius 48px and padding 32px at >= 900px. `--sh-device` / `--sh-device-lg`.
@@ -156,6 +168,7 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 
 - **The peak: hero contour parallax.** While the hero scrolls out, the level groups move up at different speeds: outer level 0, middle level up to 12px, inner levels up to 24px on mobile and up to 40px on desktop. Use CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) on `transform` only; browsers without support show it static.
 - **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
+- **Nav ball (section 5):** a `transform` transition with `cubic-bezier(.34, Y, .64, 1)`: it never moves backwards first, and bounces on arrival by about the same 10–14px on a phone at any distance. Y depends on the sockets travelled: 1.78 for 1, 1.56 for 2, 1.43 for 3, 1.37 for 4. The duration depends on the distance too: 0.35s plus 0.1s per socket (1 socket 0.45s, 4 sockets 0.75s).
 - **LED ping:** `animate-ping` on the status pill LED (section 6.2) and on the open timeline row's LED are the only looping animations allowed. The switch LEDs stay still.
 - No entrance fades or slide-ups, no scroll cues, no other looping animation.
 - `prefers-reduced-motion: reduce`: everything static, transitions off.
@@ -171,8 +184,11 @@ Build these after Hero and Featured project are approved on the real site.
   - **900–1279px:** no extra breakpoint; the content reflows. Row labels move above their skills, lists drop to 2 columns, and the numeral moves under the content when there is no room beside it. The tray grows and the switch stretches with it, so they stay the same height.
   - **< 900px:** a horizontal switch (Dev, QA, Design, Soft) up to 340px wide, with 13px labels and 7px LEDs, then the same tray at the height of its content. Icon circle 40px, summary 13px, skills 16px, lists in one column, labels above their skills, no numeral.
   - **Keyboard:** `role="tablist"` with `aria-orientation`. Up and Down on the vertical switch, Left and Right on the horizontal one, Home and End on both.
-- **Contact:** the email large (Manrope 600, `clamp(28px, 4vw, 48px)`, wraps with `overflow-wrap: anywhere`), one line of location and availability, then keys: Send email (primary), Call, Download CV, and icon keys for GitHub and LinkedIn.
-- **Footer:** one line of plain text on the ground.
+- **Contact:** approved mockups: `docs/mockup/contact-desktop.html` and `docs/mockup/contact-mobile.html`. Flat ground, no device panel and no large h2. The heading is a small uppercase "CONTACT" eyebrow, still an `h2`, with the status pill on the right of the same row. The large email (section 4) is the focus of the section, followed by a copy key, and a line of phone and location under it. All of it comes from `portfolio.js`.
+  - **Copy key:** 46px below 900px, 52px at >= 900px. The icon becomes a check, and "Copied!" or "Copy failed" shows under the key for 2 seconds without moving the layout.
+  - **>= 900px:** from the email down, everything is centred. Pad keys (section 6.1) in one row, 20px apart: Send email (primary, 280px), Download CV, GitHub, LinkedIn (140px each). No Call key.
+  - **< 900px:** the email stays on one line (`white-space: nowrap`). Send email (primary) fills the width, then one row of four icon keys: Call, CV, GitHub, LinkedIn.
+- **Footer:** plain text on the ground. One line at >= 900px with the two items at the left and right; two centred lines below 900px.
 
 ## 9. Content
 
@@ -183,11 +199,13 @@ Build these after Hero and Featured project are approved on the real site.
 
 Borders used for structure · gradients · glass or blur panels · pure black · chips · cards inside cards · more than one raised container per section · accent outside section 3 · `01 / 06` counters · gradient text · emoji · entrance fade or slide animations · scroll-down cues · invented statistics.
 
+The nav socket ring (7px, `--socket-ring`) is the one exception to the border rule: it draws the rim of the socket.
+
 ## 11. Review gate (answer before calling a task done)
 
 1. At 390px, does the first screen show the contour band, name, role, claim and both keys with little or no scrolling?
-2. Is any text sitting inside a box that is not a key, the device panel, the screen, a well or the Skills tray?
-3. Is the accent used anywhere outside the four allowed places?
+2. Is any text sitting inside a box that is not a key, the device panel, the screen, a well, the Skills tray or the nav capsule?
+3. Is the accent used anywhere outside the five allowed places?
 4. Does the name overlap the contour at any width from 900 to 1440?
 5. Do keys press in (inset) on `:active` and show a focus ring on keyboard focus?
 6. Is the switch centred, keyboard operable, and announced as a radio group?

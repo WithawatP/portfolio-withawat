@@ -1,8 +1,10 @@
+import { profile } from '../data/portfolio'
+
 export default function Footer() {
   return (
-    <footer className="mx-auto flex w-full max-w-[1440px] flex-col gap-2 px-3 pb-10 pt-2 text-[13px] text-ink sm:flex-row sm:items-center sm:justify-between sm:px-6">
-      <p>© 2026 Withawat Phiraban</p>
-      <p>Built with React and Tailwind CSS.</p>
+    <footer className="mt-[72px] flex flex-col gap-1 text-center text-xs text-muted wide:mt-24 wide:flex-row wide:justify-between wide:text-left wide:text-[13px]">
+      <p>© 2026 {profile.name}</p>
+      <p>Built with React and Tailwind CSS</p>
     </footer>
   )
 }

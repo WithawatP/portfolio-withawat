@@ -16,9 +16,9 @@ Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `
 
 ## Design rules (read `design.md` before ANY UI work)
 - `design.md` (v3, redesign) is the source of truth. It overrides every installed skill, including `design-taste-frontend`, wherever they conflict. The approved visual reference is `docs/mockup/hero-featured.html`.
-- Flat ground by default; depth only for keys, the switch, the one device panel, the gallery screen, icon wells and the Skills tray. No cards around text (the Skills tray is the one exception, design.md section 8), no chips, no nested containers.
+- Flat ground by default; depth only for keys, the switch, the one device panel, the gallery screen, icon wells, the Skills tray and the mobile nav capsule. No cards around text (the Skills tray is the one exception, design.md section 8), no chips, no nested containers.
 - Use the design.md tokens only: no hardcoded hex in components, no Tailwind `shadow-*`, no borders for structure, no gradients or glass.
-- Accent `#651C32` only in the four places design.md section 3 allows.
+- Accent `#651C32` only in the five places design.md section 3 allows.
 - Mobile first (390px), one breakpoint at 900px.
 - Do NOT change: the hero contour paths in `src/assets/contour-hero.svg`, the Swiper configuration (no loop, no autoplay, no lightbox), the order or wording of data in `portfolio.js` unless asked.
 - Never invent facts, numbers, or claims in copy. Leave a bracketed placeholder and ask the owner.

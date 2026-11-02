@@ -19,6 +19,8 @@ export const profile = {
   heroRole: 'Junior Software Developer · QA Tester',
   statusShort: 'Open to work',
   statusLong: 'Open to work · Pathum Thani and Bangkok, remote or hybrid',
+  contactLine:
+    'Based in Pathum Thani, Thailand. Open to remote and hybrid roles across Bangkok and Pathum Thani.',
 }
 
 export const coreStack = [
