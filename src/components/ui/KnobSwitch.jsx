@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { FOCUS } from '../../lib/styles'
 
+// design.md 6.5. With two options the knob travels between left: 6px and left: 50%.
 export default function KnobSwitch({
   options,
   value,
@@ -9,7 +9,6 @@ export default function KnobSwitch({
   role = 'tablist',
   idPrefix,
   showLed = false,
-  knobMotion = 'duration-[350ms] ease-[cubic-bezier(0.2,0.7,0.2,1)]',
   className = '',
 }) {
   const isRadio = role === 'radiogroup'
@@ -50,54 +49,50 @@ export default function KnobSwitch({
       role={role}
       aria-label={ariaLabel}
       aria-orientation={isRadio ? undefined : 'horizontal'}
-      className={`relative rounded-2xl bg-surface p-1 neu-inset-md ${className}`}
+      className={`relative grid h-[60px] rounded-full bg-ground p-1.5 sh-track ${className}`}
+      style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
     >
       <span
         aria-hidden="true"
-        className={`absolute left-1 top-1 bottom-1 rounded-xl bg-surface neu-raise-sm transition-transform ${knobMotion}`}
+        className="absolute inset-y-1.5 rounded-full bg-knob sh-knob [transition:left_.45s_cubic-bezier(.34,1.4,.64,1)]"
         style={{
-          width: `calc((100% - 0.5rem) / ${options.length})`,
-          transform: `translate3d(${activeIndex * 100}%, 0, 0)`,
+          left: `calc(6px + ${activeIndex} * (100% - 12px) / ${options.length})`,
+          width: `calc((100% - 12px) / ${options.length})`,
         }}
       />
-      <div
-        className="relative grid"
-        style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
-      >
-        {options.map((option, index) => {
-          const isActive = index === activeIndex
-          return (
-            <button
-              key={option.id}
-              ref={(node) => {
-                buttonRefs.current[index] = node
-              }}
-              id={idPrefix ? `${idPrefix}-tab-${option.id}` : undefined}
-              type="button"
-              role={isRadio ? 'radio' : 'tab'}
-              aria-checked={isRadio ? isActive : undefined}
-              aria-selected={isRadio ? undefined : isActive}
-              aria-controls={idPrefix ? `${idPrefix}-panel-${option.id}` : undefined}
-              tabIndex={isActive ? 0 : -1}
-              onClick={() => select(index)}
-              onKeyDown={(event) => handleKeyDown(event, index)}
-              className={`${FOCUS} relative z-10 flex min-h-11 min-w-0 items-center justify-center rounded-xl px-2 text-[13px] font-medium transition-colors duration-200 ${
-                isActive ? 'text-ink' : 'text-muted'
-              }`}
-            >
-              {showLed && (
-                <span
-                  aria-hidden="true"
-                  className={`mr-2 h-2 w-2 shrink-0 rounded-full transition-colors duration-200 ${
-                    isActive ? 'bg-led' : 'bg-faint'
-                  }`}
-                />
-              )}
-              <span className="truncate">{option.label}</span>
-            </button>
-          )
-        })}
-      </div>
+      {options.map((option, index) => {
+        const isActive = index === activeIndex
+        return (
+          <button
+            key={option.id}
+            ref={(node) => {
+              buttonRefs.current[index] = node
+            }}
+            id={idPrefix ? `${idPrefix}-tab-${option.id}` : undefined}
+            type="button"
+            role={isRadio ? 'radio' : 'tab'}
+            aria-checked={isRadio ? isActive : undefined}
+            aria-selected={isRadio ? undefined : isActive}
+            aria-controls={idPrefix ? `${idPrefix}-panel-${option.id}` : undefined}
+            tabIndex={isActive ? 0 : -1}
+            onClick={() => select(index)}
+            onKeyDown={(event) => handleKeyDown(event, index)}
+            className={`relative z-10 flex min-w-0 cursor-pointer items-center justify-center gap-2.5 rounded-full px-2 text-sm font-semibold [transition:color_.3s] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${
+              isActive ? 'text-ink' : 'text-switch-off'
+            }`}
+          >
+            {showLed && (
+              <span
+                aria-hidden="true"
+                className={`h-2 w-2 shrink-0 rounded-full [transition:all_.3s] ${
+                  isActive ? 'bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
+                }`}
+              />
+            )}
+            <span className="truncate">{option.label}</span>
+          </button>
+        )
+      })}
     </div>
   )
 }

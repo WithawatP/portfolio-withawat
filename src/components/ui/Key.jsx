@@ -43,10 +43,12 @@ export default function Key({
   )
 }
 
-export function IconKey({ href, icon, label, className = '' }) {
+export function IconKey({ href, icon, label, external = false, className = '' }) {
   return (
     <a
       href={href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noreferrer' : undefined}
       className={`group flex flex-col items-center gap-2 text-xs font-semibold text-ink-2 outline-none ${className}`}
     >
       <span

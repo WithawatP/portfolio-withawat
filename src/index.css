@@ -21,6 +21,7 @@
   --color-knob: #c9c9c9;
   --color-key-pressed: #5e5e5e;
   --color-on-accent-pressed: #e6d3d9;
+  --color-switch-off: #555555;
 
   --breakpoint-wide: 56.25rem;
 
@@ -271,17 +272,6 @@
   initial-value: -1;
 }
 
-/* Motion moment 2: the screenshot shifts inside its frame while the tray stays still.
-   Translate stays within the 7% margin that the scale adds on each side. */
-@keyframes inset-window {
-  from {
-    translate: 0 -6%;
-  }
-  to {
-    translate: 0 6%;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .extrude {
     position: relative;
@@ -327,19 +317,6 @@
       animation-timeline: --extrude;
       animation-range: entry 80px entry 480px;
     }
-
-    /* Named on the tray: Swiper's overflow would otherwise become the image's scrollport. */
-    .inset-window-tray {
-      view-timeline-name: --inset-window;
-    }
-
-    /* Only scaled here, so without this motion the whole screenshot shows uncropped. */
-    .inset-window-img {
-      scale: 1.14;
-      animation: inset-window linear both;
-      animation-timeline: --inset-window;
-      animation-range: cover 20% cover 80%;
-    }
   }
 
   @supports not (animation-timeline: view()) {
@@ -371,7 +348,13 @@
   }
 }
 
+/* The screen is taller than a slide, so the slides sit in its vertical centre. */
+.atelier-coverflow .swiper-wrapper {
+  align-items: center;
+}
+
 .atelier-coverflow .swiper-slide {
+  height: auto;
   transition: transform 400ms ease, filter 400ms ease;
 }
 

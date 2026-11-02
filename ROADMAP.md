@@ -15,22 +15,22 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 |---|---|---|
 | R0 | Setup: branch `redesign-v2`; `design.md`, `docs/mockup/hero-featured.html`, `src/assets/contour-hero.svg` in repo; add v3 tokens and shadow utilities to `index.css`; load Michroma + Manrope; build the `Key` component (design.md 6.1) | Done |
 | R1 | Hero (mobile first): nav row, status pill, contour band / right-side contour, name, role, claim, two keys | Done |
-| R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | **Next** |
-| R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | Todo |
+| R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | Done |
+| R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | **Next** |
 | R4 | Skills: plain-text groups, no chips; mobile group switch restyled | Todo |
 | R5 | Contact, footer, bottom nav restyle | Todo |
 | R6 | Motion: hero contour parallax, reduced-motion pass | Todo |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Todo |
 
-## Next task: R2
+## Next task: R3
 
-Build the Featured project from design.md sections 6.3 to 6.5 and the mockup. Plan first if it touches more than about 3 files.
+Restyle Experience from design.md section 8: flat timeline, inset rail, accent LED on the current role; keep the accordion logic. Plan first if it touches more than about 3 files.
 
 Carry over:
 - `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
-- `FeaturedProject.jsx` still sets `font-bold` on a `font-display` numeral. Michroma has one weight, so remove it in R2.
 - v2 sections and `BottomNav` still use `surface` on the new `ground` page until their phases.
-- `scroll-padding-top` still allows for the old sticky header at 640px and up. Review it when the sections are restyled.
+- `scroll-padding-top` still allows for the old sticky header at 640px and up. At 1440 the Featured heading lands 96px below the top, which reads fine, so it stayed. Review it when the remaining sections are restyled.
+- The Skills tabs below 768px already use the restyled `KnobSwitch`, sitting on the old `surface` card until R4.
 
 ## Locked decisions (still valid from v2)
 
@@ -54,10 +54,17 @@ Carry over:
 - Name clamp maximum is 64px, not 66px, so the name stays inside the 540px column and clear of the contour box up to 1920px (design.md section 5 allows shrinking it).
 - The page scrollbar is hidden on every page; scrolling still works.
 - Hero keys use 14px side padding below 900px, not 26px, so "Download CV" stays on one line in the 2-column grid.
+- Featured project shows the short copy the owner approved: `buildRows`, `techLine`, `testing.requestCaption`, `testing.bugs[].tag` and `.short`. The Admin and Customer-facing lines are condensed from `contributions`. `type`, `contributions`, `stack`, `method`, `folders`, `cause`, `requestLabel` and `bugsTitle` are no longer shown; the data stays in `portfolio.js`.
+- The summary comes from `portfolio.js` ("A full-stack storefront..."), not the mockup's wording.
+- Gallery captions and "Screens captured from the deployed demo." are removed; alt text stays.
+- Gallery slides are 78% wide at every width, capped at 304px below 900px so a 16:10 image fits the 210px screen. Swiper props are unchanged.
+- Gallery dots are driven by `onSlideChange` state, so the Pagination module is not added.
+- Build and Test swap instantly: design.md section 7 lists no fade for them.
+- `--color-switch-off` (`#555555`) is a token for the unselected switch label that design.md 6.5 specifies.
+- Inspector findings `eyebrow`, `micro-label` and `body-size` come from type that design.md sections 4 and 6.5 require. They are not on the waived list in design.md yet.
 
 ## Needs from owner
 
-- One line each for "Admin dashboard" and "Customer-facing UI" (what you built).
 - Who found and who fixed each of the two bugs (group project).
 - Screenshots for the gallery if they change; bug screenshots if any.
 
