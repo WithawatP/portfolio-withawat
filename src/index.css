@@ -132,6 +132,11 @@
   }
 }
 
+/* design.md 6.7: a mask too. The footer contour fades in from its top edge. */
+@utility footer-fade {
+  mask-image: linear-gradient(to bottom, transparent, black 35%);
+}
+
 @media (max-width: 639px) {
   :root {
     --depth-scale: 0.7;
@@ -226,7 +231,8 @@
     text-rendering: optimizeLegibility;
   }
 
-  @media (min-width: 640px) {
+  /* Keeps headings below the desktop nav capsule, which ends 76px down. */
+  @media (min-width: 56.25rem) {
     html {
       scroll-padding-top: 6rem;
     }

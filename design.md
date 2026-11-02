@@ -15,9 +15,9 @@ The mockup shows the Build side selected; the Test side is the hidden `[data-sid
 Neumorphism works as an accent, not as the whole page. So:
 
 - **Flat ground by default.** Headings, paragraphs, lists and labels sit directly on the page ground. No cards around text. The Skills tray (section 8) is the one exception.
-- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob, the mobile nav capsule) or "this is the one device" (the Featured project panel); the small icon circle in the Skills tray is raised too. Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill, the Skills tray, the nav sockets).
+- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob, the nav capsules) or "this is the one device" (the Featured project panel); the small icon circle in the Skills tray is raised too. Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill, the Skills tray, the nav sockets).
 - **One container level inside a section, at most.** The device panel may hold a screen. The Skills tray may hold its icon circle. Nothing else nests.
-- **One peak.** The hero contour is the single big visual moment of the page. Nothing else competes with it.
+- **One peak.** The hero contour is the single big visual moment of the page. Nothing else competes with it. The footer contour (section 6.7) is a quiet, still close to the page, not a second peak.
 - **One accent colour,** used in five places only (section 3).
 
 ## 2. Tokens
@@ -51,7 +51,7 @@ Neumorphism works as an accent, not as the whole page. So:
   --sh-tray: inset 6px 6px 13px #B3B3B3, inset -6px -6px 13px #F8F8F8;      /* Skills tray, mobile; --sh-screen at >= 900px */
   --sh-icon: 4px 4px 9px #B6B6B6, -4px -4px 9px #FBFBFB;                    /* Skills icon circle, mobile */
   --sh-icon-lg: 5px 5px 10px #B6B6B6, -5px -5px 10px #FBFBFB;               /* Skills icon circle, >= 900px */
-  --sh-capsule: 10px 10px 24px #B0B0B0, -8px -8px 20px #FBFBFB;             /* mobile nav capsule */
+  --sh-capsule: 10px 10px 24px #B0B0B0, -8px -8px 20px #FBFBFB;             /* both nav capsules */
   --sh-socket: 0 0 20px -12px #6E6E6E, inset 0 0 20px -13px #6E6E6E, inset 3px 3px 6px #BDBDBD;  /* nav socket */
   --sh-ball: inset 0 -9px 10px 0 rgba(0,0,0,.28), inset 0 6px 8px 0 rgba(255,255,255,.22), 0 2px 1px rgba(0,0,0,.08), 0 4px 3px rgba(0,0,0,.1), 0 8px 6px rgba(0,0,0,.1), 0 14px 10px rgba(0,0,0,.08);  /* nav ball */
   --socket-ring: rgba(245,245,245,.6);                                      /* nav socket ring */
@@ -66,7 +66,7 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 
 `#651C32` appears only on:
 1. the primary key (Download CV, Send email),
-2. LEDs (the selected side of every knob switch, the open row on the timeline),
+2. LEDs (the selected side of every knob switch, the open row on the timeline, the active link of the desktop nav),
 3. one large numeral per section (for example "14" on the Test side),
 4. the active gallery dot,
 5. the ball of the mobile nav.
@@ -108,13 +108,18 @@ Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 - The name must never overlap the contour. If it would, shrink the name with the clamp; never move the contour over it.
 
 ### Navigation
-- Desktop: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em.
-- Mobile: a floating raised capsule, approved in `docs/mockup/contact-mobile.html`. Ball and socket style adapted from "splendid-mole-76" by the404_1512 on uiverse.io (MIT); put a credit comment in the component.
+- Desktop, in the Hero: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em.
+- Desktop, past the Hero: a sticky raised capsule, approved in `docs/mockup/contact-desktop.html`.
+  - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 56px tall, centred, 20px from the top of the screen. WP (Michroma 12px), then Project, Experience, Skills, Contact (12px, 600, uppercase, tracking 0.2em).
+  - **Active link:** a 7px LED in `--accent` with `--led-glow` and `--ink` text. The others have a 7px `--faint` dot and `--switch-off` text. The active link has `aria-current`.
+  - **Appearing:** once the Hero has left the screen, it fades in and moves down 8px over 0.3s. While hidden it cannot be reached with Tab. With reduced motion it appears at once.
+  - **Logic:** the same scroll-spy and navigation lock as the mobile nav. `scroll-padding-top` is 96px at >= 900px, so headings land below the capsule, which ends 76px down.
+- Mobile: a floating raised capsule with icons only, approved in `docs/mockup/contact-mobile.html`. Ball and socket style adapted from "splendid-mole-76" by the404_1512 on uiverse.io (MIT); put a credit comment in the component.
   - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 12px from the left and right of the screen, 16px plus `safe-area-inset-bottom` from the bottom.
-  - **Sockets:** five in a row (Home, Project, Work, Skills, Contact), 36px, `--sh-socket`, with a 12px 600 label underneath (`--muted`, `--ink` when active). Each link is at least 44px tall and wide.
-  - **Ball:** 36px, `--accent`, `--sh-ball`. It rolls to the socket of the active section with `transform: translateX()`, never `left`, so page work cannot stall it, and the timing in section 7. With reduced motion it moves at once.
+  - **Sockets:** five in a row, 40px, `--sh-socket`, each with a 15px icon from `Icon.jsx` in the centre (home, folder, briefcase, code, mail). No visible text; each link has an `aria-label` (Home, Project, Work, Skills, Contact) and is at least 44px tall and wide. The active icon sits above the ball and is `--on-accent`; the others are `--ink` at 40%. The timing is in section 7.
+  - **Ball:** 40px, `--accent`, `--sh-ball`. It rolls to the socket of the active section with `transform: translateX()`, never `left`, so page work cannot stall it, and the timing in section 7. With reduced motion it moves at once.
   - **Logic:** the existing scroll-spy and its navigation lock stay. The active link has `aria-current`. Home scrolls to `scrollY` 0, not to the Hero element, which starts below the WP row. Sections have a `scroll-margin-top` of `env(safe-area-inset-top)`, so they never land under the status bar.
-  - The page leaves enough space under the footer that the capsule never covers the last key or the footer at the end of the scroll.
+  - The page leaves room under the footer, so the capsule never covers the last key or the footer at the end of the scroll.
 
 ## 6. Components
 
@@ -164,11 +169,16 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 - The SVG uses `preserveAspectRatio="xMinYMid slice"`, so the artwork is anchored to its left edge.
 - Lines fade out instead of being cut. The wrapper has a CSS `mask-image` that fades to transparent over about the top 10% at every width, over about the bottom 30% below 900px and the bottom 18% at >= 900px, and over about the left 10% at >= 900px. This is a mask, not a decorative gradient, so the gradient ban in section 10 does not apply to it.
 
+- The wrapper has `contain: paint` and `transform: translateZ(0)`: its own layer, so scrolling does not repaint the filter on every frame. Parallax on the groups inside still works.
+
+**Footer contour.** File: `src/assets/contour-footer.svg`. Inlined as a React component, `aria-hidden`, no pointer events. Do not redraw the paths. It is still: no parallax. It exists at >= 900px only. Below 900px it is not rendered at all, not hidden with CSS. It fills the band with the file's own viewBox and shadows, and a mask goes from transparent at 0% to opaque at 35%.
+
 ## 7. Motion
 
 - **The peak: hero contour parallax.** While the hero scrolls out, the level groups move up at different speeds: outer level 0, middle level up to 12px, inner levels up to 24px on mobile and up to 40px on desktop. Use CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) on `transform` only; browsers without support show it static.
 - **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
 - **Nav ball (section 5):** a `transform` transition with `cubic-bezier(.34, Y, .64, 1)`: it never moves backwards first, and bounces on arrival by about the same 10–14px on a phone at any distance. Y depends on the sockets travelled: 1.78 for 1, 1.56 for 2, 1.43 for 3, 1.37 for 4. The duration depends on the distance too: 0.35s plus 0.1s per socket (1 socket 0.45s, 4 sockets 0.75s).
+- **Nav icons:** the active icon fades to white over 0.25s with a `transition-delay` equal to that roll's duration, so it changes after the ball arrives. The icon of the socket the ball left goes grey at once. With reduced motion the colour changes at once.
 - **LED ping:** `animate-ping` on the status pill LED (section 6.2) and on the open timeline row's LED are the only looping animations allowed. The switch LEDs stay still.
 - No entrance fades or slide-ups, no scroll cues, no other looping animation.
 - `prefers-reduced-motion: reduce`: everything static, transitions off.
@@ -188,7 +198,8 @@ Build these after Hero and Featured project are approved on the real site.
   - **Copy key:** 46px below 900px, 52px at >= 900px. The icon becomes a check, and "Copied!" or "Copy failed" shows under the key for 2 seconds without moving the layout.
   - **>= 900px:** from the email down, everything is centred. Pad keys (section 6.1) in one row, 20px apart: Send email (primary, 280px), Download CV, GitHub, LinkedIn (140px each). No Call key.
   - **< 900px:** the email stays on one line (`white-space: nowrap`). Send email (primary) fills the width, then one row of four icon keys: Call, CV, GitHub, LinkedIn.
-- **Footer:** plain text on the ground. One line at >= 900px with the two items at the left and right; two centred lines below 900px.
+- **End band (>= 900px only):** the footer contour (section 6.7), full width and 340px tall, directly under the row of keys with no gap. At the end of the scroll the Contact block sits around the middle of the screen, 40–55% of its height, at 1440x900 and 1920x1080.
+- **Footer:** plain text. At >= 900px, one line over the end band, outside its mask, 32px from the bottom, with the two items at the left and right. Below 900px, two centred lines on the ground, 72px under Contact, with room under them for the nav capsule.
 
 ## 9. Content
 

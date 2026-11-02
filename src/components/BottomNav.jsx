@@ -2,13 +2,15 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useScrollSpy } from '../lib/useScrollSpy'
+import { scrollToTop } from '../lib/scrollToTop'
+import Icon from './ui/Icon'
 
 const NAV_ITEMS = [
-  { section: 'home', href: '#home', label: 'Home' },
-  { section: 'featured', href: '#featured', label: 'Project' },
-  { section: 'experience', href: '#experience', label: 'Work' },
-  { section: 'skills', href: '#skills', label: 'Skills' },
-  { section: 'contact', href: '#contact', label: 'Contact' },
+  { section: 'home', href: '#home', label: 'Home', icon: 'home' },
+  { section: 'featured', href: '#featured', label: 'Project', icon: 'folder' },
+  { section: 'experience', href: '#experience', label: 'Work', icon: 'briefcase' },
+  { section: 'skills', href: '#skills', label: 'Skills', icon: 'code' },
+  { section: 'contact', href: '#contact', label: 'Contact', icon: 'mail' },
 ]
 
 const SECTION_IDS = NAV_ITEMS.map((item) => item.section)
@@ -35,35 +37,31 @@ export default function BottomNav() {
   if (ball.index !== activeIndex) {
     setBall({ index: activeIndex, sockets: Math.abs(activeIndex - ball.index) })
   }
+  const rollSeconds = 0.35 + ball.sockets * 0.1
 
   const handleClick = (event, section) => {
     navigateTo(section)
-    if (section !== 'home') return
-
-    // The Hero starts below the WP row, so its anchor would stop with that row under the status bar.
-    event.preventDefault()
-    window.history.pushState(null, '', window.location.pathname + window.location.search)
-    window.scrollTo(0, 0)
+    if (section === 'home') scrollToTop(event)
   }
 
   return createPortal(
     <nav
       data-scroll-nav
       aria-label="Section navigation"
-      className="fixed left-3 right-3 bottom-[calc(16px+env(safe-area-inset-bottom))] z-40 rounded-full bg-ground px-1 pb-2 pt-3 sh-capsule wide:hidden"
+      className="fixed left-3 right-3 bottom-[calc(16px+env(safe-area-inset-bottom))] z-40 rounded-full bg-ground px-1.5 py-2 sh-capsule"
     >
       <div className="relative grid grid-cols-5">
         {/* One socket wide and moved by transform, so the roll runs on the compositor and page work cannot stall it. */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute left-0 top-0 z-10 w-1/5 transition-transform will-change-transform motion-reduce:transition-none"
+          className="pointer-events-none absolute left-0 top-1 z-10 w-1/5 transition-transform will-change-transform motion-reduce:transition-none"
           style={{
             transform: `translateX(${activeIndex * 100}%)`,
-            transitionDuration: `${0.35 + ball.sockets * 0.1}s`,
+            transitionDuration: `${rollSeconds}s`,
             transitionTimingFunction: BALL_EASING[ball.sockets],
           }}
         >
-          <span className="mx-auto block h-9 w-9 rounded-full bg-accent sh-ball" />
+          <span className="mx-auto block h-10 w-10 rounded-full bg-accent sh-ball" />
         </span>
         {NAV_ITEMS.map((item) => {
           const isActive = item.section === activeId
@@ -72,17 +70,21 @@ export default function BottomNav() {
               key={item.section}
               href={item.href}
               onClick={(event) => handleClick(event, item.section)}
+              aria-label={item.label}
               aria-current={isActive ? 'location' : undefined}
-              className={`flex min-h-[54px] flex-col items-center gap-1.5 rounded-lg text-xs font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${
-                isActive ? 'text-ink' : 'text-muted'
+              // The icon turns white once the ball has arrived. The socket it left goes grey at once.
+              style={isActive ? { transitionDelay: `${rollSeconds}s` } : undefined}
+              className={`flex h-12 items-center justify-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${
+                isActive
+                  ? 'text-on-accent transition-colors duration-[250ms] motion-reduce:transition-none'
+                  : 'text-ink/40'
               }`}
             >
-              {/* The ring is the one structural border on the page: design.md section 3 and 10. */}
-              <span
-                aria-hidden="true"
-                className="h-9 w-9 rounded-full border-[7px] border-socket-ring bg-ground sh-socket"
-              />
-              {item.label}
+              {/* The ring is the one structural border on the page: design.md section 10. */}
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border-[7px] border-socket-ring bg-ground sh-socket">
+                {/* Above the ball, so the active icon shows white on it. */}
+                <Icon name={item.icon} strokeWidth={2} className="relative z-20 h-[15px] w-[15px]" />
+              </span>
             </a>
           )
         })}

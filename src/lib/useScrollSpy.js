@@ -90,6 +90,11 @@ export function useScrollSpy(sectionIds) {
       evaluate()
     }
 
+    const scheduleSettle = () => {
+      if (settleTimer) clearTimeout(settleTimer)
+      settleTimer = window.setTimeout(release, SCROLL_SETTLE_MS)
+    }
+
     const lockTo = (id) => {
       setActiveId(id)
       lockId = id
@@ -102,9 +107,7 @@ export function useScrollSpy(sectionIds) {
       }
 
       scheduleSafety()
-      if (!supportsScrollEnd) {
-        settleTimer = window.setTimeout(release, SCROLL_SETTLE_MS)
-      }
+      if (!supportsScrollEnd) scheduleSettle()
     }
 
     navigateRef.current = lockTo
@@ -129,10 +132,11 @@ export function useScrollSpy(sectionIds) {
       if (lockId) {
         if (moved) {
           scheduleSafety()
-          if (!supportsScrollEnd) {
-            if (settleTimer) clearTimeout(settleTimer)
-            settleTimer = window.setTimeout(release, SCROLL_SETTLE_MS)
+          if (settleTimer) {
+            clearTimeout(settleTimer)
+            settleTimer = 0
           }
+          if (!supportsScrollEnd) scheduleSettle()
         }
         return
       }
@@ -143,8 +147,10 @@ export function useScrollSpy(sectionIds) {
     const isInsideNav = (target) =>
       target instanceof Element && Boolean(target.closest('[data-scroll-nav]'))
 
+    // A scroll cut short by a new tap also ends with scrollend, while the new scroll is about to start.
+    // So release only if the page then stays still; any movement cancels this in handleScroll.
     const handleScrollEnd = () => {
-      if (lockId) release()
+      if (lockId) scheduleSettle()
     }
 
     const handleWheel = () => release()

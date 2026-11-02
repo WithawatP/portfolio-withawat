@@ -18,25 +18,25 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | Done |
 | R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | Done |
 | R4 | Skills: knob switch and one sunken tray, from `docs/mockup/skills-desktop.html` and `skills-mobile.html` | Done |
-| R5 | Contact, footer, bottom nav restyle | **Next** |
-| R6 | Motion: hero contour parallax, reduced-motion pass | Todo |
+| R5 | Contact, footer, floating bottom nav, sticky desktop nav, end band | Done |
+| R6 | Motion: hero contour parallax, reduced-motion pass | **Next** |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Todo |
 
-## Next task: R5
+## Next task: R6
 
-Restyle Contact, the footer and the bottom nav from design.md sections 5 and 8. Plan first if it touches more than about 3 files.
+Add the hero contour parallax and do the reduced-motion pass from design.md section 7. Plan first if it touches more than about 3 files.
 
 Carry over:
-- `Pill` has no users since R3 and `SkillChip` has none since R4; remove them in R7.
-- Inspector `still-page` is a WARN, as it was before R3; the LED pings keep it there. Recheck after R5, when the last extrude goes, and after R6.
-- Inspector `covered-text` on "Work experience" at 768 is the bottom nav passing over the heading while it enters the screen. It was already there before R3. Review it in R5 with the bottom nav.
-- `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
-- v2 sections and `BottomNav` still use `surface` on the new `ground` page until their phases.
-- `scroll-padding-top` still allows for the old sticky header at 640px and up. At 1440 the Featured heading lands 96px below the top, which reads fine, so it stayed. Review it when the remaining sections are restyled.
+- These have no users; remove them in R7: `Pill`, `SkillChip`, `SectionCard`, `SectionHeading`, `InsetPanel`, `QuickContactRow`, `UiverseButton`, `src/lib/styles.js` and the `.extrude` CSS.
+- The contour mockups no longer match the site's end band: `contact-desktop.html` and `contact-mobile.html` still show it 420px tall and on phones. The v3 decisions below and design.md win.
+- If a real iPhone stalls again when tapping the nav quickly, profile it with Safari Web Inspector. Chrome at 4x CPU did not reproduce the stall, so its cause is not confirmed. R6's parallax moves groups inside the hero's SVG filter, so test tapping on the iPhone again after adding it.
+- Inspector `still-page` is a WARN with 11 elements moving; recheck after R6.
+- Inspector `covered-text` on "Work experience" at 768 and 360 is the bottom nav passing over the heading while it scrolls. A floating nav always does this, so it is not a blocker; it is not in the design.md waiver list yet.
+- Inspector `reduced-hidden` at 1440 is the desktop nav capsule, deliberately hidden while the Hero shows. The same four links are visible in the Hero's top row.
 
 ## Locked decisions (still valid from v2)
 
-- Mobile bottom nav labels are Home, Project, Work, Skills, Contact. Scroll-spy with the navigation lock stays. (Its shape changed in R5: see the v3 decisions.)
+- Mobile bottom nav link names are Home, Project, Work, Skills, Contact (as `aria-label`s since the nav became icon-only in R5). Scroll-spy with the navigation lock stays. (Its shape changed in R5: see the v3 decisions.)
 - Experience timeline: click only, the whole row toggles, single open, latest role open by default.
 - Swiper config is not to be touched (coverflow, no loop, no autoplay, no lightbox).
 - No personal photo.
@@ -79,8 +79,15 @@ Carry over:
 - Every knob switch has LEDs, the Skills switch included, so they all look the same (the owner's decision; design.md section 3 changed to match). The switch stays a `tablist` on Skills.
 - The mobile nav is a floating capsule with a wine ball (design.md section 5), not a bar on the screen edge.
 - After testing on a real iPhone, the ball's easing changed from the mockup's `cubic-bezier(1, -0.4, 0, 1.4)`, which looked like a jump on long moves, to the design.md section 7 timing. The ball moves by `transform`, not the mockup's `left`, so it runs on the compositor. Gallery images load eagerly, so they are already downloaded when the page first reaches Project; they still decode on arrival (about 6ms each in throttled Chrome). Home in the bottom nav scrolls to `scrollY` 0 and clears the hash, because the `#home` anchor stopped with the WP row under the status bar.
-- Contact follows the approved mockups, with these differences the owner approved: nav labels are 12px, not 11px (section 4 keeps 11px for uppercase eyebrows); the status pill keeps its 10px pinging LED (section 6.2); the email is `clamp(40px, 4.45vw, 64px)` at >= 900px because the mockup only shows 1440; icon keys stay 52px and the Send email key keeps radius 10px (section 6.1); icons come from `Icon.jsx`; section spacing stays 96/160px and the wrapper lines up with Skills; "Copied!" / "Copy failed" shows under the copy key for 2 seconds.
+- Contact follows the approved mockups, with these differences the owner approved: the status pill keeps its 10px pinging LED (section 6.2); the email is `clamp(40px, 4.45vw, 64px)` at >= 900px because the mockup only shows 1440; icon keys stay 52px and the Send email key keeps radius 10px (section 6.1); icons come from `Icon.jsx`; section spacing stays 96/160px and the wrapper lines up with Skills; "Copied!" / "Copy failed" shows under the copy key for 2 seconds.
 - The email is plain text, as in the mockup; Send email is the mailto link. The phone is plain text too, and the Call key is the tel link on mobile.
+- The end band differs from the mockups by the owner's decision after seeing it: >= 900px only, 340px tall, directly under the keys, the SVG filling the band. Below 900px it is not rendered, and the footer sits under Contact on the ground.
+- `scrollend` no longer releases the navigation lock at once. A scroll cut short by a new tap fires it too, which released the new lock and sent the ball through every section on the way. It now releases after 150ms with no movement.
+- The hero contour wrapper has its own layer (`contain: paint`, `translateZ(0)`), added for the stalls seen when tapping the nav quickly on a real iPhone.
+- `App.jsx` renders either `DesktopNav` or `BottomNav`, so only one scroll-spy runs.
+- The WP mark goes to `scrollY` 0 with `scrollToTop`, like Home in the bottom nav.
+- Links in the Hero's top row do not use the navigation lock. After clicking one, the capsule appears on the way and its LED follows the sections it passes.
+- `--ink` at 40% on the inactive nav icons is about 2.2:1, under the 3:1 WCAG asks of icons. It is the owner's choice from the mockup.
 - `profile.contactLine` holds the sentence that used to be hard-coded in `Contact.jsx`, word for word.
 
 ## Needs from owner

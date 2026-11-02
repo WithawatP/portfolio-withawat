@@ -1,4 +1,5 @@
 import AvailabilityBadge from './ui/AvailabilityBadge'
+import { scrollToTop } from '../lib/scrollToTop'
 import { profile } from '../data/portfolio'
 
 const focus =
@@ -16,6 +17,7 @@ export default function Header() {
     <header className="mx-auto flex h-[72px] w-full max-w-[1240px] items-center justify-between px-4 wide:px-12">
       <a
         href="#home"
+        onClick={scrollToTop}
         aria-label={`WP ${profile.name}, back to top`}
         className={`font-display text-[13px] tracking-[0.08em] text-ink ${focus}`}
       >
