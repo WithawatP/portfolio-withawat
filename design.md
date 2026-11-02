@@ -142,6 +142,8 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 - Three families of debossed (sinking) contour lines; each family's outer edge follows its neighbours with an even channel between them. Do not redraw or "improve" the paths.
 - The `<g>` groups are levels: the first is the outer level of every family, the last is the innermost.
 - Fill stays exactly `--ground`. No accent dot.
+- The SVG uses `preserveAspectRatio="xMinYMid slice"`, so the artwork is anchored to its left edge.
+- Lines fade out instead of being cut. The wrapper has a CSS `mask-image` that fades to transparent over about the bottom 18% at every width, and over about the left 10% at >= 900px. This is a mask, not a decorative gradient, so the gradient ban in section 10 does not apply to it.
 
 ## 7. Motion
 
