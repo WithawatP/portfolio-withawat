@@ -68,7 +68,7 @@ Carry over:
 - The timeline's accent LED follows the open row and blinks; if every row is closed, no LED is lit. The status pill LED blinks too, and it is green (`--color-led`) instead of the accent. The blink is 1.5s with opacity down to 0.7. The owner asked for all of this, so design.md sections 2, 3, 6.2, 7 and 8 were changed to match. The switch LEDs do not blink. Keep `--color-led` in R7.
 - Experience at >= 900px is two columns: heading left (not sticky), timeline right.
 - The timeline is now truly single open, with state in `Experience.jsx`; v2 let several rows open. An open row can be closed, so no row may be open.
-- When a row opens and the open row above collapses, the page scrolls only if the clicked row would pass the top of the screen (`keepBelowTop` in `TimelineItem.jsx`). Do not pin the row on every click: that made the rows creep down and off the screen when two rows were opened in turn.
+- When a row opens and the open row above collapses, the clicked row slides up with the collapse unless it would pass the top of the screen. Then the upper panel closes at once and the page scrolls in one step before paint, so the row stays still (`toggleKeepingRowOnScreen` in `TimelineItem.jsx`). Do not scroll on every frame of the collapse: that made the row shake on phones. Do not pin the row on every click: that made the rows creep down and off the screen when two rows were opened in turn.
 - Row details open with a 0.3s height change and no fade.
 - Experience tags are a " · " text line; the intro and "2019 – 2026" keep their wording and stay in `Experience.jsx`.
 - The rail uses the existing `sh-well`; no new groove token was needed.

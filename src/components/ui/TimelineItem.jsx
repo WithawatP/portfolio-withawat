@@ -1,28 +1,30 @@
 import { useId, useRef } from 'react'
+import { flushSync } from 'react-dom'
 import Icon from './Icon'
 
-const COLLAPSE_MS = 350
 // About one closed row, so the row above stays on screen and can be clicked next.
 const TOP_MARGIN = 96
-let stopWatching = null
 
 // Opening a row collapses the open one, which may sit above it, so the clicked row slides up.
-// Scroll only if it would pass the top of the screen. Scrolling on every click would not
-// undo itself when an upper row opens, and the rows would creep down and off the screen.
-function keepBelowTop(node) {
-  stopWatching?.()
-  const limit = Math.min(node.getBoundingClientRect().top, TOP_MARGIN)
-  const end = performance.now() + COLLAPSE_MS
-  let frame = 0
+// That slide is fine unless the row would pass the top of the screen. Then the upper panel
+// closes at once and the page scrolls by the same amount in one step, before the browser
+// paints, so the clicked row does not move. Scrolling on every frame of the collapse made
+// the row shake, and scrolling on every click made the rows creep off the screen.
+function toggleKeepingRowOnScreen(button, toggle) {
+  const openButton = button.closest('ol')?.querySelector('[aria-expanded="true"]')
+  const opensBelow =
+    openButton && openButton.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING
+  if (!opensBelow) return toggle()
 
-  const step = () => {
-    const overshoot = limit - node.getBoundingClientRect().top
-    if (overshoot > 0) window.scrollBy({ top: -overshoot, behavior: 'instant' })
-    frame = performance.now() < end ? requestAnimationFrame(step) : 0
-  }
+  const panel = document.getElementById(openButton.getAttribute('aria-controls'))
+  const top = button.getBoundingClientRect().top
+  if (top - panel.offsetHeight >= Math.min(top, TOP_MARGIN)) return toggle()
 
-  frame = requestAnimationFrame(step)
-  stopWatching = () => cancelAnimationFrame(frame)
+  panel.style.transition = 'none'
+  flushSync(toggle)
+  window.scrollBy({ top: button.getBoundingClientRect().top - top, behavior: 'instant' })
+  void panel.offsetHeight
+  panel.style.transition = ''
 }
 
 export default function TimelineItem({
@@ -46,8 +48,8 @@ export default function TimelineItem({
     if (!(target instanceof Element)) return
     const blocker = target.closest('[data-no-toggle], a, button')
     if (blocker && blocker !== headerButtonRef.current) return
-    if (!open) keepBelowTop(headerButtonRef.current)
-    onToggle()
+    if (open) onToggle()
+    else toggleKeepingRowOnScreen(headerButtonRef.current, onToggle)
   }
 
   return (
