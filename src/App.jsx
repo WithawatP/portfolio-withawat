@@ -16,8 +16,10 @@ export default function App() {
         <div className="mx-auto max-w-[1240px] px-4 pt-24 wide:px-12 wide:pt-40">
           <FeaturedProject />
         </div>
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-3 pt-24 sm:gap-10 sm:px-8 wide:pt-40">
+        <div className="mx-auto max-w-[1240px] px-4 pt-24 wide:px-12 wide:pt-40">
           <Experience />
+        </div>
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-3 pt-24 sm:gap-10 sm:px-8 wide:pt-40">
           <Skills />
           <Contact />
         </div>

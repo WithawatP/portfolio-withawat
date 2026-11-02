@@ -16,17 +16,20 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R0 | Setup: branch `redesign-v2`; `design.md`, `docs/mockup/hero-featured.html`, `src/assets/contour-hero.svg` in repo; add v3 tokens and shadow utilities to `index.css`; load Michroma + Manrope; build the `Key` component (design.md 6.1) | Done |
 | R1 | Hero (mobile first): nav row, status pill, contour band / right-side contour, name, role, claim, two keys | Done |
 | R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | Done |
-| R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | **Next** |
-| R4 | Skills: plain-text groups, no chips; mobile group switch restyled | Todo |
+| R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | Done |
+| R4 | Skills: plain-text groups, no chips; mobile group switch restyled | **Next** |
 | R5 | Contact, footer, bottom nav restyle | Todo |
 | R6 | Motion: hero contour parallax, reduced-motion pass | Todo |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Todo |
 
-## Next task: R3
+## Next task: R4
 
-Restyle Experience from design.md section 8: flat timeline, inset rail, accent LED on the current role; keep the accordion logic. Plan first if it touches more than about 3 files.
+Restyle Skills from design.md section 8 and 6.6: four groups as plain-text lists under eyebrow labels, no chips; the mobile group switch sits on flat ground. Plan first if it touches more than about 3 files.
 
 Carry over:
+- `Pill` has no users since R3; remove it in R7.
+- Inspector `still-page` became a FAIL in R3 because the Experience extrude is gone (7 elements moved, was 9). design.md forbids entrance motion, so it needs either R6's parallax or an owner waiver. Recheck after R5, when the last extrude goes, and after R6.
+- Inspector `covered-text` on "Work experience" at 768 is the bottom nav passing over the heading while it enters the screen. It was already there before R3. Review it in R5 with the bottom nav.
 - `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
 - v2 sections and `BottomNav` still use `surface` on the new `ground` page until their phases.
 - `scroll-padding-top` still allows for the old sticky header at 640px and up. At 1440 the Featured heading lands 96px below the top, which reads fine, so it stayed. Review it when the remaining sections are restyled.
@@ -62,6 +65,13 @@ Carry over:
 - Build and Test swap instantly: design.md section 7 lists no fade for them.
 - `--color-switch-off` (`#555555`) is a token for the unselected switch label that design.md 6.5 specifies.
 - Inspector findings `eyebrow`, `micro-label` and `body-size` are waived in design.md section 11: they come from type that section 4 sets deliberately.
+- The accent LED stays on the latest role (Generation Thailand, row 1) even though its period has ended; it does not follow the open row. The owner chose this.
+- Experience at >= 900px is two columns: heading left (not sticky), timeline right.
+- The timeline is now truly single open, with state in `Experience.jsx`; v2 let several rows open. An open row can be closed, so no row may be open.
+- Opening a row keeps it in place on screen while the row above collapses (`holdInPlace` in `TimelineItem.jsx`); without this it slid off the top at 390.
+- Row details open with a 0.3s height change and no fade.
+- Experience tags are a " · " text line; the intro and "2019 – 2026" keep their wording and stay in `Experience.jsx`.
+- The rail uses the existing `sh-well`; no new groove token was needed.
 
 ## Needs from owner
 
