@@ -88,6 +88,18 @@
   box-shadow: var(--sh-knob);
 }
 
+/* design.md 6.7: a mask, not a decorative gradient. Contour lines fade out instead of being cut. */
+@utility contour-fade {
+  mask-image: linear-gradient(to bottom, black 82%, transparent);
+
+  @media (min-width: 56.25rem) {
+    mask-image:
+      linear-gradient(to bottom, black 82%, transparent),
+      linear-gradient(to right, transparent, black 10%);
+    mask-composite: intersect;
+  }
+}
+
 @media (max-width: 639px) {
   :root {
     --depth-scale: 0.7;
