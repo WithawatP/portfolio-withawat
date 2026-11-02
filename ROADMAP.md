@@ -28,7 +28,7 @@ Restyle Skills from design.md section 8 and 6.6: four groups as plain-text lists
 
 Carry over:
 - `Pill` has no users since R3; remove it in R7.
-- Inspector `still-page` became a FAIL in R3 because the Experience extrude is gone (7 elements moved, was 9). design.md forbids entrance motion, so it needs either R6's parallax or an owner waiver. Recheck after R5, when the last extrude goes, and after R6.
+- Inspector `still-page` is a WARN, as it was before R3; the blinking LEDs brought it back from a FAIL. Recheck after R5, when the last extrude goes, and after R6.
 - Inspector `covered-text` on "Work experience" at 768 is the bottom nav passing over the heading while it enters the screen. It was already there before R3. Review it in R5 with the bottom nav.
 - `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
 - v2 sections and `BottomNav` still use `surface` on the new `ground` page until their phases.
@@ -65,7 +65,7 @@ Carry over:
 - Build and Test swap instantly: design.md section 7 lists no fade for them.
 - `--color-switch-off` (`#555555`) is a token for the unselected switch label that design.md 6.5 specifies.
 - Inspector findings `eyebrow`, `micro-label` and `body-size` are waived in design.md section 11: they come from type that section 4 sets deliberately.
-- The accent LED stays on the latest role (Generation Thailand, row 1) even though its period has ended; it does not follow the open row. The owner chose this.
+- The timeline's accent LED follows the open row and blinks; if every row is closed, no LED is lit. The status pill LED blinks too. The owner asked for this, so design.md sections 3, 7 and 8 were changed to match. The switch LEDs do not blink.
 - Experience at >= 900px is two columns: heading left (not sticky), timeline right.
 - The timeline is now truly single open, with state in `Experience.jsx`; v2 let several rows open. An open row can be closed, so no row may be open.
 - Opening a row keeps it in place on screen while the row above collapses (`holdInPlace` in `TimelineItem.jsx`); without this it slid off the top at 390.

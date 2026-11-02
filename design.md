@@ -58,7 +58,7 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 
 `#651C32` appears only on:
 1. the primary key (Download CV, Send email),
-2. LEDs (status pill, the selected side of the Build/Test switch, the current role on the timeline),
+2. LEDs (status pill, the selected side of the Build/Test switch, the open row on the timeline),
 3. one large numeral per section (for example "14" on the Test side),
 4. the active gallery dot.
 
@@ -150,14 +150,15 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 
 - **The peak: hero contour parallax.** While the hero scrolls out, the level groups move up at different speeds: outer level 0, middle level up to 12px, inner levels up to 24px on mobile and up to 40px on desktop. Use CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) on `transform` only; browsers without support show it static.
 - **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
-- No entrance fades or slide-ups, no scroll cues, no looping animation.
+- **LED blink:** the status pill LED and the open timeline row's LED blink softly (Tailwind `animate-pulse`). The switch LEDs do not blink.
+- No entrance fades or slide-ups, no scroll cues, no looping animation other than the LED blink.
 - `prefers-reduced-motion: reduce`: everything static, transitions off.
 
 ## 8. Sections not in the mockup yet (apply the same rules)
 
 Build these after Hero and Featured project are approved on the real site.
 
-- **Experience:** the timeline on flat ground, no cards. Each role is one row (title 15–16px 600; company and dates in `--muted`). The whole row toggles its details (keep the existing accordion logic: click only, single open, latest role open). The rail is an inset groove; the current role's node has the accent LED.
+- **Experience:** the timeline on flat ground, no cards. Each role is one row (title 15–16px 600; company and dates in `--muted`). The whole row toggles its details (keep the existing accordion logic: click only, single open, latest role open). The rail is an inset groove; the open row's node has the blinking accent LED, and closed rows show the off LED.
 - **Skills:** four groups (Programming & Web, QA & Testing, Design, Soft skills) as plain-text lists under eyebrow labels. Mobile may keep the existing switch between groups, restyled like the Build/Test switch.
 - **Contact:** the email large (Manrope 600, `clamp(28px, 4vw, 48px)`, wraps with `overflow-wrap: anywhere`), one line of location and availability, then keys: Send email (primary), Call, Download CV, and icon keys for GitHub and LinkedIn.
 - **Footer:** one line of plain text on the ground.

@@ -29,7 +29,6 @@ export default function TimelineItem({
   highlights = [],
   skills = [],
   isLast,
-  isCurrent = false,
   open,
   onToggle,
 }) {
@@ -63,8 +62,8 @@ export default function TimelineItem({
         className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ground sh-well"
       >
         <span
-          className={`h-2 w-2 rounded-full ${
-            isCurrent ? 'bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
+          className={`h-2 w-2 rounded-full [transition:all_.3s] ${
+            open ? 'animate-pulse bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
           }`}
         />
       </span>

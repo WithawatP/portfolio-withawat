@@ -35,7 +35,6 @@ export default function Experience() {
             highlights={experience.highlights}
             skills={experience.tags}
             isLast={index === experiences.length - 1}
-            isCurrent={index === 0}
             open={index === openIndex}
             onToggle={() => setOpenIndex((current) => (current === index ? null : index))}
           />
