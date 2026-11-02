@@ -13,6 +13,7 @@
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Unbounded", var(--font-sans);
 }
 
 :root {
@@ -69,6 +70,11 @@
     calc(var(--lx) * 12px * var(--depth-scale)) calc(var(--ly) * 12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-highlight);
 }
 
+@utility neu-raise-bar {
+  box-shadow:
+    0 calc(-6px * var(--depth-scale)) calc(14px * var(--depth-scale)) calc(-4px * var(--depth-scale)) var(--color-shadow);
+}
+
 @utility neu-inset-sm {
   box-shadow:
     inset calc(var(--lx) * -2px * var(--depth-scale)) calc(var(--ly) * -2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-shadow),
@@ -103,11 +109,17 @@
   html {
     background-color: var(--color-surface);
     color-scheme: light;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 1rem;
     scrollbar-gutter: stable both-edges;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  @media (min-width: 640px) {
+    html {
+      scroll-padding-top: 6rem;
+    }
   }
 
   body {
@@ -132,48 +144,206 @@
   }
 }
 
-@keyframes rise {
+/* Motion moment 1: a section rises from the surface as it enters the viewport.
+   The shadow lives on a layer whose opacity changes, so box-shadow is never animated.
+   Scrubbed by scroll, so the progress is linear and has no duration. */
+@keyframes extrude-rise {
   from {
-    opacity: 0;
-    transform: translateY(16px);
+    scale: 0.95;
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    scale: 1;
   }
 }
 
-@layer utilities {
-  .rise {
-    animation: rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+@keyframes extrude-shadow {
+  0%,
+  45% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* The section starts pressed into the surface, goes flat, then rises. */
+@keyframes extrude-dent {
+  0% {
+    opacity: 1;
+  }
+  45%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Motion moment 3: hero layers travel at different speeds. Upper layers move up and lower layers
+   move down, so the gaps between them only widen and text never overlaps. */
+@property --lx {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: -1;
+}
+
+@property --ly {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: -1;
+}
+
+@keyframes hero-travel {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 var(--hero-travel);
+  }
+}
+
+@keyframes hero-light {
+  from {
+    --lx: -1.2;
+    --ly: -1.2;
+  }
+  to {
+    --lx: -0.8;
+    --ly: -0.8;
+  }
+}
+
+/* Motion moment 2: the screenshot shifts inside its frame while the tray stays still.
+   Translate stays within the 7% margin that the scale adds on each side. */
+@keyframes inset-window {
+  from {
+    translate: 0 -6%;
+  }
+  to {
+    translate: 0 6%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .extrude {
+    position: relative;
+    isolation: isolate;
+    box-shadow: none;
+    /* Keeps the top edge in place while scaled, so anchor navigation lands correctly. */
+    transform-origin: 50% 0;
   }
 
-  .rise-delay-1 {
-    animation-delay: 70ms;
+  .extrude::before {
+    @apply neu-raise-lg;
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
   }
 
-  .rise-delay-2 {
-    animation-delay: 140ms;
+  @supports (animation-timeline: view()) {
+    .extrude {
+      view-timeline-name: --extrude;
+      animation: extrude-rise linear both;
+      animation-timeline: --extrude;
+      animation-range: entry 80px entry 480px;
+    }
+
+    .extrude::before {
+      animation: extrude-shadow linear both;
+      animation-timeline: --extrude;
+      animation-range: entry 80px entry 480px;
+    }
+
+    .extrude::after {
+      @apply neu-inset-lg;
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      pointer-events: none;
+      animation: extrude-dent linear both;
+      animation-timeline: --extrude;
+      animation-range: entry 80px entry 480px;
+    }
+
+    /* Named on the tray: Swiper's overflow would otherwise become the image's scrollport. */
+    .inset-window-tray {
+      view-timeline-name: --inset-window;
+    }
+
+    /* Only scaled here, so without this motion the whole screenshot shows uncropped. */
+    .inset-window-img {
+      scale: 1.14;
+      animation: inset-window linear both;
+      animation-timeline: --inset-window;
+      animation-range: cover 20% cover 80%;
+    }
+
+    /* Below 640px the keys sit above the headline, so they move up with the name. */
+    .hero-layer-name {
+      --hero-travel: -16px;
+    }
+
+    .hero-layer-keys {
+      --hero-travel: -8px;
+    }
+
+    .hero-layer-panels {
+      --hero-travel: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .hero-layer-name {
+        --hero-travel: -28px;
+      }
+
+      .hero-layer-keys {
+        --hero-travel: 16px;
+      }
+
+      .hero-layer-panels {
+        --hero-travel: 28px;
+      }
+    }
+
+    .hero-layer-name,
+    .hero-layer-keys,
+    .hero-layer-panels {
+      animation: hero-travel linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 60vh;
+    }
+
+    @media (hover: none) {
+      .hero-light-scroll {
+        animation: hero-light linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 60vh;
+      }
+    }
   }
 
-  .rise-delay-3 {
-    animation-delay: 210ms;
-  }
+  @supports not (animation-timeline: view()) {
+    .extrude,
+    .extrude::before {
+      transition:
+        scale 500ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        opacity 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
 
-  .rise-delay-4 {
-    animation-delay: 280ms;
-  }
+    .extrude[data-extrude="pending"] {
+      scale: 0.97;
+    }
 
-  .rise-delay-5 {
-    animation-delay: 350ms;
+    .extrude[data-extrude="pending"]::before {
+      opacity: 0;
+    }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rise {
-    animation: none;
-  }
-
   *,
   *::before,
   *::after {

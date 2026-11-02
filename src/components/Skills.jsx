@@ -1,22 +1,97 @@
-import SectionCard from './ui/SectionCard'
-import SectionHeading from './ui/SectionHeading'
-import InsetPanel from './ui/InsetPanel'
-import SkillChip from './ui/SkillChip'
-import { skillGroups } from '../data/portfolio'
+import { useState } from "react";
+import SectionCard from "./ui/SectionCard";
+import SectionHeading from "./ui/SectionHeading";
+import InsetPanel from "./ui/InsetPanel";
+import KnobSwitch from "./ui/KnobSwitch";
+import SkillChip from "./ui/SkillChip";
+import { useMediaQuery } from "../lib/useMediaQuery";
+import { skillGroups } from "../data/portfolio";
+
+const skillTabs = [
+  { id: "dev", label: "Dev" },
+  { id: "qa", label: "QA" },
+  { id: "design", label: "Design" },
+  { id: "soft", label: "Soft" },
+];
+
+// Below 640px a half-width chip holds about 19 characters at 360px; longer labels need one column.
+const hasLongLabel = (items) => items.some((item) => item.length > 19);
+
+// Uneven modules from 768px up, in the order Dev, QA, Design, Soft.
+const moduleClass = {
+  dev: "md:col-span-2 lg:col-span-8",
+  qa: "lg:col-span-4",
+  design: "lg:col-span-5",
+  soft: "md:col-span-2 lg:col-span-7",
+};
+
+const chipGridClass = (items) =>
+  hasLongLabel(items)
+    ? "grid-cols-1 sm:grid-cols-2 sm:@max-[360px]:grid-cols-1"
+    : "grid-cols-2 @max-[260px]:grid-cols-1 sm:@max-[360px]:grid-cols-1";
+
+const chipSpanClass = (items, index) => {
+  if (items.length % 2 === 0 || index !== items.length - 1) return "";
+  return hasLongLabel(items)
+    ? "sm:col-span-2 sm:@max-[360px]:col-span-1"
+    : "col-span-2 @max-[260px]:col-span-1 sm:@max-[360px]:col-span-1";
+};
+
+// Dev tray from 1024px: every group ends on three rows at 1280px and up. Between 1024px and 1279px
+// three groups across would clip the half-width chips, so Languages takes its own row.
+// Important is needed to win over the container rules in chipGridClass and chipSpanClass.
+const devGroupClass = (groupIndex) =>
+  groupIndex === 0 ? "lg:col-span-2 xl:col-span-1" : "";
+
+const devGridClass = (groupIndex) =>
+  groupIndex === 0 ? "lg:grid-cols-3! xl:grid-cols-1!" : "lg:grid-cols-2!";
+
+const devChipClass = (items, groupIndex, itemIndex) => {
+  if (groupIndex === 0) return "lg:col-span-1!";
+  return items.length % 2 === 1 && itemIndex === items.length - 1
+    ? "lg:col-span-2!"
+    : "";
+};
 
 export default function Skills() {
-  const [primary, ...secondary] = skillGroups
+  const [primary, ...secondary] = skillGroups;
+  const [activeTab, setActiveTab] = useState("dev");
+  const isMobile = useMediaQuery("(max-width: 767px)");
+
+  const tabPanelProps = (tab) =>
+    isMobile
+      ? {
+          id: `skills-panel-${tab.id}`,
+          role: "tabpanel",
+          "aria-labelledby": `skills-tab-${tab.id}`,
+        }
+      : {};
 
   return (
     <SectionCard id="skills" labelledBy="skills-title">
       <SectionHeading
         id="skills-title"
         title="Technical skills"
-        intro="A practical toolkit for building, testing, and designing web applications, supported by the soft skills that keep delivery on track."
+        intro="The tools and methods I have used to build, test, and design web applications, plus the people skills from running restaurant shifts."
       />
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <InsetPanel className="rise rise-delay-1 md:col-span-2 lg:col-span-3">
+      <div className="mb-4 md:hidden">
+        <KnobSwitch
+          options={skillTabs}
+          value={activeTab}
+          onChange={setActiveTab}
+          ariaLabel="Skill categories"
+          idPrefix={isMobile ? "skills" : undefined}
+        />
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-12">
+        <InsetPanel
+          {...tabPanelProps(skillTabs[0])}
+          className={`${moduleClass.dev} ${
+            activeTab === "dev" ? "" : "max-md:hidden"
+          }`}
+        >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
               <h3 className="text-xl font-bold text-ink">{primary.title}</h3>
@@ -26,44 +101,46 @@ export default function Skills() {
             </div>
           </div>
 
-          <div className="mt-5 grid items-start gap-5 lg:grid-cols-3">
+          <div className="mt-5 grid items-start gap-5 lg:grid-cols-2 xl:grid-cols-[3fr_4fr_4fr]">
             {primary.groups.map((group, groupIndex) => {
-              const labelId = `skill-sub-${groupIndex}`
+              const labelId = `skill-sub-${groupIndex}`;
               return (
-                <div key={group.label} className="@container">
+                <div
+                  key={group.label}
+                  className={`@container ${devGroupClass(groupIndex)}`}
+                >
                   <p id={labelId} className="text-[13px] font-medium text-ink">
                     {group.label}
                   </p>
                   <ul
                     aria-labelledby={labelId}
-                    className="mt-2 grid grid-cols-2 gap-2 @max-[360px]:grid-cols-1"
+                    className={`mt-2 grid gap-2 ${chipGridClass(group.items)} ${devGridClass(groupIndex)}`}
                   >
-                    {group.items.map((item, itemIndex) => {
-                      const spansBoth =
-                        group.items.length % 2 === 1 &&
-                        itemIndex === group.items.length - 1
-                      return (
-                        <SkillChip
-                          key={item}
-                          className={spansBoth ? 'col-span-2 @max-[360px]:col-span-1' : ''}
-                        >
-                          {item}
-                        </SkillChip>
-                      )
-                    })}
+                    {group.items.map((item, itemIndex) => (
+                      <SkillChip
+                        key={item}
+                        className={`${chipSpanClass(group.items, itemIndex)} ${devChipClass(group.items, groupIndex, itemIndex)}`}
+                      >
+                        {item}
+                      </SkillChip>
+                    ))}
                   </ul>
                 </div>
-              )
+              );
             })}
           </div>
         </InsetPanel>
 
         {secondary.map((group, groupIndex) => {
-          const labelId = `skill-cat-${groupIndex}`
+          const labelId = `skill-cat-${groupIndex}`;
+          const tab = skillTabs[groupIndex + 1];
           return (
             <InsetPanel
               key={group.title}
-              className="@container rise rise-delay-2"
+              {...tabPanelProps(tab)}
+              className={`@container ${moduleClass[tab.id]} ${
+                activeTab === tab.id ? "" : "max-md:hidden"
+              }`}
             >
               <h3 id={labelId} className="text-xl font-bold text-ink">
                 {group.title}
@@ -73,26 +150,27 @@ export default function Skills() {
               </p>
               <ul
                 aria-labelledby={labelId}
-                className="mt-5 grid grid-cols-2 gap-2 @max-[360px]:grid-cols-1"
+                className={`mt-5 grid gap-2 ${chipGridClass(group.items)} ${
+                  tab.id === "qa" ? "xl:grid-cols-2!" : ""
+                }`}
               >
-                {group.items.map((item, itemIndex) => {
-                  const spansBoth =
-                    group.items.length % 2 === 1 &&
-                    itemIndex === group.items.length - 1
-                  return (
-                    <SkillChip
-                      key={item}
-                      className={spansBoth ? 'col-span-2 @max-[360px]:col-span-1' : ''}
-                    >
-                      {item}
-                    </SkillChip>
-                  )
-                })}
+                {group.items.map((item, itemIndex) => (
+                  <SkillChip
+                    key={item}
+                    className={`${chipSpanClass(group.items, itemIndex)} ${
+                      tab.id === "qa" && itemIndex === group.items.length - 1
+                        ? "xl:col-span-2!"
+                        : ""
+                    }`}
+                  >
+                    {item}
+                  </SkillChip>
+                ))}
               </ul>
             </InsetPanel>
-          )
+          );
         })}
       </div>
     </SectionCard>
-  )
+  );
 }

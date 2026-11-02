@@ -1,6 +1,6 @@
 import SectionCard from './ui/SectionCard'
 import SectionHeading from './ui/SectionHeading'
-import HoverTimelineCard from './ui/HoverTimelineCard'
+import TimelineItem from './ui/TimelineItem'
 import { experiences } from '../data/portfolio'
 
 export default function Experience() {
@@ -13,19 +13,20 @@ export default function Experience() {
         meta="2019 – 2026"
       />
 
-      <div className="flex flex-col">
+      <ol className="flex flex-col">
         {experiences.map((experience, index) => (
-          <HoverTimelineCard
+          <TimelineItem
             key={`${experience.company}-${experience.period}`}
             role={experience.role}
             company={experience.company}
             period={experience.period}
-            description={experience.highlights}
+            highlights={experience.highlights}
             skills={experience.tags}
             isLast={index === experiences.length - 1}
+            defaultOpen={index === 0}
           />
         ))}
-      </div>
+      </ol>
     </SectionCard>
   )
 }
