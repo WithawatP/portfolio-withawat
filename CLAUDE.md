@@ -1,6 +1,6 @@
 # Portfolio website (Withawat Phiraban)
 
-Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `@theme` inside `src/index.css`). Swiper powers the project gallery. A redesign (design.md v3) is in progress on the `redesign` branch; styled-components and `UiverseButton` are being retired.
+Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `@theme` inside `src/index.css`). Swiper powers the project gallery. A redesign (design.md v3) is in progress on the `redesign-v2` branch; styled-components and `UiverseButton` are being retired.
 
 ## Commands
 - `npm run dev`, `npm run build`, `npm run lint` (oxlint).
@@ -11,7 +11,7 @@ Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `
 - `src/index.css`: tokens and shadow utilities (being replaced by the design.md v3 set).
 - `src/assets/contour-hero.svg`: the hero contour artwork. `docs/mockup/hero-featured.html`: the approved mockup markup.
 - `src/data/portfolio.js`: ALL copy and data. Owner-supplied facts only.
-- `src/components/*`: page sections. `src/components/ui/*`: shared pieces (SectionCard, InsetPanel, SkillChip, Pill, TimelineItem, QuickContactRow, UiverseButton, Icon).
+- `src/components/*`: page sections. `src/components/ui/*`: shared pieces (SectionCard, InsetPanel, SkillChip, Pill, TimelineItem, QuickContactRow, UiverseButton, Key, Icon).
 - `src/components/BottomNav.jsx` and `src/lib/useScrollSpy.js`: mobile navigation.
 
 ## Design rules (read `design.md` before ANY UI work)
