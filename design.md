@@ -1,207 +1,182 @@
-# Design System: Hardware Neumorphism (v2.1)
+# design.md (v3, redesign)
 
-Content, order, and copy live in `portfolio_content_structure_blueprint.md`. This file governs how the page looks, feels, and moves.
+The source of truth for how the portfolio looks and moves. It replaces design.md v2 completely.
+It overrides every installed skill (design-taste-frontend or any other) wherever they disagree.
+Content and copy still come from `src/data/portfolio.js`.
 
-**Precedence.** This file overrides any installed skill (including `design-taste-frontend`) wherever they conflict.
-Known conflicts and how to treat them:
+Visual reference: the approved mockup of Hero + Featured project, saved in the repo as
+`docs/mockup/hero-featured.html`. Match it. Where this file and the mockup differ, this file wins.
+In the mockup markup, `{{accent}}` means `#651C32`; the other `{{...}}` values are switch state (section 6.5).
 
-- "No shadows on things at rest": waived for the `neu-*` classes. Depth is the design. `inspect.mjs` will report `FAIL shadow` at 1440, 768 and 390; that is expected and not to be "fixed".
-- "No floating pill navigation": the mobile bottom bar must be attached to the bottom edge of the screen, full width, never a floating pill.
-- "Entrance for every section, rising 16 to 32px, at least 8 moving elements": replaced by the motion plan in section 7. If the inspector complains about the count of moving elements, report it; do not add fade-ups to satisfy it.
-- `draw.mjs` (direction dealer), `assets.mjs` (found pictures), and the "add a video or photographs" advice: do not use. The direction is fixed here, and the only images are the owner's project screenshots and, optionally, one portrait supplied by the owner (never stock or AI-generated). `WARN no-footage` is accepted.
-- `UiverseButton` is the one deliberate exception (section 8b): the skill's `gradient`, `button-fx`, and `text-shadow` findings are waived for that component only. `few-pictures` is waived too.
-- `font-fallback` (the Inter warning from `UiverseButton`) and `small-text` for text of 12px or larger (the minimum in section 5) are waived.
-- `empty-screens` is waived (owner decision, Phase 4). The rule counts panels in `--surface` as empty because it cannot see `neu-*` depth, so a panel the eye reads as solid scores zero. Do not add `--recess` fills only to raise this score.
-- Everything else in the skill still applies and must pass: no eyebrow labels, no gradients, no thin rules or outlined boxes, no icon-topped feature cards or rows of identical cards, no covered text, and headlines at most two lines.
-- Run `inspect.mjs` at 1440, 768 and 390 px and `lint.mjs`; fix everything except the waivers above.
+---
 
-## 1. Concept
+## 1. Concept: a quiet page with a few objects
 
-The page is one sheet of matte plastic lit by ONE light source. Everything on it is a piece of hardware: panels, trays, dials, switches, LEDs, grooves. Depth is the only decoration.
+Neumorphism works as an accent, not as the whole page. So:
 
-What makes the reference images work (borrow these, not their layout):
-
-- Objects differ from each other: pill, squircle, circle (dial), groove (slider), tick marks. Not one card repeated.
-- A recessed tray can be a slightly darker tone (`--recess`), not only a shadow.
-- Almost everything is grey. Strong contrast appears only in small places: clock hands, a play icon, one photo.
-- Type has real scale contrast: big numerals next to tiny labels.
-- Every detail carries meaning (tick marks mark a scale, the LED shows a state).
+- **Flat ground by default.** Headings, paragraphs, lists and labels sit directly on the page ground. No cards around text.
+- **Depth only for objects.** Raised means "you can press it" (keys, the switch knob) or "this is the one device" (the Featured project panel). Inset means "a well or a screen" (icon wells, the gallery screen, the switch track, the status pill).
+- **One container level inside a section, at most.** The device panel may hold a screen. Nothing else nests.
+- **One peak.** The hero contour is the single big visual moment of the page. Nothing else competes with it.
+- **One accent colour,** used in four places only (section 3).
 
 ## 2. Tokens
 
-Never hardcode hex values or shadow strings in components. Use these tokens (CSS variables in `index.css`, exposed to Tailwind through the theme).
-
-| Token       | Value     | Use                                                                                   |
-| :---------- | :-------- | :------------------------------------------------------------------------------------ |
-| `--surface` | `#E7E7E7` | Page and every panel. All surfaces match exactly.                                     |
-| `--light`   | `#FFFFFF` | Highlight side of every shadow                                                        |
-| `--shade`   | `#B6B6B6` | Dark side of every shadow                                                             |
-| `--recess`  | `#D1D1D1` | Optional darker fill inside a tray                                                    |
-| `--ink`     | `#333333` | Headings, key text, active icons                                                      |
-| `--ink-2`   | `#4A4A4A` | Body text                                                                             |
-| `--ink-3`   | `#666666` | Labels, dates, secondary text (4.6:1 on surface)                                      |
-| `--ink-4`   | `#9B9B9B` | Decorative only: tick marks, disabled icons. Never for text that carries information. |
-| `--led`     | `#22C55E` | The only functional color: status LED. Plus real project screenshots.                 |
-
-Light direction: `--lx: -1; --ly: -1;` (light from top-left; each `-1..1`). Shadows are classes in `index.css` (or Tailwind `@utility`), NOT stored shadow variables, so a local override of `--lx/--ly` on one section really changes that section's shadows.
-
 ```css
-.neu-raise-lg {
-  box-shadow:
-    calc(var(--lx) * -12px) calc(var(--ly) * -12px) 24px var(--shade),
-    calc(var(--lx) * 12px) calc(var(--ly) * 12px) 24px var(--light);
-}
-.neu-raise-sm {
-  box-shadow:
-    calc(var(--lx) * -4px) calc(var(--ly) * -4px) 10px var(--shade),
-    calc(var(--lx) * 4px) calc(var(--ly) * 4px) 10px var(--light);
-}
-.neu-inset-lg {
-  box-shadow:
-    inset calc(var(--lx) * -6px) calc(var(--ly) * -6px) 12px var(--shade),
-    inset calc(var(--lx) * 6px) calc(var(--ly) * 6px) 12px var(--light);
-}
-.neu-inset-sm {
-  box-shadow:
-    inset calc(var(--lx) * -2px) calc(var(--ly) * -2px) 4px var(--shade),
-    inset calc(var(--lx) * 2px) calc(var(--ly) * 2px) 4px var(--light);
+:root {
+  --ground: #DADADA;        /* page and every raised object */
+  --screen: #E9E9E9;        /* inside the gallery screen only */
+  --ink: #2A2A2A;           /* headings, name, key labels (never pure black) */
+  --ink-2: #3E3E3E;         /* role line, nav, small labels on keys */
+  --body: #4F4A4C;          /* paragraphs (slightly warm, not flat grey) */
+  --muted: #555055;         /* secondary lines, tech line, subtitles */
+  --label: #4E4E4E;         /* uppercase eyebrow labels */
+  --faint: #A3A3A3;         /* decoration only: inactive dots, off LED. Never text. */
+  --accent: #651C32;
+  --on-accent: #FFFFFF;
+
+  --sh-key: 6px 6px 12px #B6B6B6, -6px -6px 12px #FBFBFB;
+  --sh-key-pressed: 0 0 0 #B6B6B6, 0 0 0 #FBFBFB, inset 4px 4px 12px #B6B6B6, inset -4px -4px 12px #FBFBFB;
+  --sh-primary: 6px 6px 12px #B2B2B2, -6px -6px 12px #FBFBFB;
+  --sh-primary-pressed: 0 0 0 #B2B2B2, 0 0 0 #FBFBFB, inset 4px 4px 12px rgba(0,0,0,.35), inset -4px -4px 12px rgba(255,255,255,.18);
+  --sh-device: 14px 14px 32px #B0B0B0, -12px -12px 28px #FBFBFB;            /* mobile */
+  --sh-device-lg: 20px 20px 48px #B0B0B0, -18px -18px 44px #FBFBFB;         /* >= 900px */
+  --sh-well: inset 4px 4px 9px #B6B6B6, inset -4px -4px 9px #F7F7F7;        /* icon wells, status pill */
+  --sh-screen: inset 7px 7px 15px #B3B3B3, inset -7px -7px 15px #F8F8F8;
+  --sh-track: inset 7px 7px 14px #A6A6A6, inset -7px -7px 14px #F6F6F6;
+  --sh-knob: 5px 5px 12px #9C9C9C, -4px -4px 10px #EFEFEF, inset 2px 2px 3px rgba(255,255,255,.5);
+  --knob: #C9C9C9;
+  --led-glow: 0 0 7px 2px rgba(101,28,50,.6);
 }
 ```
 
-Below 640px, scale offsets and blur down by about 30% (use a `--depth-scale` multiplier) so raised sections do not eat the side margins.
+Contrast on `--ground`: ink about 11:1, body and muted above 5:1, white on accent about 12:1. Keep it that way: no lighter text greys.
 
-Forbidden: pure black or `rgba(0,0,0,...)` shadows, Tailwind `shadow-*` utilities, gradients, glass/blur, neon, emoji, mixed icon families.
-Borders: none for structure. Exception: keyboard focus uses `outline: 2px solid var(--ink); outline-offset: 3px` on `:focus-visible`.
+Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for the shadows). Components use tokens only, never raw hex.
 
-## 3. Depth roles
+## 3. Accent rules
 
-Depth means a role. If you cannot name the role, do not add a shadow.
+`#651C32` appears only on:
+1. the primary key (Download CV, Send email),
+2. LEDs (status pill, the selected side of the Build/Test switch, the current role on the timeline),
+3. one large numeral per section (for example "14" on the Test side),
+4. the active gallery dot.
 
-| Role               | Look                                                    | Use ONLY for                                |
-| :----------------- | :------------------------------------------------------ | :------------------------------------------ |
-| L1 Raised section  | `neu-raise-lg`, large radius                            | Main section wrappers                       |
-| L2 Tray            | `neu-inset-lg` (optional `--recess` fill)               | A group of related content inside L1        |
-| L3a Control        | `neu-raise-sm`, pressed = `neu-inset-sm` + `scale(.97)` | Things you can click or toggle              |
-| L3b Engraved label | `neu-inset-sm`, no hover, no press                      | Static tags: tech chips, skill chips, roles |
-| Pointer            | `--led`, tiny                                           | Status                                      |
+Nowhere else: not on links, headings, borders, icons or hover states.
 
-Rules:
+## 4. Typography
 
-- Raised means clickable. Engraved means information. Never swap them.
-- Max 3 physical layers stacked in any area (L1 > L2 > L3).
-- An engraved chip inside a tray must be clearly shallower than the tray (about one third of the depth).
-- Equal-width 2-column chip grids are the owner's choice for the Tech stack and Technical skills cards: keep them (an odd last chip spans both columns; fall back to 1 column when a label would clip). Everywhere else (hero Core stack, timeline tags) use natural-width chips that wrap.
+- **Michroma** (display): the name and large numerals only. Never headings, never body.
+- **Manrope** 400 / 500 / 600 / 700: everything else.
+- Load both from Google Fonts in `index.html` (no new npm dependency).
 
-## 4. Variation rules (anti-slop)
+| Role | Size | Weight / style |
+|---|---|---|
+| Name (2 lines, uppercase) | `clamp(34px, 4.6vw, 66px)`, line-height 1.06 | Michroma |
+| Section title (h2) | `clamp(32px, 3.4vw, 48px)`, tracking -0.02em | 600 |
+| Role line | `clamp(16px, 1.4vw, 19px)` | 600, `--ink-2` |
+| Body | `clamp(15px, 1.2vw, 17px)`, line-height 1.65, max 440–620px wide | 400, `--body` |
+| Item title | 15–16px | 600 |
+| Secondary line | 13–14px | 400, `--muted` |
+| Eyebrow label | 11–12px, uppercase, tracking 0.2–0.22em | 600, `--label` |
+| Large numeral | `clamp(42px, 4vw, 56px)` | Michroma, `--accent` |
 
-Slop is sameness, not tidiness. Check these on every section:
+Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 
-- Use a radius scale tied to size: pill (controls), 16px (rows), 24px (trays), 40px (sections), full circle (dials, avatar). Do not put one radius on everything.
-- Panels of different sizes. Never more than two identical sibling panels in a row. Prefer 2:1 or 3:2 cells.
-- Each section has a different composition. Do not repeat "heading + one-line subtitle + right-aligned meta label" on every section.
-- Each section includes at least one object that is not a card: dial, switch, slider groove, tick scale, LED, avatar circle.
-- Decoration must carry information. If it signals nothing, delete it.
-- No fake precision: no skill-level percentages, no star ratings.
-- One signature moment on the whole page (section 7). Everything else stays quiet.
-- Remove unnecessary labels above content (eyebrows, "Four categories" style counters). A label must change what the reader understands.
+## 5. Layout (mobile first)
 
-## 5. Type and copy
+- Design at **390px** first. One breakpoint: **900px**.
+- Side gutter 16px, 48px at >= 900px. Content max width 1240px.
+- Section spacing: 96px between sections on mobile, 160px at >= 900px. More space above a heading than below it.
+- No horizontal overflow at 360, 390, 768, 1024, 1440.
 
-- One family, or two clearly different. Body 15 to 16px on mobile, labels at least 12px. Sentence case. No all-caps labels.
-- Use scale contrast: large display text or numerals against small labels.
-- Display face: an expanded/wide face is allowed ONLY for the owner's name and large numerals (36px or bigger, one weight). Never for labels, chips, buttons, or body. Manrope (the current face) has no width axis, so keep it for everything else and add exactly ONE display family for these cases (candidates: Archivo with `font-stretch` up to 125%, or Unbounded; the owner picks after a side-by-side test). Two typefaces in total. Latin glyphs only, so keep those elements English. Load Latin subset only, with `font-display: swap`.
-- Do not accent a single word in a headline with color or italics.
-- Copy is specific: a number, a tool, a decision, a result. Replace adjectives with evidence.
-- Avoid: passionate, seamless, leverage, robust, cutting-edge, "quality mindset", "practical toolkit", "delivery on track", and any sentence that would fit any developer's portfolio.
-- Every skill, tool, or claim shown must be something the owner can discuss in an interview. Never invent numbers, counts, or results; use only facts supplied by the owner.
+### Hero
+- **Mobile:** nav row (WP mark left, "Open to work" pill right), then the contour band (full bleed, 300px tall), then name, role, one-line claim, then two keys side by side (2-column grid).
+- **>= 900px:** min-height 760px. The contour sits absolutely on the right 52% of the hero, full hero height, touching the right edge of the screen. Text column on the left, max 540px, above the contour (z-index). The status pill moves into the text column; the nav shows spaced uppercase links.
+- The name must never overlap the contour. If it would, shrink the name with the clamp; never move the contour over it.
 
-## 6. Mobile-first
+### Navigation
+- Desktop: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em.
+- Mobile: keep the existing edge-attached bottom bar and its scroll-spy logic. Restyle it with these tokens: bar on `--ground` with an upward shadow, the active item as a pressed key with the accent LED.
 
-Most visitors arrive on a phone. Design at 390px first, then enhance at 768px and 1024px+, with a 1440px max width. In Tailwind, unprefixed classes are mobile; add `md:` and `lg:` for larger.
+## 6. Components
 
-- First screen on mobile must show: the name (display face), the availability LED, and the primary action, without scrolling.
-- Touch targets at least 44 by 44px with at least 8px between controls. Nothing is reachable only by hover.
-- Layout collapses to one column; the most important cell comes first. Bento cells stack, they are not just shrunk.
-- Mobile section labels in the bottom bar: Home, Project, Work, Skills, Contact (12px minimum, 48px touch height).
-- Navigation: mobile uses a fixed bottom bar attached to the screen edge, full width, not a floating pill (inset groove with a raised knob that slides to the active section; respects `safe-area-inset-bottom`). Desktop uses the top header.
-- Switches and segmented controls are full-width on mobile.
-- Long text wraps; no horizontal scroll at 360px.
-- Corner radius on mobile must not exceed about 1.5x the padding of the same box, so text never sits close to a curve: sections 24px (`rounded-3xl`) with `p-5`, trays and rows 16px (`rounded-2xl`) with `p-4`. Desktop radii stay as they are. Pills, chips, and keys stay fully round.
-- Test at 360, 390, 768, 1024, 1440.
+### 6.1 Key (all buttons and icon links)
+Based on "witty-wolverine-69" by javierBarroso on uiverse.io (MIT). Put a credit comment in the component.
 
-## 7. Motion and interaction (level: clearly visible)
+- Radius 10px, padding 14px 26px, 1px border in the same colour as the background, `--sh-key`, `transition: all .3s`.
+- `:active`: `--sh-key-pressed`, text `#5E5E5E`.
+- Primary: background and border `--accent`, text white, `--sh-primary`; `:active` uses `--sh-primary-pressed`.
+- Icon key: 52x52, radius 14px, icon 18px, label (12px, 600) underneath, outside the key.
+- Focus: `outline: 2px solid var(--accent); outline-offset: 4px` on `:focus-visible`.
+- Hover effects only inside `@media (hover: hover)`.
+- The old `UiverseButton` (styled-components) is retired once every button uses the Key.
 
-Motion follows physics: surfaces extrude, controls press in, light shifts. Never decorative. The owner wants motion that is clearly noticeable, so keep moments bold but few.
+### 6.2 Status pill
+Inset (`--sh-well`), radius 999px, LED 7–8px in `--accent` with `--led-glow`, text 12–13px 600 `--ink-2`.
 
-Scroll moments (budget: these three only):
+### 6.3 Device panel (Featured project only)
+- Radius 32px and padding 16px on mobile; radius 48px and padding 32px at >= 900px. `--sh-device` / `--sh-device-lg`.
+- Mobile: stacked (screen, switch, content, tech line, icon keys). Desktop: two columns, screen 55% left, side 45% right.
 
-1. Section extrude: a Level 1 section rises from the surface as it enters the viewport (starts pressed in, goes flat, then raised by crossfading inset and raised shadow layers, plus a scale from .95 to 1; owner asked for stronger motion in Phase 5). Do NOT use fade-and-slide-up on every section.
-2. Hero depth layers: name, panels, and controls move at different speeds. Travel up to 40px on desktop, 16 to 20px on mobile. The light direction shifts slightly in the hero: follows the pointer on desktop, follows scroll progress on touch (scoped to the hero, range about 0.4).
-3. Inset window: an image inside a tray shifts 8 to 12 percent while the tray stays still.
+### 6.4 Screen (gallery)
+- Inset frame: radius 24px, padding 10px, `--sh-screen`. Inner area radius 16px, `--screen`, height 210px mobile / 400px desktop, vertically centred in its column.
+- The existing Swiper lives inside the screen. Keep its configuration (no loop, no autoplay, no lightbox).
+- Pagination under the screen: inactive dots 6px `--faint`, active dot an 18x6px pill in `--accent`.
 
-The scroll rail on the timeline was built and removed in Phase 5 (owner decision): it did not suit the page and competed with the click-to-open LED. Do not add it back.
+### 6.5 Build / Test switch
+- `role="radiogroup"`, two buttons with `role="radio"` and `aria-checked`. Arrow keys move between them.
+- Track: 60px tall, full width up to 320px, **centred in its column** (`align-self: center`), radius 999px, `--sh-track`, padding 6px.
+- Knob: `--knob` with `--sh-knob`, half the track width, slides between `left: 6px` and `left: 50%` with `transition: left .45s cubic-bezier(.34, 1.4, .64, 1)`.
+- Each label has an 8px LED: selected = `--accent` + `--led-glow`, text `--ink`; unselected = `--faint`, no glow, text `#555555`.
+- Both content sides sit in the same grid cell so the panel height does not jump; the hidden side gets `inert`.
+- Build side: "WHAT I BUILT" label, then rows of icon well (46px, `--sh-well`) + title + one secondary line.
+- Test side: "HOW I TESTED" label, the large numeral with its caption, then one block per bug (eyebrow label + one sentence: symptom and fix).
 
-User-triggered feedback (always allowed): press-in on controls, copy-to-clipboard confirmation as a pressed state, accordion open/close, the Build/Test switch, the bottom dock knob.
+### 6.6 Lists instead of chips
+There are no chips anywhere. Tech stacks and skills are plain text, items separated by " · ", in `--muted` 13–14px, grouped under eyebrow labels.
 
-Technical rules:
+### 6.7 Hero contour
+- File: `src/assets/contour-hero.svg` (provided). Use it inline as a React component so its level groups can move for the parallax (section 7). `aria-hidden`, no pointer events.
+- Three families of debossed (sinking) contour lines; each family's outer edge follows its neighbours with an even channel between them. Do not redraw or "improve" the paths.
+- The `<g>` groups are levels: the first is the outer level of every family, the last is the innermost.
+- Fill stays exactly `--ground`. No accent dot.
 
-- Animate only `transform`, `opacity`, and CSS variables on small scopes. For shadow changes on large elements, crossfade the opacity of two layers (pseudo-elements) instead of animating `box-shadow`.
-- Prefer CSS scroll-driven animations (`animation-timeline: view()`) inside `@supports`. Fallback: IntersectionObserver with a static final state. No scroll listeners that read layout.
-- Respect `prefers-reduced-motion: reduce`: no parallax, no extrude animation, no knob travel; state changes are instant.
-- Mobile keeps parallax at reduced travel. If frame rate drops on a mid-range phone, fall back to extrude plus press feedback only. Never use gyroscope or device-orientation effects.
-- Duration 150 to 350 ms for feedback; 400 to 600 ms for switches and scroll reveals. Easing `cubic-bezier(.2,.7,.2,1)`; a slight overshoot is allowed on knobs only. No looping animation except the status LED pulse.
-- Never change `--lx/--ly` on `:root`; scope to a section.
-- Hover must never be the only way to reach content (timeline details open by tap and keyboard, with `aria-expanded`).
+## 7. Motion
 
-## 8. Signature moment: Build / Test switch
+- **The peak: hero contour parallax.** While the hero scrolls out, the level groups move up at different speeds: outer level 0, middle level up to 12px, inner levels up to 24px on mobile and up to 40px on desktop. Use CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) on `transform` only; browsers without support show it static.
+- **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
+- No entrance fades or slide-ups, no scroll cues, no looping animation.
+- `prefers-reduced-motion: reduce`: everything static, transitions off.
 
-Location: Featured project, in the "What I built" panel.
+## 8. Sections not in the mockup yet (apply the same rules)
 
-- Control: a two-position physical switch (inset groove, raised knob), labelled "Build" and "Test", with the LED lit on the active side. Knob slides 400 to 500 ms with a slight overshoot. On mobile it is full-width.
-- Behavior: panel content crossfades; the panel keeps a stable height (set a min-height) so nothing jumps.
-- Accessibility: segmented radio group (arrow keys move between options), `aria-live="polite"` on the content region.
-- Build side: what the owner built (authentication and security, admin dashboard, core UI).
-- Test side: the testing method and bugs found and fixed, each as symptom, cause, fix. Facts come only from the owner (`src/data/portfolio.js`).
-- This is the one memorable moment. Do not add a second showpiece elsewhere.
+Build these after Hero and Featured project are approved on the real site.
 
-## 8b. The remote key (`UiverseButton`): keep the original look
+- **Experience:** the timeline on flat ground, no cards. Each role is one row (title 15–16px 600; company and dates in `--muted`). The whole row toggles its details (keep the existing accordion logic: click only, single open, latest role open). The rail is an inset groove; the current role's node has the accent LED.
+- **Skills:** four groups (Programming & Web, QA & Testing, Design, Soft skills) as plain-text lists under eyebrow labels. Mobile may keep the existing switch between groups, restyled like the Build/Test switch.
+- **Contact:** the email large (Manrope 600, `clamp(28px, 4vw, 48px)`, wraps with `overflow-wrap: anywhere`), one line of location and availability, then keys: Send email (primary), Call, Download CV, and icon keys for GitHub and LinkedIn.
+- **Footer:** one line of plain text on the ground.
 
-The primary action buttons are keys on an old remote control. The owner likes the ORIGINAL visual style of this component (taken from uiverse.io and softened to the grey palette) and wants it kept exactly as it was before Phase 3B.
+## 9. Content
 
-- Do not restyle it: no new palette mapping, no concave dish, no haptics, no font change. Its gradients and layered shadows stay as they are.
-- Allowed changes are layout and invisible usability only: the `mobileBlock` prop (full width below 640px), the `primary` prop (taller key), a `:focus-visible` outline (the component uses `all: unset`, which removes the ring), and hover rules gated with `@media (hover: hover)` so a tap never leaves a stuck hover look.
-- Cluster below 640px: one full-width primary key, then two equal half-width keys. Keys in the cluster are at least 44px tall.
-- Use it for primary actions only (download CV, contact, view projects). Never for tags, toggles, or navigation.
-- Respect `prefers-reduced-motion`.
+- Every fact comes from `src/data/portfolio.js`. Never invent numbers, names or claims.
+- Missing copy stays a visible placeholder in brackets, for example `[One line on what you built]`, until the owner supplies it.
 
-## 9. Accessibility floor
+## 10. Refuse list
 
-- Text contrast at least 4.5:1 (`--ink-3` or darker on `--surface`).
-- Visible `:focus-visible` on every control. Real `<button>` and `<a>` for interactive things; `<ul>/<li>` for tag groups.
-- Images have meaningful `alt`. Layout does not shift on load.
+Borders used for structure · gradients · glass or blur panels · pure black · chips · cards inside cards · more than one raised container per section · accent outside section 3 · `01 / 06` counters · gradient text · emoji · entrance fade or slide animations · scroll-down cues · invented statistics.
 
-## 10. Default compositions (change only with owner approval)
+## 11. Review gate (answer before calling a task done)
 
-- Hero: mobile first screen as in section 6. Desktop: two columns; left name and role, right status LED and quick-contact rows (raised controls).
-- Featured project: unequal bento: title and role tile, screens in a tray (inset window), the Build/Test panel, tech stack, links.
-- Experience: vertical groove with LED nodes. Each row is a real `<button>` toggle (`aria-expanded`, `aria-controls`). Collapsed = raised key; open = pressed-in tray with the details revealed. The company name is visible when collapsed. The node LED is lit (with the status pulse) while the row is open.
-  - One state only: `open`. Click, tap, or Enter/Space toggles it. The whole card surface is the click target: one handler on the card container toggles `open`, while the inner header `<button>` provides keyboard and screen-reader access (its click bubbles to the container, so nothing toggles twice). Clicks made while text is selected are ignored. There is NO hover expansion on any device, and focus alone never opens a row.
-  - On hover-capable devices a closed row may lift by 1px as a hint (Tailwind's `hover:` variant already applies only to hover-capable devices). Never change the content on hover.
-  - The latest role starts open at every screen width; the others start closed. Details animate with `grid-template-rows` 0fr to 1fr, instant under reduced motion. Highlights render as a list of up to 3 short bullets.
-- Skills: one control-panel layout with uneven modules; tags are engraved labels.
-- Contact: the email address as the single large focal element; actions as raised controls.
+1. At 390px, does the first screen show the contour band, name, role, claim and both keys with little or no scrolling?
+2. Is any text sitting inside a box that is not a key, the device panel, the screen or a well?
+3. Is the accent used anywhere outside the four allowed places?
+4. Does the name overlap the contour at any width from 900 to 1440?
+5. Do keys press in (inset) on `:active` and show a focus ring on keyboard focus?
+6. Is the switch centred, keyboard operable, and announced as a radio group?
+7. No horizontal overflow at 360 / 390 / 768 / 1024 / 1440; report the page height at 390.
+8. With reduced motion on, does nothing move?
+9. `npm run lint` and `npm run build` pass.
 
-## 11. Review gate (run before saying "done")
-
-Answer each item in the final summary. If any fails, fix it first.
-
-1. Could this section be dropped into another portfolio unchanged? If yes, what is specific to this owner?
-2. Is any role mismatched (raised static info, engraved clickable thing)?
-3. Does any section repeat another section's structure?
-4. Is there a non-card object in each section, and does it carry meaning?
-5. Any hardcoded hex, pure black, `shadow-*` utility, border, or gradient?
-6. Is each moving thing inside the motion budget and reduced-motion safe?
-7. Is any copy generic enough to belong to anyone? List it for the owner.
-8. 390px first screen shows name, availability, primary action? No horizontal scroll at 360px?
-9. `inspect.mjs` run at 1440, 768, 390: resting-shadow failures on `neu-*` are expected and waived; every other failure fixed.
-10. Contrast, focus, and touch-target check done.
+Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `few-pictures`, `font-fallback`.
