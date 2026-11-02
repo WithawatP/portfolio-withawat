@@ -2,24 +2,27 @@ import { useId, useRef } from 'react'
 import Icon from './Icon'
 
 const COLLAPSE_MS = 350
-let stopHolding = null
+// About one closed row, so the row above stays on screen and can be clicked next.
+const TOP_MARGIN = 96
+let stopWatching = null
 
-// Opening a row collapses the open one, which may sit above it. Scrolling by the same
-// amount each frame keeps the clicked row where it was, instead of sliding off the screen.
-function holdInPlace(node) {
-  stopHolding?.()
-  const top = node.getBoundingClientRect().top
+// Opening a row collapses the open one, which may sit above it, so the clicked row slides up.
+// Scroll only if it would pass the top of the screen. Scrolling on every click would not
+// undo itself when an upper row opens, and the rows would creep down and off the screen.
+function keepBelowTop(node) {
+  stopWatching?.()
+  const limit = Math.min(node.getBoundingClientRect().top, TOP_MARGIN)
   const end = performance.now() + COLLAPSE_MS
   let frame = 0
 
   const step = () => {
-    const drift = node.getBoundingClientRect().top - top
-    if (drift) window.scrollBy({ top: drift, behavior: 'instant' })
+    const overshoot = limit - node.getBoundingClientRect().top
+    if (overshoot > 0) window.scrollBy({ top: -overshoot, behavior: 'instant' })
     frame = performance.now() < end ? requestAnimationFrame(step) : 0
   }
 
   frame = requestAnimationFrame(step)
-  stopHolding = () => cancelAnimationFrame(frame)
+  stopWatching = () => cancelAnimationFrame(frame)
 }
 
 export default function TimelineItem({
@@ -43,7 +46,7 @@ export default function TimelineItem({
     if (!(target instanceof Element)) return
     const blocker = target.closest('[data-no-toggle], a, button')
     if (blocker && blocker !== headerButtonRef.current) return
-    if (!open) holdInPlace(headerButtonRef.current)
+    if (!open) keepBelowTop(headerButtonRef.current)
     onToggle()
   }
 
