@@ -63,7 +63,7 @@ export default function TimelineItem({
       >
         <span
           className={`h-2 w-2 rounded-full [transition:all_.3s] ${
-            open ? 'animate-pulse bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
+            open ? 'animate-led-blink bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
           }`}
         />
       </span>

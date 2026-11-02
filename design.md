@@ -47,6 +47,8 @@ Neumorphism works as an accent, not as the whole page. So:
   --sh-knob: 5px 5px 12px #9C9C9C, -4px -4px 10px #EFEFEF, inset 2px 2px 3px rgba(255,255,255,.5);
   --knob: #C9C9C9;
   --led-glow: 0 0 7px 2px rgba(101,28,50,.6);
+  --led: #22C55E;           /* status pill LED only */
+  --led-glow-green: 0 0 7px 2px rgba(34,197,94,.6);
 }
 ```
 
@@ -58,11 +60,12 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 
 `#651C32` appears only on:
 1. the primary key (Download CV, Send email),
-2. LEDs (status pill, the selected side of the Build/Test switch, the open row on the timeline),
+2. LEDs (the selected side of the Build/Test switch, the open row on the timeline),
 3. one large numeral per section (for example "14" on the Test side),
 4. the active gallery dot.
 
 Plus the keyboard focus ring (section 6.1), which is an accessibility signal, not decoration.
+The status pill LED is green (`--led`) by the owner's decision. Green appears nowhere else.
 Nowhere else: not on links, headings, borders, icons or hover states.
 
 ## 4. Typography
@@ -114,7 +117,7 @@ Based on "witty-wolverine-69" by javierBarroso on uiverse.io (MIT). Put a credit
 - The old `UiverseButton` (styled-components) is retired once every button uses the Key.
 
 ### 6.2 Status pill
-Inset (`--sh-well`), radius 999px, LED 7–8px in `--accent` with `--led-glow`, text 12–13px 600 `--ink-2`.
+Inset (`--sh-well`), radius 999px, LED 7–8px in `--led` with `--led-glow-green`, text 12–13px 600 `--ink-2`.
 
 ### 6.3 Device panel (Featured project only)
 - Radius 32px and padding 16px on mobile; radius 48px and padding 32px at >= 900px. `--sh-device` / `--sh-device-lg`.
@@ -150,7 +153,7 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 
 - **The peak: hero contour parallax.** While the hero scrolls out, the level groups move up at different speeds: outer level 0, middle level up to 12px, inner levels up to 24px on mobile and up to 40px on desktop. Use CSS scroll-driven animation (`animation-timeline: view()` or `scroll()`) on `transform` only; browsers without support show it static.
 - **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
-- **LED blink:** the status pill LED and the open timeline row's LED blink softly (Tailwind `animate-pulse`). The switch LEDs do not blink.
+- **LED blink:** the status pill LED and the open timeline row's LED blink softly (`animate-led-blink`: 1.5s, opacity down to 0.7). The switch LEDs do not blink.
 - No entrance fades or slide-ups, no scroll cues, no looping animation other than the LED blink.
 - `prefers-reduced-motion: reduce`: everything static, transitions off.
 

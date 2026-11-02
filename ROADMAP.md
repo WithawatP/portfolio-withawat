@@ -65,7 +65,7 @@ Carry over:
 - Build and Test swap instantly: design.md section 7 lists no fade for them.
 - `--color-switch-off` (`#555555`) is a token for the unselected switch label that design.md 6.5 specifies.
 - Inspector findings `eyebrow`, `micro-label` and `body-size` are waived in design.md section 11: they come from type that section 4 sets deliberately.
-- The timeline's accent LED follows the open row and blinks; if every row is closed, no LED is lit. The status pill LED blinks too. The owner asked for this, so design.md sections 3, 7 and 8 were changed to match. The switch LEDs do not blink.
+- The timeline's accent LED follows the open row and blinks; if every row is closed, no LED is lit. The status pill LED blinks too, and it is green (`--color-led`) instead of the accent. The blink is 1.5s with opacity down to 0.7. The owner asked for all of this, so design.md sections 2, 3, 6.2, 7 and 8 were changed to match. The switch LEDs do not blink. Keep `--color-led` in R7.
 - Experience at >= 900px is two columns: heading left (not sticky), timeline right.
 - The timeline is now truly single open, with state in `Experience.jsx`; v2 let several rows open. An open row can be closed, so no row may be open.
 - Opening a row keeps it in place on screen while the row above collapses (`holdInPlace` in `TimelineItem.jsx`); without this it slid off the top at 390.

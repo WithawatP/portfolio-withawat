@@ -5,7 +5,7 @@ export default function AvailabilityBadge({ children, className = '' }) {
     >
       <span
         aria-hidden="true"
-        className="h-[7px] w-[7px] shrink-0 animate-pulse rounded-full bg-accent [box-shadow:var(--led-glow)] wide:h-2 wide:w-2"
+        className="h-[7px] w-[7px] shrink-0 animate-led-blink rounded-full bg-led [box-shadow:var(--led-glow-green)] wide:h-2 wide:w-2"
       />
       {children}
     </span>
