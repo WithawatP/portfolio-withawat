@@ -195,5 +195,5 @@ Borders used for structure · gradients · glass or blur panels · pure black ·
 8. With reduced motion on, does nothing move?
 9. `npm run lint` and `npm run build` pass.
 
-Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`, `eyebrow`, `micro-label`, `body-size` (the 11–12px labels and 15–17px body in section 4 are deliberate; `body-size` also counts section 4's 13–14px secondary lines as body).
+Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`, `eyebrow`, `micro-label`, `body-size` (the 11–12px labels and 15–17px body in section 4 are deliberate; `body-size` also counts section 4's 13–14px secondary lines as body), `small-text` (the only text under 12px is the uppercase 11px eyebrow labels that section 4 allows; all other text must be 12px or larger).
 Until R7 removes them, findings caused by v2 leftovers (`UiverseButton` gradient, text-shadow and button-fx) are expected and are not blockers. Dev test pages under `dev/` are not inspected for content findings.

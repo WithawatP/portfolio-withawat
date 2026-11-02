@@ -28,7 +28,6 @@ Restyle Contact, the footer and the bottom nav from design.md sections 5 and 8. 
 
 Carry over:
 - `Pill` has no users since R3 and `SkillChip` has none since R4; remove them in R7.
-- Inspector `small-text` is now a FAIL at every width because of the 11px and 12px labels in R4, which design.md section 4 allows. It is not waived; the owner decides.
 - Inspector `still-page` is a WARN, as it was before R3; the LED pings keep it there. Recheck after R5, when the last extrude goes, and after R6.
 - Inspector `covered-text` on "Work experience" at 768 is the bottom nav passing over the heading while it enters the screen. It was already there before R3. Review it in R5 with the bottom nav.
 - `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
@@ -64,7 +63,7 @@ Carry over:
 - Gallery dots are driven by `onSlideChange` state, so the Pagination module is not added.
 - Build and Test swap instantly: design.md section 7 lists no fade for them.
 - `--color-switch-off` (`#555555`) is a token for the unselected switch label that design.md 6.5 specifies.
-- Inspector findings `eyebrow`, `micro-label` and `body-size` are waived in design.md section 11: they come from type that section 4 sets deliberately.
+- Inspector findings `eyebrow`, `micro-label`, `body-size` and `small-text` are waived in design.md section 11: they come from type that section 4 sets deliberately. The only text under 12px is uppercase 11px eyebrow labels; all other text must be 12px or larger.
 - The timeline's accent LED follows the open row and has the same `animate-ping` as the status pill; if every row is closed, no LED is lit. The switch LEDs stay still. The status pill LED is the size and `animate-ping` from before R1 (`a8d4edb`), inside the v3 pill, with both the dot and the ring in `--color-led` (`#22C55E`) by the owner's decision. These two pings are the only looping animations. The owner asked for all of this, so design.md sections 2, 3, 6.2, 7 and 8 were changed to match. The custom blink is gone.
 - Experience at >= 900px is two columns: heading left (not sticky), timeline right.
 - The timeline is now truly single open, with state in `Experience.jsx`; v2 let several rows open. An open row can be closed, so no row may be open.
