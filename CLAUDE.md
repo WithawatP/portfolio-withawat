@@ -4,7 +4,7 @@ Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `
 
 ## Commands
 - `npm run dev`, `npm run build`, `npm run lint` (oxlint).
-- On this Windows machine PowerShell blocks `npm.ps1`: use `npm.cmd` when `npm` fails.
+- Run every command with the Bash tool (Git Bash) in bash syntax: use `npm`, not `npm.cmd`, and chain with `&&`. Never use PowerShell. If the Bash tool does not work, tell the owner first; do not switch to PowerShell.
 - A task is not done until lint and build pass.
 
 ## Where things live
@@ -27,6 +27,6 @@ Single-page neumorphic portfolio. React 19 + Vite + Tailwind CSS v4 (tokens in `
 - One task at a time. If a task touches more than about 3 files, propose a plan first and wait for approval.
 - Do not add dependencies without asking.
 - Verify at 360, 390, 768, 1024 and 1440 px: no horizontal overflow. Report the page height at 390. Answer the review gate in design.md section 11.
-- The skill's `inspect.mjs` is for measuring. Waived findings are listed at the end of design.md.
+- `.claude/skills/design-taste-frontend/scripts/inspect.mjs` is for measuring. Waived findings are listed at the end of design.md.
 - End each task with a short report: files changed, measurements, anything uncertain.
 - The roadmap and decisions are in `ROADMAP.md`. Read it at the start of a session and update it at the end of each phase.

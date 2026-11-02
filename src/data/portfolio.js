@@ -16,6 +16,9 @@ export const profile = {
   githubLabel: 'github.com/WithawatP',
   linkedin: 'https://www.linkedin.com/in/withawatp',
   linkedinLabel: 'linkedin.com/in/withawatp',
+  heroRole: 'Junior Software Developer · QA Tester',
+  statusShort: 'Open to work',
+  statusLong: 'Open to work · Pathum Thani and Bangkok, remote or hybrid',
 }
 
 export const coreStack = [

@@ -1,138 +1,60 @@
-import SectionCard from './ui/SectionCard'
-import InsetPanel from './ui/InsetPanel'
-import Pill from './ui/Pill'
-import QuickContactRow from './ui/QuickContactRow'
 import AvailabilityBadge from './ui/AvailabilityBadge'
-import UiverseButton from './ui/UiverseButton'
-import { coreStack, profile, quickContacts } from '../data/portfolio'
-import { useHeroLight } from '../lib/useHeroLight'
+import ContourHero from './ui/ContourHero'
+import Icon from './ui/Icon'
+import Key from './ui/Key'
+import { profile } from '../data/portfolio'
 
 export default function Hero() {
-  useHeroLight('home')
-
-  const copyContacts = quickContacts.filter(
-    (item) => item.href.startsWith('mailto:') || item.href.startsWith('tel:')
-  )
-  const compactContacts = quickContacts.filter(
-    (item) => !item.href.startsWith('mailto:') && !item.href.startsWith('tel:')
-  )
+  const [firstName, lastName] = profile.name.split(' ')
 
   return (
-    <SectionCard id="home" labelledBy="hero-title" extrude={false} className="hero-light-scroll">
-      <div className="grid gap-8 lg:grid-cols-12 lg:gap-6">
-        <div className="flex min-w-0 flex-col lg:col-span-7">
+    <section
+      id="home"
+      aria-labelledby="hero-title"
+      className="relative flex flex-col wide:min-h-[760px] wide:justify-center"
+    >
+      <ContourHero className="relative h-[300px] wide:absolute wide:inset-y-0 wide:right-0 wide:h-auto wide:w-[52%]" />
+
+      <div className="mx-auto w-full max-w-[1240px] px-4 wide:px-12">
+        <div className="relative z-10 flex flex-col gap-5 pt-2 wide:max-w-[540px] wide:gap-7 wide:pt-0">
+          <div className="hidden wide:block">
+            <AvailabilityBadge>{profile.statusLong}</AvailabilityBadge>
+          </div>
+
           <h1
             id="hero-title"
-            className="hero-layer-name text-balance font-display text-[clamp(2.875rem,9vw,5.75rem)] font-bold leading-none tracking-[-0.03em] text-ink"
+            className="font-display text-[clamp(34px,4.6vw,64px)] font-normal uppercase leading-[1.06] tracking-[-0.01em] text-ink"
           >
-            Withawat
+            {firstName}
             <br />
-            Phiraban
+            {lastName}
           </h1>
 
-          <p className="hero-layer-name mt-5 text-base font-semibold text-ink max-sm:whitespace-nowrap sm:text-xl">
-            Junior Software Developer <span aria-hidden="true">·</span> QA <span className="hidden sm:inline">/ Software </span>Tester
+          <p className="text-[clamp(16px,1.4vw,19px)] font-semibold text-ink-2">
+            {profile.heroRole}
           </p>
 
-          <p className="mt-5 max-w-[42ch] text-xl leading-relaxed text-ink max-sm:order-1">
+          <p className="max-w-[440px] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-body">
             {profile.headline}
           </p>
 
-          <p className="mt-4 hidden max-w-[52ch] text-base leading-relaxed text-ink sm:block">
-            {profile.bio}
-          </p>
-
-          <div className="mt-8 max-sm:order-1">
-            <InsetPanel>
-              <p className="text-[13px] font-semibold text-ink">
-                Core stack
-              </p>
-              <ul
-                aria-label="Core technologies"
-                className="mt-3 flex flex-wrap gap-2"
-              >
-                {coreStack.map((skill) => (
-                  <li key={skill}>
-                    <Pill>{skill}</Pill>
-                  </li>
-                ))}
-              </ul>
-            </InsetPanel>
-          </div>
-
-          <div className="hero-layer-keys mt-8 grid grid-cols-2 gap-3 max-sm:mt-5 sm:flex sm:flex-wrap">
-            <UiverseButton
+          <div className="grid grid-cols-2 gap-3.5 pt-2 wide:flex wide:gap-5">
+            <Key
               href={profile.cvHref}
               download
+              variant="primary"
               icon="download"
-              primary
-              mobileBlock
-              className="col-span-2 sm:col-auto"
+              className="whitespace-nowrap max-wide:px-3.5"
             >
-              Download CV (PDF)
-            </UiverseButton>
-            <UiverseButton href="#featured" icon="arrowRight" mobileBlock>
-              View projects
-            </UiverseButton>
-            <UiverseButton href="#contact" icon="mail" mobileBlock>
-              Contact me
-            </UiverseButton>
+              Download CV
+            </Key>
+            <Key href="#featured" className="whitespace-nowrap max-wide:px-3.5">
+              View project
+              <Icon name="arrowRight" className="h-[18px] w-[18px] shrink-0" />
+            </Key>
           </div>
         </div>
-
-        <div className="hero-layer-panels flex min-w-0 flex-col gap-6 lg:col-span-5">
-          <InsetPanel>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-base font-bold text-ink">Availability</h2>
-              <AvailabilityBadge />
-            </div>
-            <p className="mt-4 text-base leading-relaxed text-ink">
-              Open to junior developer and QA / tester roles. Remote or hybrid
-              across Pathum Thani and northern Bangkok.
-            </p>
-            <dl className="mt-5 flex flex-col gap-3">
-              <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-[13px] font-medium text-ink">
-                  Location
-                </dt>
-                <dd className="text-right text-base font-semibold text-ink">
-                  {profile.location}
-                </dd>
-              </div>
-              <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-[13px] font-medium text-ink">
-                  Expected salary
-                </dt>
-                <dd className="text-right text-base font-semibold text-ink">
-                  {profile.salary}
-                </dd>
-              </div>
-              <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-[13px] font-medium text-ink">
-                  Work style
-                </dt>
-                <dd className="text-right text-base font-semibold text-ink">
-                  Remote / Hybrid
-                </dd>
-              </div>
-            </dl>
-          </InsetPanel>
-
-          <InsetPanel>
-            <h2 className="text-base font-bold text-ink">Quick contact</h2>
-            <div className="mt-4 flex flex-col gap-3">
-              {copyContacts.map((item) => (
-                <QuickContactRow key={item.label} {...item} />
-              ))}
-              <div className="flex gap-3 sm:flex-col">
-                {compactContacts.map((item) => (
-                  <QuickContactRow key={item.label} {...item} compact />
-                ))}
-              </div>
-            </div>
-          </InsetPanel>
-        </div>
       </div>
-    </SectionCard>
+    </section>
   )
 }

@@ -24,7 +24,7 @@ export default function BottomNav() {
     <nav
       data-scroll-nav
       aria-label="Section navigation"
-      className="fixed inset-x-0 bottom-0 z-40 bg-surface pb-[min(env(safe-area-inset-bottom),1.5rem)] neu-raise-bar sm:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 bg-surface pb-[min(env(safe-area-inset-bottom),1.5rem)] neu-raise-bar wide:hidden"
     >
       <div className="px-3 py-2">
         <div className="rounded-2xl bg-surface p-1 neu-inset-md">

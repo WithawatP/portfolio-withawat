@@ -14,23 +14,23 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | Phase | Scope | Status |
 |---|---|---|
 | R0 | Setup: branch `redesign-v2`; `design.md`, `docs/mockup/hero-featured.html`, `src/assets/contour-hero.svg` in repo; add v3 tokens and shadow utilities to `index.css`; load Michroma + Manrope; build the `Key` component (design.md 6.1) | Done |
-| R1 | Hero (mobile first): nav row, status pill, contour band / right-side contour, name, role, claim, two keys | **Next** |
-| R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | Todo |
+| R1 | Hero (mobile first): nav row, status pill, contour band / right-side contour, name, role, claim, two keys | Done |
+| R2 | Featured project: heading block on flat ground, device panel, Swiper inside the screen, Build/Test switch restyled (design.md 6.5), Build and Test content, tech line, icon keys | **Next** |
 | R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | Todo |
 | R4 | Skills: plain-text groups, no chips; mobile group switch restyled | Todo |
 | R5 | Contact, footer, bottom nav restyle | Todo |
 | R6 | Motion: hero contour parallax, reduced-motion pass | Todo |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Todo |
 
-## Next task: R1
+## Next task: R2
 
-Build the hero from design.md section 5 and the mockup, using `src/components/ui/Key.jsx`. Plan first if it touches more than about 3 files.
+Build the Featured project from design.md sections 6.3 to 6.5 and the mockup. Plan first if it touches more than about 3 files.
 
-Carry over from R0:
-- Delete `dev/key-test.html` and `dev/key-test.jsx` when R1 ends.
-- Point `--font-display` at Michroma (`--font-michroma` holds it for now), then drop Unbounded from `index.html`.
-- Move the page and `html` background from `surface` to `ground`, and update `theme-color`. Until then the scrollbar gutter shows `surface` beside a `ground` section.
+Carry over:
 - `faint` is still used as text in v2 sections; design.md allows it for decoration only. Fix each one as its section is restyled.
+- `FeaturedProject.jsx` still sets `font-bold` on a `font-display` numeral. Michroma has one weight, so remove it in R2.
+- v2 sections and `BottomNav` still use `surface` on the new `ground` page until their phases.
+- `scroll-padding-top` still allows for the old sticky header at 640px and up. Review it when the sections are restyled.
 
 ## Locked decisions (still valid from v2)
 
@@ -48,6 +48,11 @@ Carry over from R0:
 - Buttons are the uiverse "witty-wolverine-69" key style (javierBarroso, MIT) adapted to the ground colour; the old UiverseButton look is retired.
 - No chips anywhere; tech and skills are " · " separated text.
 - Hero contour artwork is final; do not redraw it.
+- Expected salary is not shown on the page; `profile.salary` stays in `portfolio.js`.
+- Hero role line is "Junior Software Developer · QA Tester" (`profile.heroRole`); `profile.roles` is unchanged.
+- Hero bio and core stack are no longer shown; the data stays in `portfolio.js`.
+- Name clamp maximum is 64px, not 66px, so the name stays inside the 540px column and clear of the contour box up to 1920px (design.md section 5 allows shrinking it).
+- Hero keys use 14px side padding below 900px, not 26px, so "Download CV" stays on one line in the 2-column grid.
 
 ## Needs from owner
 

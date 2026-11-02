@@ -9,16 +9,18 @@ import BottomNav from './components/BottomNav'
 
 export default function App() {
   return (
-    <div className="min-h-svh overflow-x-clip bg-surface">
-      <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col px-3 pt-6 pb-28 sm:px-8 sm:pb-16">
-        <Header />
-        <main className="flex flex-col gap-4 pt-4 sm:gap-10">
-          <Hero />
+    <div className="min-h-svh overflow-x-clip bg-ground">
+      <Header />
+      <main>
+        <Hero />
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-3 pt-24 sm:gap-10 sm:px-8 wide:pt-40">
           <FeaturedProject />
           <Experience />
           <Skills />
           <Contact />
-        </main>
+        </div>
+      </main>
+      <div className="mx-auto max-w-[1440px] px-3 pb-28 sm:px-8 wide:pb-16">
         <Footer />
       </div>
       <BottomNav />
