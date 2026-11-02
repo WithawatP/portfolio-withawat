@@ -90,7 +90,7 @@
 
 /* design.md 6.7: a mask, not a decorative gradient. Contour lines fade out instead of being cut. */
 @utility contour-fade {
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 70%, transparent);
 
   @media (min-width: 56.25rem) {
     mask-image:

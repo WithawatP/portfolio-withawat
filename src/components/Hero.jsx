@@ -15,7 +15,7 @@ export default function Hero() {
     >
       <ContourHero className="relative h-[230px] wide:absolute wide:inset-y-0 wide:right-0 wide:h-auto wide:w-[52%]" />
 
-      <div className="mx-auto -mt-6 w-full max-w-[1240px] px-4 wide:mt-0 wide:px-12">
+      <div className="mx-auto w-full max-w-[1240px] px-4 wide:px-12">
         <div className="relative z-10 flex flex-col gap-5 wide:max-w-[540px] wide:gap-7">
           <div className="hidden wide:block">
             <AvailabilityBadge>{profile.statusLong}</AvailabilityBadge>

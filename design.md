@@ -92,7 +92,7 @@ Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 - No horizontal overflow at 360, 390, 768, 1024, 1440.
 
 ### Hero
-- **Mobile:** nav row (WP mark left, "Open to work" pill right), then the contour band (full bleed, 230px tall), then name, role, one-line claim, then two keys side by side (2-column grid). The text block moves up about 24px over the faded bottom edge of the band and sits above it (z-index).
+- **Mobile:** nav row (WP mark left, "Open to work" pill right), then the contour band (full bleed, 230px tall), then name, role, one-line claim, then two keys side by side (2-column grid). The text block starts directly below the band, with no margin and no overlap.
 - **>= 900px:** min-height 760px. The contour sits absolutely on the right 52% of the hero, full hero height, touching the right edge of the screen. Text column on the left, max 540px, above the contour (z-index). The status pill moves into the text column; the nav shows spaced uppercase links.
 - The name must never overlap the contour. If it would, shrink the name with the clamp; never move the contour over it.
 
@@ -143,7 +143,7 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 - The `<g>` groups are levels: the first is the outer level of every family, the last is the innermost.
 - Fill stays exactly `--ground`. No accent dot.
 - The SVG uses `preserveAspectRatio="xMinYMid slice"`, so the artwork is anchored to its left edge.
-- Lines fade out instead of being cut. The wrapper has a CSS `mask-image` that fades to transparent over about the top 10% and bottom 18% at every width, and over about the left 10% at >= 900px. This is a mask, not a decorative gradient, so the gradient ban in section 10 does not apply to it.
+- Lines fade out instead of being cut. The wrapper has a CSS `mask-image` that fades to transparent over about the top 10% at every width, over about the bottom 30% below 900px and the bottom 18% at >= 900px, and over about the left 10% at >= 900px. This is a mask, not a decorative gradient, so the gradient ban in section 10 does not apply to it.
 
 ## 7. Motion
 
