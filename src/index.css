@@ -1,135 +1,190 @@
 @import "tailwindcss";
 
+/* design.md 4: the fonts are self-hosted, the same Latin files Google Fonts serves. Manrope is one variable
+   file for the 400, 500 and 600 the page uses; Michroma has one weight. index.html preloads both. */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/manrope-latin-variable.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Michroma";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/michroma-latin-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @theme static {
-  --color-surface: #e7e7e7;
-  --color-highlight: #ffffff;
   --color-recessed: #d1d1d1;
-  --color-shadow: #b6b6b6;
-  --color-ink: #333333;
-  --color-ink-2: #4a4a4a;
-  --color-muted: #666666;
-  --color-faint: #9b9b9b;
+  --color-ink: #2a2a2a;
+  --color-ink-2: #3e3e3e;
+  --color-muted: #555055;
+  --color-faint: #a3a3a3;
   --color-led: #22c55e;
+
+  /* design.md v3 */
+  --color-ground: #dadada;
+  --color-screen: #e9e9e9;
+  --color-body: #4f4a4c;
+  --color-label: #4e4e4e;
+  --color-accent: #651c32;
+  --color-on-accent: #ffffff;
+  --color-knob: #c9c9c9;
+  --color-key-pressed: #5e5e5e;
+  --color-on-accent-pressed: #e6d3d9;
+  --color-switch-off: #555555;
+  --color-socket-ring: rgba(245, 245, 245, 0.6);
+
+  --breakpoint-wide: 56.25rem;
 
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Unbounded", var(--font-sans);
+  --font-display: "Michroma", var(--font-sans);
 }
 
 :root {
-  --lx: -1;
-  --ly: -1;
-  --depth-scale: 1;
+  /* design.md v3. Pressed shadows keep their zero layers so the transition interpolates. */
+  --sh-key: 6px 6px 12px #B6B6B6, -6px -6px 12px #FBFBFB;
+  --sh-key-pressed: 0 0 0 #B6B6B6, 0 0 0 #FBFBFB, inset 4px 4px 12px #B6B6B6, inset -4px -4px 12px #FBFBFB;
+  --sh-primary: 6px 6px 12px #B2B2B2, -6px -6px 12px #FBFBFB;
+  --sh-primary-pressed: 0 0 0 #B2B2B2, 0 0 0 #FBFBFB, inset 4px 4px 12px rgba(0,0,0,.35), inset -4px -4px 12px rgba(255,255,255,.18);
+  --sh-device: 14px 14px 32px #B0B0B0, -12px -12px 28px #FBFBFB;
+  --sh-device-lg: 20px 20px 48px #B0B0B0, -18px -18px 44px #FBFBFB;
+  --sh-well: inset 4px 4px 9px #B6B6B6, inset -4px -4px 9px #F7F7F7;
+  --sh-screen: inset 7px 7px 15px #B3B3B3, inset -7px -7px 15px #F8F8F8;
+  --sh-track: inset 7px 7px 14px #A6A6A6, inset -7px -7px 14px #F6F6F6;
+  --sh-knob: 5px 5px 12px #9C9C9C, -4px -4px 10px #EFEFEF, inset 2px 2px 3px rgba(255,255,255,.5);
+  --sh-tray: inset 6px 6px 13px #B3B3B3, inset -6px -6px 13px #F8F8F8;
+  --sh-icon: 4px 4px 9px #B6B6B6, -4px -4px 9px #FBFBFB;
+  --sh-icon-lg: 5px 5px 10px #B6B6B6, -5px -5px 10px #FBFBFB;
+  --sh-capsule: 10px 10px 24px #B0B0B0, -8px -8px 20px #FBFBFB;
+  --sh-socket: 0 0 20px -12px #6E6E6E, inset 0 0 20px -13px #6E6E6E, inset 3px 3px 6px #BDBDBD;
+  --sh-ball: inset 0 -9px 10px 0 rgba(0,0,0,.28), inset 0 6px 8px 0 rgba(255,255,255,.22), 0 2px 1px rgba(0,0,0,.08), 0 4px 3px rgba(0,0,0,.1), 0 8px 6px rgba(0,0,0,.1), 0 14px 10px rgba(0,0,0,.08);
+  --led-glow: 0 0 7px 2px rgba(101,28,50,.6);
 }
 
-@media (max-width: 639px) {
-  :root {
-    --depth-scale: 0.7;
+@utility sh-key {
+  box-shadow: var(--sh-key);
+}
+
+@utility sh-key-pressed {
+  box-shadow: var(--sh-key-pressed);
+}
+
+@utility sh-primary {
+  box-shadow: var(--sh-primary);
+}
+
+@utility sh-primary-pressed {
+  box-shadow: var(--sh-primary-pressed);
+}
+
+@utility sh-device {
+  box-shadow: var(--sh-device);
+
+  @media (min-width: 56.25rem) {
+    box-shadow: var(--sh-device-lg);
   }
 }
 
-@utility neu-raise-xs {
-  box-shadow:
-    calc(var(--lx) * -3px * var(--depth-scale)) calc(var(--ly) * -3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 3px * var(--depth-scale)) calc(var(--ly) * 3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-highlight);
+@utility sh-well {
+  box-shadow: var(--sh-well);
 }
 
-@utility neu-raise-node {
-  box-shadow:
-    calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-highlight);
+@utility sh-screen {
+  box-shadow: var(--sh-screen);
 }
 
-@utility neu-raise-sm {
-  box-shadow:
-    calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(10px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(10px * var(--depth-scale)) var(--color-highlight);
+@utility sh-track {
+  box-shadow: var(--sh-track);
 }
 
-@utility neu-raise-hover {
-  box-shadow:
-    calc(var(--lx) * -5px * var(--depth-scale)) calc(var(--ly) * -5px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 5px * var(--depth-scale)) calc(var(--ly) * 5px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
+@utility sh-knob {
+  box-shadow: var(--sh-knob);
 }
 
-@utility neu-raise-lift {
-  box-shadow:
-    calc(var(--lx) * -6px * var(--depth-scale)) calc(var(--ly) * -6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 6px * var(--depth-scale)) calc(var(--ly) * 6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
+@utility sh-tray {
+  box-shadow: var(--sh-tray);
 }
 
-@utility neu-raise-md {
-  box-shadow:
-    calc(var(--lx) * -8px * var(--depth-scale)) calc(var(--ly) * -8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 8px * var(--depth-scale)) calc(var(--ly) * 8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-highlight);
+@utility sh-icon {
+  box-shadow: var(--sh-icon);
 }
 
-@utility neu-raise-lg {
-  box-shadow:
-    calc(var(--lx) * -12px * var(--depth-scale)) calc(var(--ly) * -12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 12px * var(--depth-scale)) calc(var(--ly) * 12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-highlight);
+@utility sh-icon-lg {
+  box-shadow: var(--sh-icon-lg);
 }
 
-@utility neu-raise-bar {
-  box-shadow:
-    0 calc(-6px * var(--depth-scale)) calc(14px * var(--depth-scale)) calc(-4px * var(--depth-scale)) var(--color-shadow);
+@utility sh-capsule {
+  box-shadow: var(--sh-capsule);
 }
 
-@utility neu-inset-sm {
-  box-shadow:
-    inset calc(var(--lx) * -2px * var(--depth-scale)) calc(var(--ly) * -2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 2px * var(--depth-scale)) calc(var(--ly) * 2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-highlight);
+@utility sh-socket {
+  box-shadow: var(--sh-socket);
 }
 
-@utility neu-inset-press {
-  box-shadow:
-    inset calc(var(--lx) * -3px * var(--depth-scale)) calc(var(--ly) * -3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 3px * var(--depth-scale)) calc(var(--ly) * 3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-highlight);
+@utility sh-ball {
+  box-shadow: var(--sh-ball);
 }
 
-@utility neu-inset-md {
-  box-shadow:
-    inset calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-highlight);
+/* design.md 6.7: a mask, not a decorative gradient. Contour lines fade out instead of being cut. */
+@utility contour-fade {
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 70%, transparent);
+
+  @media (min-width: 56.25rem) {
+    mask-image:
+      linear-gradient(to bottom, transparent, black 10%, black 82%, transparent),
+      linear-gradient(to right, transparent, black 10%);
+    mask-composite: intersect;
+  }
 }
 
-@utility neu-inset-lg {
-  box-shadow:
-    inset calc(var(--lx) * -6px * var(--depth-scale)) calc(var(--ly) * -6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 6px * var(--depth-scale)) calc(var(--ly) * 6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-inset-xl {
-  box-shadow:
-    inset calc(var(--lx) * -8px * var(--depth-scale)) calc(var(--ly) * -8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 8px * var(--depth-scale)) calc(var(--ly) * 8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-highlight);
+/* design.md 6.7: a mask too. The footer contour fades in from its top edge. */
+@utility footer-fade {
+  mask-image: linear-gradient(to bottom, transparent, black 35%);
 }
 
 @layer base {
   html {
-    background-color: var(--color-surface);
+    background-color: var(--color-ground);
     color-scheme: light;
-    scroll-padding-top: 1rem;
-    scrollbar-gutter: stable both-edges;
+    scroll-padding-top: 0;
+    scrollbar-width: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
-  @media (min-width: 640px) {
+  /* design.md 5: a section lands 48px below the desktop nav capsule, which ends 76px down. */
+  @media (min-width: 56.25rem) {
     html {
-      scroll-padding-top: 6rem;
+      scroll-padding-top: 7.75rem;
     }
+  }
+
+  /* Added to scroll-padding-top, so a section never lands under the status bar. */
+  section[id] {
+    scroll-margin-top: env(safe-area-inset-top);
   }
 
   body {
     min-height: 100svh;
     margin: 0;
     overflow-x: clip;
-    background-color: var(--color-surface);
+    background-color: var(--color-ground);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-tap-highlight-color: transparent;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   ::selection {
@@ -144,203 +199,202 @@
   }
 }
 
-/* Motion moment 1: a section rises from the surface as it enters the viewport.
-   The shadow lives on a layer whose opacity changes, so box-shadow is never animated.
-   Scrubbed by scroll, so the progress is linear and has no duration. */
-@keyframes extrude-rise {
+/* design.md 7, peak 1: the hero motion. Scrubbed by the page's scroll from 0. --hero-end, --contour-end
+   and --contour-rise-end come from useHeroMotion. Browsers without support and reduced motion keep it
+   still; the reduce rule below cannot stop it, because a scroll timeline ignores animation-duration. */
+@keyframes contour-block-drop {
+  to {
+    transform: translateY(calc(var(--contour-end) * var(--contour-drop)));
+  }
+}
+
+/* Level distances are in the artwork's own units (--art is one viewBox unit on screen), so they stay
+   under the gaps between the levels at every width: outer to middle 32 of ~34, middle to inner 64 of ~70. */
+@keyframes contour-outer-rise {
+  to {
+    transform: translateY(calc(var(--art) * -40));
+  }
+}
+
+@keyframes contour-middle-rise {
+  to {
+    transform: translateY(calc(var(--art) * -72));
+  }
+}
+
+@keyframes contour-inner-rise {
   from {
-    scale: 0.95;
+    transform: translateY(0) scale(1);
   }
   to {
-    scale: 1;
+    transform: translateY(calc(var(--art) * -136)) scale(var(--contour-inner-scale));
   }
 }
 
-@keyframes extrude-shadow {
-  0%,
-  45% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* The section starts pressed into the surface, goes flat, then rises. */
-@keyframes extrude-dent {
-  0% {
-    opacity: 1;
-  }
-  45%,
-  100% {
-    opacity: 0;
-  }
-}
-
-/* Motion moment 3: hero layers travel at different speeds. Upper layers move up and lower layers
-   move down, so the gaps between them only widen and text never overlaps. */
-@property --lx {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: -1;
-}
-
-@property --ly {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: -1;
-}
-
-@keyframes hero-travel {
-  from {
-    translate: 0 0;
-  }
+@keyframes hero-copy-leave {
   to {
-    translate: 0 var(--hero-travel);
+    transform: translateY(-60px);
+    opacity: 0.4;
   }
 }
 
-@keyframes hero-light {
-  from {
-    --lx: -1.2;
-    --ly: -1.2;
+/* The SVG uses slice, so one viewBox unit is the larger of width / 800 and height / 800 of this box. */
+.contour-parallax {
+  container-type: size;
+  --art: calc(max(100cqw, 100cqh) / 800);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .contour-level {
+    will-change: transform;
   }
-  to {
-    --lx: -0.8;
-    --ly: -0.8;
+
+  @supports (animation-timeline: scroll()) {
+    /* --contour-drop is the share of the page's scroll the art moves back down, so it crawls on screen. */
+    .contour-parallax {
+      --contour-drop: 0.42;
+      --contour-inner-scale: 1.024;
+    }
+
+    @media (min-width: 56.25rem) {
+      .contour-parallax {
+        --contour-drop: 0.7;
+        --contour-inner-scale: 1.04;
+      }
+    }
+
+    .contour-block,
+    .contour-level,
+    .hero-copy {
+      animation-duration: 1ms;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range-start: 0px;
+    }
+
+    .contour-block {
+      animation-name: contour-block-drop;
+      animation-range-end: var(--contour-end);
+    }
+
+    /* The levels rise fastest at the first pixel and settle by the end: 1 - (1 - p)^2, sampled. */
+    .contour-level {
+      animation-range-end: var(--contour-rise-end);
+      animation-timing-function: linear(0, 0.19, 0.36, 0.51, 0.64, 0.75, 0.84, 0.91, 0.96, 0.99, 1);
+    }
+
+    .contour-level-1 {
+      animation-name: contour-outer-rise;
+    }
+
+    .contour-level-2 {
+      animation-name: contour-middle-rise;
+    }
+
+    .contour-level-3 {
+      animation-name: contour-inner-rise;
+    }
+
+    .hero-copy {
+      animation-name: hero-copy-leave;
+      animation-range-end: var(--hero-end);
+    }
   }
 }
 
-/* Motion moment 2: the screenshot shifts inside its frame while the tray stays still.
-   Translate stays within the 7% margin that the scale adds on each side. */
-@keyframes inset-window {
-  from {
-    translate: 0 -6%;
+/* design.md 7, peak 2: the device panel plays a short entrance when it comes into view (FeaturedProject).
+   It rises from below with the switch knob's overshoot, then its screen lights up, then the switch LED.
+   Transform and opacity only, so the text is in the DOM and readable throughout. 'ready' is the start
+   pose, 'play' the end pose with the timing; going back to 'ready' snaps, because it has no transition. */
+.device-intro {
+  --intro-drop: 90px;
+}
+
+@media (min-width: 56.25rem) {
+  .device-intro {
+    --intro-drop: 160px;
   }
+}
+
+.device-intro[data-intro='ready'] .device-panel {
+  transform: translateY(var(--intro-drop)) scale(0.94);
+}
+
+.device-intro[data-intro='ready'] .device-screen .atelier-coverflow {
+  opacity: 0.15;
+}
+
+.device-intro[data-intro='play'] .device-panel {
+  transition: transform 0.65s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.device-intro[data-intro='play'] .device-screen .atelier-coverflow {
+  transition: opacity 0.6s ease-out 0.65s;
+}
+
+/* design.md 7, peak 3: the end band's waves slide left at different speeds as the page reaches its end.
+   --fu is one viewBox unit on screen (the SVG uses slice). The outer level stays; the others move
+   40 units further each, which never brings two levels closer than they already are at rest. */
+.footer-parallax {
+  container-type: size;
+  view-timeline-name: --footer-band;
+  view-timeline-axis: block;
+  view-timeline-inset: 0px;
+  --fu: max(100cqw / 1600, 100cqh / 460);
+}
+
+@keyframes footer-wave-2 {
   to {
-    translate: 0 6%;
+    transform: translateX(calc(var(--fu) * -40));
+  }
+}
+
+@keyframes footer-wave-3 {
+  to {
+    transform: translateX(calc(var(--fu) * -80));
+  }
+}
+
+@keyframes footer-wave-4 {
+  to {
+    transform: translateX(calc(var(--fu) * -120));
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .extrude {
-    position: relative;
-    isolation: isolate;
-    box-shadow: none;
-    /* Keeps the top edge in place while scaled, so anchor navigation lands correctly. */
-    transform-origin: 50% 0;
-  }
-
-  .extrude::before {
-    @apply neu-raise-lg;
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    pointer-events: none;
+  .footer-level {
+    will-change: transform;
   }
 
   @supports (animation-timeline: view()) {
-    .extrude {
-      view-timeline-name: --extrude;
-      animation: extrude-rise linear both;
-      animation-timeline: --extrude;
-      animation-range: entry 80px entry 480px;
+    /* The band ends the page, so it is fully in view exactly at the end of the scroll. */
+    .footer-level {
+      animation-duration: 1ms;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --footer-band;
+      animation-range-start: entry 0%;
+      animation-range-end: entry 100%;
     }
 
-    .extrude::before {
-      animation: extrude-shadow linear both;
-      animation-timeline: --extrude;
-      animation-range: entry 80px entry 480px;
+    .footer-level-2 {
+      animation-name: footer-wave-2;
     }
 
-    .extrude::after {
-      @apply neu-inset-lg;
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      border-radius: inherit;
-      pointer-events: none;
-      animation: extrude-dent linear both;
-      animation-timeline: --extrude;
-      animation-range: entry 80px entry 480px;
+    .footer-level-3 {
+      animation-name: footer-wave-3;
     }
 
-    /* Named on the tray: Swiper's overflow would otherwise become the image's scrollport. */
-    .inset-window-tray {
-      view-timeline-name: --inset-window;
-    }
-
-    /* Only scaled here, so without this motion the whole screenshot shows uncropped. */
-    .inset-window-img {
-      scale: 1.14;
-      animation: inset-window linear both;
-      animation-timeline: --inset-window;
-      animation-range: cover 20% cover 80%;
-    }
-
-    /* Below 640px the keys sit above the headline, so they move up with the name. */
-    .hero-layer-name {
-      --hero-travel: -16px;
-    }
-
-    .hero-layer-keys {
-      --hero-travel: -8px;
-    }
-
-    .hero-layer-panels {
-      --hero-travel: 8px;
-    }
-
-    @media (min-width: 640px) {
-      .hero-layer-name {
-        --hero-travel: -28px;
-      }
-
-      .hero-layer-keys {
-        --hero-travel: 16px;
-      }
-
-      .hero-layer-panels {
-        --hero-travel: 28px;
-      }
-    }
-
-    .hero-layer-name,
-    .hero-layer-keys,
-    .hero-layer-panels {
-      animation: hero-travel linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0px 60vh;
-    }
-
-    @media (hover: none) {
-      .hero-light-scroll {
-        animation: hero-light linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0px 60vh;
-      }
+    .footer-level-4 {
+      animation-name: footer-wave-4;
     }
   }
+}
 
-  @supports not (animation-timeline: view()) {
-    .extrude,
-    .extrude::before {
-      transition:
-        scale 500ms cubic-bezier(0.2, 0.7, 0.2, 1),
-        opacity 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .extrude[data-extrude="pending"] {
-      scale: 0.97;
-    }
-
-    .extrude[data-extrude="pending"]::before {
-      opacity: 0;
-    }
-  }
+/* Lenis moves the page itself on every frame; native smooth scrolling would fight it. */
+html.lenis {
+  scroll-behavior: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -354,7 +408,13 @@
   }
 }
 
+/* The screen is taller than a slide, so the slides sit in its vertical centre. */
+.atelier-coverflow .swiper-wrapper {
+  align-items: center;
+}
+
 .atelier-coverflow .swiper-slide {
+  height: auto;
   transition: transform 400ms ease, filter 400ms ease;
 }
 

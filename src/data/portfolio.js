@@ -2,7 +2,7 @@ export const profile = {
   name: 'Withawat Phiraban',
   roles: ['Junior Software Developer', 'Quality Assurance / Software Tester'],
   headline:
-    'I build MERN apps and test them: 14 API requests in Postman on a team storefront, 20 client templates across three browsers.',
+    'I build full-stack web apps with React and Node.js, then test them across browsers, screen sizes, and the API layer.',
   bio: 'Bootcamp-trained full-stack developer with earlier work in front-end QC, graphic design, IT support, and shift management.',
   email: 'withawat1201@gmail.com',
   phone: '(+66) 84-229-9742',
@@ -16,6 +16,11 @@ export const profile = {
   githubLabel: 'github.com/WithawatP',
   linkedin: 'https://www.linkedin.com/in/withawatp',
   linkedinLabel: 'linkedin.com/in/withawatp',
+  heroRole: 'Junior Software Developer · QA Tester',
+  statusShort: 'Open to work',
+  statusLong: 'Open to work · Pathum Thani and Bangkok, remote or hybrid',
+  contactLine:
+    'Based in Pathum Thani, Thailand. Open to remote and hybrid roles across Bangkok and Pathum Thani.',
 }
 
 export const coreStack = [
@@ -104,33 +109,53 @@ export const featuredProject = {
       label: 'Live demo',
       shortLabel: 'Live demo',
       href: 'https://jsd-13-group-project2-mc-kraken-spr.vercel.app',
-      icon: 'external',
+      icon: 'globe',
     },
     {
       label: 'Frontend repository',
       shortLabel: 'Frontend',
       href: 'https://github.com/JittrinP/JSD13_Group_Project2_McKraken_sprint2',
-      icon: 'github',
+      icon: 'code',
     },
     {
       label: 'Backend repository',
       shortLabel: 'Backend',
       href: 'https://github.com/JittrinP/McKraken_sprint3_Backend',
-      icon: 'github',
+      icon: 'server',
     },
     {
       label: 'Presentation deck',
       shortLabel: 'Deck',
       href: 'https://gp-02-data-system.vercel.app',
-      icon: 'presentation',
+      icon: 'monitor',
     },
   ],
+  buildTitle: 'What I built',
+  buildRows: [
+    {
+      icon: 'lock',
+      title: 'Authentication',
+      line: 'Login, register, refresh token, password reset',
+    },
+    {
+      icon: 'dashboard',
+      title: 'Admin dashboard',
+      line: 'Product catalog CRUD, order management, administrative tracking',
+    },
+    {
+      icon: 'bag',
+      title: 'Customer-facing UI',
+      line: 'Navigation, product catalog, featured items, purchase history',
+    },
+  ],
+  techLine: ['React 19', 'Vite', 'Tailwind', 'Node', 'Express', 'MongoDB', 'Stripe', 'Gemini'],
   testing: {
     title: 'How I tested',
     method:
       'Manual API testing in Postman: I sent requests one endpoint at a time and checked the status code and response myself.',
     requestCount: '14',
     requestLabel: 'requests in one Postman collection, grouped in 2 folders',
+    requestCaption: 'manual API requests in one Postman collection, grouped into Auth and Products',
     folders: [
       {
         label: 'Auth',
@@ -159,12 +184,16 @@ export const featuredProject = {
         symptom: "The userId was sent in the URL, so anyone could view another user's data.",
         cause: 'The server trusted the userId coming from the client.',
         fix: 'Read the userId from the JWT instead (req.user.userId).',
+        tag: 'Bug · Access control',
+        short: "userId sent in the URL let anyone read another user's data. Fixed by reading it from the JWT.",
       },
       {
         label: 'Bug 2',
         symptom: 'The token expired after 15 minutes, and plain fetch calls then broke.',
         cause: 'The client had no mechanism to renew the token.',
         fix: 'Moved to an axios instance with a refresh-token interceptor.',
+        tag: 'Bug · Session expiry',
+        short: 'Tokens expired after 15 minutes and plain fetch calls broke. Fixed with an axios refresh-token interceptor.',
       },
     ],
   },
@@ -232,11 +261,11 @@ export const skillGroups = [
         items: ['JavaScript (ES6+)', 'HTML5', 'CSS3'],
       },
       {
-        label: 'Frameworks & Libraries',
+        label: 'Frameworks',
         items: ['React', 'Node.js', 'Express.js', 'Tailwind CSS', 'REST APIs'],
       },
       {
-        label: 'Tools & Databases',
+        label: 'Tools & Data',
         items: ['MongoDB', 'PostgreSQL', 'Git', 'GitHub', 'Vite'],
       },
     ],

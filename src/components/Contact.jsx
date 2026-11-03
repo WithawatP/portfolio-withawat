@@ -1,84 +1,56 @@
-import SectionCard from "./ui/SectionCard";
-import SectionHeading from "./ui/SectionHeading";
-import InsetPanel from "./ui/InsetPanel";
-import QuickContactRow from "./ui/QuickContactRow";
-import UiverseButton from "./ui/UiverseButton";
-import { FOCUS } from "../lib/styles";
-import { profile } from "../data/portfolio";
+import AvailabilityBadge from './ui/AvailabilityBadge'
+import CopyKey from './ui/CopyKey'
+import Key, { IconKey, PadKey } from './ui/Key'
+import { profile } from '../data/portfolio'
 
 export default function Contact() {
-  const [emailUser, emailDomain] = profile.email.split("@");
+  const mailHref = `mailto:${profile.email}`
 
   return (
-    <SectionCard id="contact" labelledBy="contact-title">
-      <SectionHeading id="contact-title" title="Contact" />
+    <section id="contact" aria-labelledby="contact-title">
+      <div className="flex items-center justify-between gap-4">
+        <h2
+          id="contact-title"
+          className="text-[11px] font-semibold uppercase tracking-[0.22em] text-label wide:text-xs"
+        >
+          Contact
+        </h2>
+        <AvailabilityBadge>{profile.statusShort}</AvailabilityBadge>
+      </div>
 
-      <div className="grid gap-6 lg:grid-cols-12">
-        <InsetPanel className="lg:col-span-12">
-          <a
-            href={`mailto:${profile.email}`}
-            className={`block rounded-lg text-[clamp(2rem,9.2vw,2.25rem)] font-extrabold leading-tight tracking-[-0.04em] text-ink underline-offset-8 transition-all duration-200 hover:underline [overflow-wrap:anywhere] sm:text-[clamp(2.25rem,5.8vw,4.5rem)] ${FOCUS}`}
-          >
-            {emailUser}
-            <wbr />@{emailDomain}
-          </a>
-          <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-ink">
-            Based in Pathum Thani, Thailand. Open to remote and hybrid roles
-            across Bangkok and Pathum Thani.
-          </p>
-          <a
-            href={profile.phoneHref}
-            className={`mt-2 inline-block rounded-lg text-base font-semibold text-ink underline-offset-4 transition-all duration-200 hover:underline ${FOCUS}`}
-          >
-            {profile.phone}
-          </a>
-        </InsetPanel>
+      <div className="mt-7 flex items-center gap-3.5 wide:mt-12 wide:justify-center wide:gap-6">
+        <p className="min-w-0 flex-1 whitespace-nowrap text-[clamp(19px,5.9vw,24px)] font-semibold leading-[1.2] tracking-[-0.02em] text-ink wide:flex-none wide:text-[clamp(40px,4.45vw,64px)] wide:leading-none wide:tracking-[-0.03em]">
+          {profile.email}
+        </p>
+        <CopyKey value={profile.email} label="Copy email" />
+      </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap lg:col-span-7 lg:content-center lg:items-center">
-          <UiverseButton
-            href={`mailto:${profile.email}`}
-            icon="mail"
-            primary
-            mobileBlock
-            className="col-span-2 sm:col-auto"
-          >
-            Send an email
-          </UiverseButton>
-          <UiverseButton href={profile.phoneHref} icon="phone" mobileBlock>
-            Call me
-          </UiverseButton>
-          <UiverseButton
-            href={profile.cvHref}
-            download
-            icon="download"
-            mobileBlock
-          >
-            Download CV
-          </UiverseButton>
-        </div>
+      <p className="mt-[18px] text-[15px] leading-[1.65] text-body wide:mt-[22px] wide:text-center wide:text-[17px] wide:leading-[1.6]">
+        <span className="block wide:inline">{profile.phone}</span>
+        <span className="hidden wide:inline"> · </span>
+        {profile.contactLine}
+      </p>
 
-        <div className="hidden min-w-0 flex-col gap-6 sm:flex lg:col-span-5">
-          <InsetPanel>
-            <h3 className="text-base font-bold text-ink">
-              Professional profiles
-            </h3>
-            <div className="mt-4 flex flex-col gap-3">
-              <QuickContactRow
-                href={profile.github}
-                label="GitHub"
-                value={profile.githubLabel}
-                icon="github"
-              />
-              <QuickContactRow
-                href={profile.linkedin}
-                label="LinkedIn"
-                value={profile.linkedinLabel}
-                icon="linkedin"
-              />
-            </div>
-          </InsetPanel>
+      {/* >= 900px: the keypad. No Call key on desktop. */}
+      <div className="mt-14 hidden justify-center gap-5 wide:flex">
+        <PadKey href={mailHref} icon="mail" label="Send email" variant="primary" className="w-[280px]" />
+        <PadKey href={profile.cvHref} download icon="download" label="Download CV" className="w-[140px]" />
+        <PadKey href={profile.github} external icon="github" label="GitHub" className="w-[140px]" />
+        <PadKey href={profile.linkedin} external icon="linkedin" label="LinkedIn" className="w-[140px]" />
+      </div>
+
+      {/* < 900px: one wide key, then a row of four icon keys. */}
+      <div className="mt-10 wide:hidden">
+        <Key href={mailHref} variant="primary" icon="mail" className="w-full">
+          Send email
+        </Key>
+        <div className="mt-8 grid grid-cols-4">
+          <IconKey href={profile.phoneHref} icon="phone" label="Call" />
+          <IconKey href={profile.cvHref} download icon="download" label="CV" />
+          <IconKey href={profile.github} external icon="github" label="GitHub" />
+          <IconKey href={profile.linkedin} external icon="linkedin" label="LinkedIn" />
         </div>
       </div>
-    </SectionCard>
-  );
+    </section>
+  )
 }
