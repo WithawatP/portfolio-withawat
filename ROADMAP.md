@@ -19,25 +19,26 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R3 | Experience: flat timeline, inset rail, accent LED on current role; keep accordion logic | Done |
 | R4 | Skills: knob switch and one sunken tray, from `docs/mockup/skills-desktop.html` and `skills-mobile.html` | Done |
 | R5 | Contact, footer, floating bottom nav, sticky desktop nav, end band | Done |
-| R6 | Motion: hero contour parallax, reduced-motion pass | **Next** |
-| R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Todo |
+| R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
+| R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | **Next** |
 
-## Next task: R6
+## Next task: R7
 
-Add the hero contour parallax and do the reduced-motion pass from design.md section 7. Plan first if it touches more than about 3 files.
+Cleanup from the Status table. Plan first if it touches more than about 3 files.
 
 Carry over:
 - These have no users; remove them in R7: `Pill`, `SkillChip`, `SectionCard`, `SectionHeading`, `InsetPanel`, `QuickContactRow`, `UiverseButton`, `src/lib/styles.js` and the `.extrude` CSS.
+- Remove the `?parallax-debug` mode (`ContourHero.jsx` and its CSS in `index.css`) and its line in design.md section 7.
 - The contour mockups no longer match the site's end band: `contact-desktop.html` and `contact-mobile.html` still show it 420px tall and on phones. The v3 decisions below and design.md win.
-- If a real iPhone stalls again when tapping the nav quickly, profile it with Safari Web Inspector. Chrome at 4x CPU did not reproduce the stall, so its cause is not confirmed. R6's parallax moves groups inside the hero's SVG filter, so test tapping on the iPhone again after adding it.
-- Inspector `still-page` is a WARN with 11 elements moving; recheck after R6.
+- The iPhone stall when tapping the nav quickly did not come back in R6 testing (owner, real iPhone). If it does, profile it with Safari Web Inspector.
+- Inspector after R6: the six FAILs are the same as before R6 (`off-centre` @1440 is new in R6 and comes from the hero contour layers reaching the right edge, which design.md section 5 asks for; overflow is 0). New WARN `long-pin` @1440 is the pinned Experience, which opens a new role at each step. `still-page` is gone.
 - Inspector `covered-text` on "Work experience" at 768 and 360 is the bottom nav passing over the heading while it scrolls. A floating nav always does this, so it is not a blocker; it is not in the design.md waiver list yet.
 - Inspector `reduced-hidden` at 1440 is the desktop nav capsule, deliberately hidden while the Hero shows. The same four links are visible in the Hero's top row.
 
 ## Locked decisions (still valid from v2)
 
 - Mobile bottom nav link names are Home, Project, Work, Skills, Contact (as `aria-label`s since the nav became icon-only in R5). Scroll-spy with the navigation lock stays. (Its shape changed in R5: see the v3 decisions.)
-- Experience timeline: click only, the whole row toggles, single open, latest role open by default.
+- Experience timeline: the whole row toggles, latest role open by default. Since R6: single open on phones and as the fallback accordion; pinned and click-to-manual on desktops (see the R6 decisions).
 - Swiper config is not to be touched (coverflow, no loop, no autoplay, no lightbox).
 - No personal photo.
 - Content in `portfolio.js` (owner-supplied facts only): Shift Manager 3 bullets, Versatile Haus 2 bullets, IT Support 2 bullets; no PHP/MySQL; "Responsive Testing" naming.
@@ -89,6 +90,22 @@ Carry over:
 - Links in the Hero's top row do not use the navigation lock. After clicking one, the capsule appears on the way and its LED follows the sections it passes.
 - `--ink` at 40% on the inactive nav icons is about 2.2:1, under the 3:1 WCAG asks of icons. It is the owner's choice from the mockup.
 - `profile.contactLine` holds the sentence that used to be hard-coded in `Contact.jsx`, word for word.
+
+## R6 decisions (motion)
+
+Five test rounds with the owner on a desktop and a real iPhone. design.md sections 1, 5, 6 and 7 hold the final rules; the points below are the decisions and the reasons behind them.
+- **Three peaks, the hero the main one** (design.md 1 and 7), replacing "one peak".
+- **Hero parallax:** CSS `scroll(root)` from the first pixel, one `<svg>` per level so moving a level never re-filters it. Level distances are in the artwork's units (40 / 72 / 136) because the 60/100/180px of round 2 made the levels touch at the end of the range (measured gaps 34 and 70 units). The levels' range ends at 400px on desktops with an ease-out; the whole contour still crawls over the full Hero. Mouse follow is ±8/20/36px and fades out as the levels rise, so the two never close a gap.
+- **Device panel entrance** (peak 2) replaced the scroll-linked shadow and gallery drift of round 3: an IntersectionObserver at about 25% plays rise (0.65s, knob easing), screen light-up (0.6s), switch LED (0.3s). It replays only after the panel has left through the bottom of the screen. It is the one exception to the no-entrance-animation rule.
+- **Experience on desktops:** pinned, centred under the capsule (never above 124px), 40svh per role, and the list keeps its longest height. A click always wins: it unpins in the same frame, removes the pin space and scrolls so the clicked title stays put (manual mode, several rows open). The pin returns once the section has left the screen, compensating the scroll if the reader is below it. The pin space is a real box after the sticky block, not padding: a sticky element only travels inside its parent's content box.
+- **Experience on phones:** the click accordion (an auto-open-on-scroll mode was tried in round 3 and dropped). Closed rows show only the title, 16px apart; the company line sits in the details panel so a row animates one height, and the open panel moves up into the empty part of the 44px title button. The 0.3s height animation stays (owner, round 5).
+- **Rail LED:** one moving LED on the role opened (desktop manual: clicked) last; it never goes out.
+- **Phone tap jank (round 5):** two ResizeObservers on the timeline ran on every frame of the height animation (50 callbacks per tap, half the script time) and up to four heights animated at once. Now one observer reacts to width changes only, and one height animates per row.
+- **Footer waves** slide left 0 / 40 / 80 / 120 viewBox units as the end band comes in (desktop only); a common drift was tried and brought the converging right ends into view.
+- **Lenis** on desktop mice only (`lenis` dependency). It refreshes its size before instant scrolls, or a page that just grew (the pin space) would cut them short. Native smooth scrolling is off while it runs.
+- **Nav landing points** (design.md 5): centred in the free area, or the top 48px under the capsule; desktop routes jump over the Experience pin space and never change the open role on the way. While a nav scroll travels, nothing else scrolls the page by script.
+- **Counting numerals:** the Test "14" and the Skills count count up over 0.8s; the Skills count comes from the items each group shows (13, 5, 3, 3).
+- **`scroll-padding-top`:** 124px on desktops, 0 on phones (plus the safe area).
 
 ## Needs from owner
 

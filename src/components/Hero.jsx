@@ -1,14 +1,19 @@
+import { useRef } from 'react'
 import AvailabilityBadge from './ui/AvailabilityBadge'
 import ContourHero from './ui/ContourHero'
 import Icon from './ui/Icon'
 import Key from './ui/Key'
+import { useHeroMotion } from '../lib/useHeroMotion'
 import { profile } from '../data/portfolio'
 
 export default function Hero() {
   const [firstName, lastName] = profile.name.split(' ')
+  const sectionRef = useRef(null)
+  useHeroMotion(sectionRef)
 
   return (
     <section
+      ref={sectionRef}
       id="home"
       aria-labelledby="hero-title"
       className="relative flex flex-col wide:min-h-[760px] wide:justify-center"
@@ -16,7 +21,7 @@ export default function Hero() {
       <ContourHero className="relative h-[230px] wide:absolute wide:inset-y-0 wide:right-0 wide:h-auto wide:w-[52%]" />
 
       <div className="mx-auto w-full max-w-[1240px] px-4 wide:px-12">
-        <div className="relative z-10 flex flex-col gap-5 wide:max-w-[540px] wide:gap-7">
+        <div className="hero-copy relative z-10 flex flex-col gap-5 wide:max-w-[540px] wide:gap-7">
           <div className="hidden wide:block">
             <AvailabilityBadge>{profile.statusLong}</AvailabilityBadge>
           </div>

@@ -1,32 +1,8 @@
 import { useId, useRef } from 'react'
-import { flushSync } from 'react-dom'
 import Icon from './Icon'
 
-// About one closed row, so the row above stays on screen and can be clicked next.
-const TOP_MARGIN = 96
-
-// Opening a row collapses the open one, which may sit above it, so the clicked row slides up.
-// That slide is fine unless the row would pass the top of the screen. Then the upper panel
-// closes at once and the page scrolls by the same amount in one step, before the browser
-// paints, so the clicked row does not move. Scrolling on every frame of the collapse made
-// the row shake, and scrolling on every click made the rows creep off the screen.
-function toggleKeepingRowOnScreen(button, toggle) {
-  const openButton = button.closest('ol')?.querySelector('[aria-expanded="true"]')
-  const opensBelow =
-    openButton && openButton.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING
-  if (!opensBelow) return toggle()
-
-  const panel = document.getElementById(openButton.getAttribute('aria-controls'))
-  const top = button.getBoundingClientRect().top
-  if (top - panel.offsetHeight >= Math.min(top, TOP_MARGIN)) return toggle()
-
-  panel.style.transition = 'none'
-  flushSync(toggle)
-  window.scrollBy({ top: button.getBoundingClientRect().top - top, behavior: 'instant' })
-  void panel.offsetHeight
-  panel.style.transition = ''
-}
-
+// One role on the timeline. Which rows are open, and the lit LED that moves along the rail, belong to
+// Experience (useExperienceMotion); this row shows the off LED on its node.
 export default function TimelineItem({
   role,
   company,
@@ -35,7 +11,8 @@ export default function TimelineItem({
   skills = [],
   isLast,
   open,
-  onToggle,
+  compact = false,
+  onRowClick,
 }) {
   const id = useId()
   const buttonId = `${id}-button`
@@ -48,12 +25,17 @@ export default function TimelineItem({
     if (!(target instanceof Element)) return
     const blocker = target.closest('[data-no-toggle], a, button')
     if (blocker && blocker !== headerButtonRef.current) return
-    if (open) onToggle()
-    else toggleKeepingRowOnScreen(headerButtonRef.current, onToggle)
+    onRowClick()
   }
 
+  // Below 900px a closed row shows only its title and the rows sit closer. The company line sits at the
+  // top of the details there, so a row animates one height, not two (each animated height re-lays out
+  // the page on every frame). Screen readers still hear it as part of the title.
+  const meta = `${company} · ${period}`
+  const spacing = isLast ? '' : compact ? 'pb-4' : 'pb-6'
+
   return (
-    <li className="relative flex w-full gap-4 wide:gap-6">
+    <li data-row className="relative flex w-full gap-4 wide:gap-6">
       {/* The groove runs from this node's centre to the next node's centre; the nodes cover its ends. */}
       {!isLast && (
         <span
@@ -66,23 +48,14 @@ export default function TimelineItem({
         aria-hidden="true"
         className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ground sh-well"
       >
-        {open && (
-          <span className="absolute h-2 w-2 animate-ping rounded-full bg-accent opacity-75" />
-        )}
-        <span
-          className={`relative h-2 w-2 rounded-full [transition:all_.3s] ${
-            open ? 'bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'
-          }`}
-        />
+        <span className="relative h-2 w-2 rounded-full bg-faint" />
       </span>
 
-      <div
-        onClick={handleRowClick}
-        className={`min-w-0 flex-1 cursor-pointer ${isLast ? '' : 'pb-6'}`}
-      >
+      <div onClick={handleRowClick} className={`min-w-0 flex-1 cursor-pointer ${spacing}`}>
         <h3>
           <button
             ref={headerButtonRef}
+            data-row-button
             id={buttonId}
             type="button"
             aria-expanded={open}
@@ -93,9 +66,11 @@ export default function TimelineItem({
               <span className="text-[15px] font-semibold leading-snug text-ink wide:text-base">
                 {role}
               </span>
-              <span className="text-[13px] font-normal leading-normal text-muted">
-                {company} · {period}
-              </span>
+              {compact ? (
+                <span className="sr-only">{meta}</span>
+              ) : (
+                <span className="text-[13px] font-normal leading-normal text-muted">{meta}</span>
+              )}
             </span>
             <Icon
               name="chevronDown"
@@ -108,15 +83,24 @@ export default function TimelineItem({
 
         <div
           id={panelId}
+          data-row-panel
           role="region"
           aria-labelledby={buttonId}
           inert={!open}
-          className={`grid [transition:grid-template-rows_.3s] ${
+          // Phones: an open panel also moves up into the empty part of the 44px title button, so the
+          // company line sits right under the title. --meta-pull is measured per row (useExperienceMotion).
+          className={`grid [transition:grid-template-rows_.3s,margin-top_.3s] ${
             open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
           }`}
+          style={compact && open ? { marginTop: 'var(--meta-pull, 0px)' } : undefined}
         >
           <div className="min-h-0 overflow-hidden">
-            <div className="flex max-w-[620px] flex-col gap-3.5 pt-3.5">
+            <div data-row-details className="flex max-w-[620px] flex-col gap-3.5 pt-3.5">
+              {compact && (
+                <p aria-hidden="true" className="-mt-3 text-[13px] leading-normal text-muted">
+                  {meta}
+                </p>
+              )}
               <ul className="flex flex-col gap-2">
                 {highlights.map((highlight) => (
                   <li

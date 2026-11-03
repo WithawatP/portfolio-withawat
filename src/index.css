@@ -224,17 +224,17 @@
   html {
     background-color: var(--color-ground);
     color-scheme: light;
-    scroll-padding-top: 1rem;
+    scroll-padding-top: 0;
     scrollbar-width: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
-  /* Keeps headings below the desktop nav capsule, which ends 76px down. */
+  /* design.md 5: a section lands 48px below the desktop nav capsule, which ends 76px down. */
   @media (min-width: 56.25rem) {
     html {
-      scroll-padding-top: 6rem;
+      scroll-padding-top: 7.75rem;
     }
   }
 
@@ -377,6 +377,227 @@
       opacity: 0;
     }
   }
+}
+
+/* design.md 7, peak 1: the hero motion. Scrubbed by the page's scroll from 0. --hero-end, --contour-end
+   and --contour-rise-end come from useHeroMotion. Browsers without support and reduced motion keep it
+   still; the reduce rule below cannot stop it, because a scroll timeline ignores animation-duration. */
+@keyframes contour-block-drop {
+  to {
+    transform: translateY(calc(var(--contour-end) * var(--contour-drop)));
+  }
+}
+
+/* Level distances are in the artwork's own units (--art is one viewBox unit on screen), so they stay
+   under the gaps between the levels at every width: outer to middle 32 of ~34, middle to inner 64 of ~70. */
+@keyframes contour-outer-rise {
+  to {
+    transform: translateY(calc(var(--art) * -40));
+  }
+}
+
+@keyframes contour-middle-rise {
+  to {
+    transform: translateY(calc(var(--art) * -72));
+  }
+}
+
+@keyframes contour-inner-rise {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(calc(var(--art) * -136)) scale(var(--contour-inner-scale));
+  }
+}
+
+@keyframes hero-copy-leave {
+  to {
+    transform: translateY(-60px);
+    opacity: 0.4;
+  }
+}
+
+/* The SVG uses slice, so one viewBox unit is the larger of width / 800 and height / 800 of this box. */
+.contour-parallax {
+  container-type: size;
+  --art: calc(max(100cqw, 100cqh) / 800);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .contour-level {
+    will-change: transform;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    /* --contour-drop is the share of the page's scroll the art moves back down, so it crawls on screen. */
+    .contour-parallax {
+      --contour-drop: 0.42;
+      --contour-inner-scale: 1.024;
+    }
+
+    @media (min-width: 56.25rem) {
+      .contour-parallax {
+        --contour-drop: 0.7;
+        --contour-inner-scale: 1.04;
+      }
+    }
+
+    .contour-block,
+    .contour-level,
+    .hero-copy {
+      animation-duration: 1ms;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range-start: 0px;
+    }
+
+    .contour-block {
+      animation-name: contour-block-drop;
+      animation-range-end: var(--contour-end);
+    }
+
+    /* The levels rise fastest at the first pixel and settle by the end: 1 - (1 - p)^2, sampled. */
+    .contour-level {
+      animation-range-end: var(--contour-rise-end);
+      animation-timing-function: linear(0, 0.19, 0.36, 0.51, 0.64, 0.75, 0.84, 0.91, 0.96, 0.99, 1);
+    }
+
+    .contour-level-1 {
+      animation-name: contour-outer-rise;
+    }
+
+    .contour-level-2 {
+      animation-name: contour-middle-rise;
+    }
+
+    .contour-level-3 {
+      animation-name: contour-inner-rise;
+    }
+
+    .hero-copy {
+      animation-name: hero-copy-leave;
+      animation-range-end: var(--hero-end);
+    }
+  }
+}
+
+/* design.md 7, peak 2: the device panel plays a short entrance when it comes into view (FeaturedProject).
+   It rises from below with the switch knob's overshoot, then its screen lights up, then the switch LED.
+   Transform and opacity only, so the text is in the DOM and readable throughout. 'ready' is the start
+   pose, 'play' the end pose with the timing; going back to 'ready' snaps, because it has no transition. */
+.device-intro {
+  --intro-drop: 90px;
+}
+
+@media (min-width: 56.25rem) {
+  .device-intro {
+    --intro-drop: 160px;
+  }
+}
+
+.device-intro[data-intro='ready'] .device-panel {
+  transform: translateY(var(--intro-drop)) scale(0.94);
+}
+
+.device-intro[data-intro='ready'] .device-screen .atelier-coverflow {
+  opacity: 0.15;
+}
+
+.device-intro[data-intro='play'] .device-panel {
+  transition: transform 0.65s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.device-intro[data-intro='play'] .device-screen .atelier-coverflow {
+  transition: opacity 0.6s ease-out 0.65s;
+}
+
+/* design.md 7, peak 3: the end band's waves slide left at different speeds as the page reaches its end.
+   --fu is one viewBox unit on screen (the SVG uses slice). The outer level stays; the others move
+   40 units further each, which never brings two levels closer than they already are at rest. */
+.footer-parallax {
+  container-type: size;
+  view-timeline-name: --footer-band;
+  view-timeline-axis: block;
+  view-timeline-inset: 0px;
+  --fu: max(100cqw / 1600, 100cqh / 460);
+}
+
+@keyframes footer-wave-2 {
+  to {
+    transform: translateX(calc(var(--fu) * -40));
+  }
+}
+
+@keyframes footer-wave-3 {
+  to {
+    transform: translateX(calc(var(--fu) * -80));
+  }
+}
+
+@keyframes footer-wave-4 {
+  to {
+    transform: translateX(calc(var(--fu) * -120));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .footer-level {
+    will-change: transform;
+  }
+
+  @supports (animation-timeline: view()) {
+    /* The band ends the page, so it is fully in view exactly at the end of the scroll. */
+    .footer-level {
+      animation-duration: 1ms;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --footer-band;
+      animation-range-start: entry 0%;
+      animation-range-end: entry 100%;
+    }
+
+    .footer-level-2 {
+      animation-name: footer-wave-2;
+    }
+
+    .footer-level-3 {
+      animation-name: footer-wave-3;
+    }
+
+    .footer-level-4 {
+      animation-name: footer-wave-4;
+    }
+  }
+}
+
+/* Lenis moves the page itself on every frame; native smooth scrolling would fight it. */
+html.lenis {
+  scroll-behavior: auto;
+}
+
+/* ?parallax-debug: a box around each contour level, to check how they move. The clip and the fade come off,
+   or they would hide the boxes, so the art may cover the next section in this mode. */
+[data-parallax-debug] {
+  contain: none;
+  overflow: visible;
+  mask-image: none;
+}
+
+[data-parallax-debug] .contour-level {
+  outline: 2px solid var(--color-ink);
+  outline-offset: -2px;
+}
+
+[data-parallax-debug] .contour-level-2 {
+  outline-color: var(--color-led);
+  outline-offset: -8px;
+}
+
+[data-parallax-debug] .contour-level-3 {
+  outline-color: var(--color-accent);
+  outline-offset: -14px;
 }
 
 @media (prefers-reduced-motion: reduce) {

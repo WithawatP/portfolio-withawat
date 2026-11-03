@@ -16,6 +16,8 @@ export default function KnobSwitch({
   orientation = 'horizontal',
   idPrefix,
   showLed = false,
+  // Featured project keeps the selected LED off until the last step of its entrance (design.md 6.5, 7).
+  ledLit = true,
   className = '',
 }) {
   const isRadio = role === 'radiogroup'
@@ -115,7 +117,7 @@ export default function KnobSwitch({
                 aria-hidden="true"
                 className={`shrink-0 rounded-full [transition:all_.3s] ${
                   isCompact ? 'h-[7px] w-[7px]' : 'h-2 w-2'
-                } ${isActive ? 'bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'}`}
+                } ${isActive && ledLit ? 'bg-accent [box-shadow:var(--led-glow)]' : 'bg-faint'}`}
               />
             )}
             <span className="truncate">{option.label}</span>

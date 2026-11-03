@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { freeArea } from './sectionScroll'
 
 const BOTTOM_EPSILON = 4
 const LOCK_SAFETY_MS = 1500
@@ -48,8 +49,13 @@ export function useScrollSpy(sectionIds) {
         return
       }
 
-      const bandTop = window.innerHeight * 0.45
-      const bandBottom = window.innerHeight * 0.5
+      // A thin band in the middle of the screen the capsule leaves free, where a nav tap puts a
+      // short section (design.md 5). A tall section lands with its top higher, so it covers the band too.
+      const free = freeArea()
+      const middle = (free.top + free.bottom) / 2
+      const halfBand = window.innerHeight * 0.025
+      const bandTop = middle - halfBand
+      const bandBottom = middle + halfBand
       let bestSection = null
       let bestOverlap = 0
 
@@ -112,17 +118,16 @@ export function useScrollSpy(sectionIds) {
 
     navigateRef.current = lockTo
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (lockId) return
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActiveId(entry.target.id)
-        }
-      },
-      { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
-    )
-
-    sections.forEach((section) => observer.observe(section))
+    // Read once per frame at most, after the scroll, instead of an IntersectionObserver whose
+    // margins would have to be rebuilt whenever the band moves.
+    let frame = 0
+    const scheduleEvaluate = () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        if (!lockId) evaluate()
+      })
+    }
 
     const handleScroll = () => {
       const y = window.scrollY
@@ -141,7 +146,7 @@ export function useScrollSpy(sectionIds) {
         return
       }
 
-      if (isAtBottom()) setActiveId(lastId)
+      scheduleEvaluate()
     }
 
     const isInsideNav = (target) =>
@@ -177,6 +182,7 @@ export function useScrollSpy(sectionIds) {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', scheduleEvaluate)
     window.addEventListener('scrollend', handleScrollEnd)
     window.addEventListener('wheel', handleWheel, { passive: true })
     window.addEventListener('touchstart', handleTouchStart, { passive: true })
@@ -188,8 +194,9 @@ export function useScrollSpy(sectionIds) {
     return () => {
       navigateRef.current = null
       clearTimers()
-      observer.disconnect()
+      cancelAnimationFrame(frame)
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', scheduleEvaluate)
       window.removeEventListener('scrollend', handleScrollEnd)
       window.removeEventListener('wheel', handleWheel)
       window.removeEventListener('touchstart', handleTouchStart)

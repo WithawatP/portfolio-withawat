@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Icon from './ui/Icon'
 import KnobSwitch from './ui/KnobSwitch'
+import CountUp from './ui/CountUp'
 import { useMediaQuery } from '../lib/useMediaQuery'
 import { skillGroups } from '../data/portfolio'
 
@@ -113,12 +114,10 @@ export default function Skills() {
             )}
           </div>
 
-          <div
-            aria-hidden="true"
-            className="ml-auto hidden w-[150px] shrink-0 flex-col items-end justify-center gap-2 wide:flex"
-          >
+          {/* Counted from the items this group shows (portfolio.js), never typed in. */}
+          <div className="ml-auto hidden w-[150px] shrink-0 flex-col items-end justify-center gap-2 wide:flex">
             <span className="font-display text-[72px] leading-none text-accent">
-              {countSkills(group)}
+              <CountUp value={countSkills(group)} align="end" />
             </span>
             <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.22em] text-label">
               Skills in group

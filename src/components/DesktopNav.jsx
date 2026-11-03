@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useScrollSpy } from '../lib/useScrollSpy'
-import { scrollToTop } from '../lib/scrollToTop'
+import { scrollToSection } from '../lib/sectionScroll'
 import { profile } from '../data/portfolio'
 
 const focus =
@@ -40,7 +40,7 @@ export default function DesktopNav() {
         href="#home"
         onClick={(event) => {
           navigateTo('home')
-          scrollToTop(event)
+          scrollToSection(event, 'home')
         }}
         aria-label={`WP ${profile.name}, back to top`}
         className={`pr-3 font-display text-xs tracking-[0.08em] text-ink ${focus}`}
@@ -54,7 +54,10 @@ export default function DesktopNav() {
           <a
             key={item.section}
             href={item.href}
-            onClick={() => navigateTo(item.section)}
+            onClick={(event) => {
+              navigateTo(item.section)
+              scrollToSection(event, item.section)
+            }}
             aria-current={isActive ? 'location' : undefined}
             className={`flex h-14 items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] ${focus} ${
               isActive ? 'text-ink' : 'text-switch-off'

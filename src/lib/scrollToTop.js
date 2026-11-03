@@ -1,6 +1,6 @@
-// The Hero starts below the WP row, so the #home anchor would stop with that row under the status bar.
+import { scrollToSection } from './sectionScroll'
+
+// The WP mark in the Hero's top row. Same as the navs' Home: the very top of the page.
 export function scrollToTop(event) {
-  event.preventDefault()
-  window.history.pushState(null, '', window.location.pathname + window.location.search)
-  window.scrollTo(0, 0)
+  scrollToSection(event, 'home')
 }

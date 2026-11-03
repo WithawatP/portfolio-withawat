@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useScrollSpy } from '../lib/useScrollSpy'
-import { scrollToTop } from '../lib/scrollToTop'
+import { scrollToSection } from '../lib/sectionScroll'
 import Icon from './ui/Icon'
 
 const NAV_ITEMS = [
@@ -41,7 +41,7 @@ export default function BottomNav() {
 
   const handleClick = (event, section) => {
     navigateTo(section)
-    if (section === 'home') scrollToTop(event)
+    scrollToSection(event, section)
   }
 
   return createPortal(
