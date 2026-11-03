@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import TimelineItem from './ui/TimelineItem'
+import ContourExperience from './ui/ContourExperience'
 import { useExperienceMotion } from '../lib/useExperienceMotion'
 import { useMediaQuery } from '../lib/useMediaQuery'
 import { experiences } from '../data/portfolio'
@@ -16,8 +17,13 @@ export default function Experience() {
     count: experiences.length,
   })
   const pinned = mode === 'pinned'
+  const wide = useMediaQuery('(min-width: 900px)')
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   // Phones: closed rows show only the title, so the open role gets the room.
-  const compact = !useMediaQuery('(min-width: 900px)')
+  const compact = !wide
+  // The background waves: desktops only, with the pin (moving), after a click (frozen) or with reduced
+  // motion (still). Phones never render them, like the footer art.
+  const waves = wide && (pinned || mode === 'manual' || reduced)
 
   return (
     <section
@@ -30,12 +36,14 @@ export default function Experience() {
       // useExperienceMotion keeps the reader's place itself; the browser's scroll anchoring would add to it.
       className="[overflow-anchor:none]"
     >
+      {/* isolate: its own stacking context, so the waves sit behind the text but above the page ground. */}
       <div
-        className={`flex flex-col gap-7 wide:grid wide:grid-cols-[5fr_7fr] wide:gap-16 ${
-          pinned ? 'sticky' : ''
+        className={`isolate flex flex-col gap-7 wide:grid wide:grid-cols-[5fr_7fr] wide:gap-16 ${
+          pinned ? 'sticky' : 'relative'
         }`}
         style={pinned ? { top: `${pinTop}px` } : undefined}
       >
+        {waves && <ContourExperience sectionRef={sectionRef} animate={pinned && !reduced} />}
         <header className="flex max-w-[620px] flex-col gap-3.5">
           <h2
             id="experience-title"

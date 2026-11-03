@@ -106,6 +106,7 @@ Five test rounds with the owner on a desktop and a real iPhone. design.md sectio
 - **Nav landing points** (design.md 5): centred in the free area, or the top 48px under the capsule; desktop routes jump over the Experience pin space and never change the open role on the way. While a nav scroll travels, nothing else scrolls the page by script.
 - **Counting numerals:** the Test "14" and the Skills count count up over 0.8s; the Skills count comes from the items each group shows (13, 5, 3, 3).
 - **`scroll-padding-top`:** 124px on desktops, 0 on phones (plus the safe area).
+- **Experience waves (after R6, approved):** `contour-experience.svg` behind the pinned Experience at >= 900px, one layer per band moved by `transform` with the pin's progress (design.md 6.7 and 7). The file's filter read twice as heavy as the footer waves, so the component uses offset 6 / blur 5 / shadow 0.4 / light 0.65, matched on screenshots at 1440 and 1920; the asset itself is untouched. Still fades at the top and bottom instead of a mask; full screen width, clipped on its own box only. Frozen in manual mode, static with reduced motion, not on phones. No paints on the band layers while scrolling through the pin.
 
 ## Needs from owner
 
