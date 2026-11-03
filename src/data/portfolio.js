@@ -2,7 +2,7 @@ export const profile = {
   name: 'Withawat Phiraban',
   roles: ['Junior Software Developer', 'Quality Assurance / Software Tester'],
   headline:
-    'I build MERN apps and test them: 14 API requests in Postman on a team storefront, 20 client templates across three browsers.',
+    'I build full-stack web apps with React and Node.js, then test them across browsers, screen sizes, and the API layer.',
   bio: 'Bootcamp-trained full-stack developer with earlier work in front-end QC, graphic design, IT support, and shift management.',
   email: 'withawat1201@gmail.com',
   phone: '(+66) 84-229-9742',

@@ -11,13 +11,10 @@ const levels = [...art.matchAll(/<g\b[^>]*>.*?<\/g>/gs)]
   .filter((group) => group.includes('<path'))
   .map((group, index) => `${svgOpen}${index === 0 ? defs : ''}${group}</svg>`)
 
-const debug = new URLSearchParams(window.location.search).has('parallax-debug')
-
 export default function ContourHero({ className = '' }) {
   return (
     <div
       aria-hidden="true"
-      data-parallax-debug={debug || undefined}
       // Its own layer, so scrolling does not repaint the SVG filter on every frame.
       // The art moves inside this clip, so its opaque fill can never cover the section below.
       className={`contour-fade contour-parallax pointer-events-none overflow-hidden [contain:paint] [transform:translateZ(0)] [&_svg]:absolute [&_svg]:inset-0 [&_svg]:h-full [&_svg]:w-full [&_svg]:overflow-visible ${className}`}

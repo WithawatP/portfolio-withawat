@@ -1,10 +1,27 @@
 @import "tailwindcss";
 
+/* design.md 4: the fonts are self-hosted, the same Latin files Google Fonts serves. Manrope is one variable
+   file for the 400, 500 and 600 the page uses; Michroma has one weight. index.html preloads both. */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/manrope-latin-variable.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Michroma";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/michroma-latin-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @theme static {
-  --color-surface: #e7e7e7;
-  --color-highlight: #ffffff;
   --color-recessed: #d1d1d1;
-  --color-shadow: #b6b6b6;
   --color-ink: #2a2a2a;
   --color-ink-2: #3e3e3e;
   --color-muted: #555055;
@@ -32,10 +49,6 @@
 }
 
 :root {
-  --lx: -1;
-  --ly: -1;
-  --depth-scale: 1;
-
   /* design.md v3. Pressed shadows keep their zero layers so the transition interpolates. */
   --sh-key: 6px 6px 12px #B6B6B6, -6px -6px 12px #FBFBFB;
   --sh-key-pressed: 0 0 0 #B6B6B6, 0 0 0 #FBFBFB, inset 4px 4px 12px #B6B6B6, inset -4px -4px 12px #FBFBFB;
@@ -137,89 +150,6 @@
   mask-image: linear-gradient(to bottom, transparent, black 35%);
 }
 
-@media (max-width: 639px) {
-  :root {
-    --depth-scale: 0.7;
-  }
-}
-
-@utility neu-raise-xs {
-  box-shadow:
-    calc(var(--lx) * -3px * var(--depth-scale)) calc(var(--ly) * -3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 3px * var(--depth-scale)) calc(var(--ly) * 3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-node {
-  box-shadow:
-    calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-sm {
-  box-shadow:
-    calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(10px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(10px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-hover {
-  box-shadow:
-    calc(var(--lx) * -5px * var(--depth-scale)) calc(var(--ly) * -5px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 5px * var(--depth-scale)) calc(var(--ly) * 5px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-lift {
-  box-shadow:
-    calc(var(--lx) * -6px * var(--depth-scale)) calc(var(--ly) * -6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 6px * var(--depth-scale)) calc(var(--ly) * 6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-md {
-  box-shadow:
-    calc(var(--lx) * -8px * var(--depth-scale)) calc(var(--ly) * -8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 8px * var(--depth-scale)) calc(var(--ly) * 8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-lg {
-  box-shadow:
-    calc(var(--lx) * -12px * var(--depth-scale)) calc(var(--ly) * -12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-shadow),
-    calc(var(--lx) * 12px * var(--depth-scale)) calc(var(--ly) * 12px * var(--depth-scale)) calc(24px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-raise-bar {
-  box-shadow:
-    0 calc(-6px * var(--depth-scale)) calc(14px * var(--depth-scale)) calc(-4px * var(--depth-scale)) var(--color-shadow);
-}
-
-@utility neu-inset-sm {
-  box-shadow:
-    inset calc(var(--lx) * -2px * var(--depth-scale)) calc(var(--ly) * -2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 2px * var(--depth-scale)) calc(var(--ly) * 2px * var(--depth-scale)) calc(4px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-inset-press {
-  box-shadow:
-    inset calc(var(--lx) * -3px * var(--depth-scale)) calc(var(--ly) * -3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 3px * var(--depth-scale)) calc(var(--ly) * 3px * var(--depth-scale)) calc(6px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-inset-md {
-  box-shadow:
-    inset calc(var(--lx) * -4px * var(--depth-scale)) calc(var(--ly) * -4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 4px * var(--depth-scale)) calc(var(--ly) * 4px * var(--depth-scale)) calc(8px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-inset-lg {
-  box-shadow:
-    inset calc(var(--lx) * -6px * var(--depth-scale)) calc(var(--ly) * -6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 6px * var(--depth-scale)) calc(var(--ly) * 6px * var(--depth-scale)) calc(12px * var(--depth-scale)) var(--color-highlight);
-}
-
-@utility neu-inset-xl {
-  box-shadow:
-    inset calc(var(--lx) * -8px * var(--depth-scale)) calc(var(--ly) * -8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-shadow),
-    inset calc(var(--lx) * 8px * var(--depth-scale)) calc(var(--ly) * 8px * var(--depth-scale)) calc(16px * var(--depth-scale)) var(--color-highlight);
-}
-
 @layer base {
   html {
     background-color: var(--color-ground);
@@ -265,116 +195,6 @@
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
-    }
-  }
-}
-
-/* Motion moment 1: a section rises from the surface as it enters the viewport.
-   The shadow lives on a layer whose opacity changes, so box-shadow is never animated.
-   Scrubbed by scroll, so the progress is linear and has no duration. */
-@keyframes extrude-rise {
-  from {
-    scale: 0.95;
-  }
-  to {
-    scale: 1;
-  }
-}
-
-@keyframes extrude-shadow {
-  0%,
-  45% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* The section starts pressed into the surface, goes flat, then rises. */
-@keyframes extrude-dent {
-  0% {
-    opacity: 1;
-  }
-  45%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@property --lx {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: -1;
-}
-
-@property --ly {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: -1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .extrude {
-    position: relative;
-    isolation: isolate;
-    box-shadow: none;
-    /* Keeps the top edge in place while scaled, so anchor navigation lands correctly. */
-    transform-origin: 50% 0;
-  }
-
-  .extrude::before {
-    @apply neu-raise-lg;
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
-  @supports (animation-timeline: view()) {
-    .extrude {
-      view-timeline-name: --extrude;
-      animation: extrude-rise linear both;
-      animation-timeline: --extrude;
-      animation-range: entry 80px entry 480px;
-    }
-
-    .extrude::before {
-      animation: extrude-shadow linear both;
-      animation-timeline: --extrude;
-      animation-range: entry 80px entry 480px;
-    }
-
-    .extrude::after {
-      @apply neu-inset-lg;
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      border-radius: inherit;
-      pointer-events: none;
-      animation: extrude-dent linear both;
-      animation-timeline: --extrude;
-      animation-range: entry 80px entry 480px;
-    }
-  }
-
-  @supports not (animation-timeline: view()) {
-    .extrude,
-    .extrude::before {
-      transition:
-        scale 500ms cubic-bezier(0.2, 0.7, 0.2, 1),
-        opacity 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .extrude[data-extrude="pending"] {
-      scale: 0.97;
-    }
-
-    .extrude[data-extrude="pending"]::before {
-      opacity: 0;
     }
   }
 }
@@ -575,29 +395,6 @@
 /* Lenis moves the page itself on every frame; native smooth scrolling would fight it. */
 html.lenis {
   scroll-behavior: auto;
-}
-
-/* ?parallax-debug: a box around each contour level, to check how they move. The clip and the fade come off,
-   or they would hide the boxes, so the art may cover the next section in this mode. */
-[data-parallax-debug] {
-  contain: none;
-  overflow: visible;
-  mask-image: none;
-}
-
-[data-parallax-debug] .contour-level {
-  outline: 2px solid var(--color-ink);
-  outline-offset: -2px;
-}
-
-[data-parallax-debug] .contour-level-2 {
-  outline-color: var(--color-led);
-  outline-offset: -8px;
-}
-
-[data-parallax-debug] .contour-level-3 {
-  outline-color: var(--color-accent);
-  outline-offset: -14px;
 }
 
 @media (prefers-reduced-motion: reduce) {

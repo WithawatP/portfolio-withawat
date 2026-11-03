@@ -3,28 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Michroma&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Self-hosted fonts (src/index.css): both files are needed for the first screen. -->
+    <link rel="preload" href="/fonts/michroma-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/manrope-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#DADADA" />
+    <title>Withawat Phiraban — Software Developer & QA</title>
     <meta
       name="description"
       content="Withawat Phiraban — junior software developer and QA / software tester. Builds MERN web apps and tests them, by hand, in Postman and across browsers."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Withawat Phiraban" />
     <meta property="og:title" content="Withawat Phiraban — Software Developer & QA" />
     <meta
       property="og:description"
       content="Junior software developer and QA / software tester. Builds MERN web apps and tests them, by hand, in Postman and across browsers."
     />
-    <title>Withawat Phiraban — Software Developer & QA</title>
+    <meta name="twitter:title" content="Withawat Phiraban — Software Developer & QA" />
+    <meta
+      name="twitter:description"
+      content="Junior software developer and QA / software tester. Builds MERN web apps and tests them, by hand, in Postman and across browsers."
+    />
+    <!-- canonical, og:url, og:image and twitter:image come from VITE_SITE_URL (vite.config.js) -->
+    <!--site-url-tags-->
   </head>
   <body>
     <div id="root"></div>

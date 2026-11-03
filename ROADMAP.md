@@ -20,15 +20,23 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R4 | Skills: knob switch and one sunken tray, from `docs/mockup/skills-desktop.html` and `skills-mobile.html` | Done |
 | R5 | Contact, footer, floating bottom nav, sticky desktop nav, end band | Done |
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
-| R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | **Next** |
+| R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 
-## Next task: R7
+## Next task: deploy
 
-Cleanup from the Status table. Plan first if it touches more than about 3 files.
+R7 is done; the redesign is ready to ship. Next: deploy, then set `VITE_SITE_URL` and rebuild (see Needs from owner).
+
+R7 summary:
+- Removed after proving they have no users: `UiverseButton`, the styled-components dependency, `SkillChip`, `SectionCard`, `InsetPanel`, `QuickContactRow`, `Pill`, `SectionHeading`, `src/lib/styles.js` (`LEVEL_*`), the 13 `neu-*` utilities and their tokens (`--lx`, `--ly`, `--depth-scale`, `--color-shadow`, `--color-highlight`), `--color-surface`, the `.extrude` CSS, the `?parallax-debug` mode, `public/icons.svg`, and unused images in `src/assets` (`hero.png`, `neumorphism*.png`, `react.svg`, `vite.svg`, the four `atelier-*.jpg` originals and `reference ui components style.jpg`; the owner kept copies).
+- Favicon: the WP mark in Michroma (variant B: outlines with a 3-unit stroke so it reads at 16px), `--ink` on a `--ground` rounded square. `favicon.svg` (outline paths, no webfont), `favicon-32.png`, and `apple-touch-icon.png` (180px, square, since iOS rounds it). Vite's default icon is gone.
+- Fonts self-hosted in `public/fonts`: the same Latin woff2 files Google Fonts serves (Manrope variable for 400-600, Michroma 400), `font-display: swap`, both preloaded; the Google Fonts links are gone. Screenshots of the Hero, the Skills numeral and Contact at 390 and 1440 match the Google Fonts version pixel for pixel, and the count-up boxes keep their widths.
+- Meta: title, description, theme-color, Open Graph and Twitter tags in `index.html`. Canonical, `og:url` and the absolute share-image tags come from `VITE_SITE_URL` (`.env`, see `.env.example`) through a small plugin in `vite.config.js`, and are left out while it is empty or not a public http(s) URL.
+- New share image `public/og-image.png` (1200x630), rendered from the real Hero (contour art, name in Michroma, role line). The v2 `og-image.jpg` is gone.
+- Hero intro (`profile.headline`) is now "I build full-stack web apps with React and Node.js, then test them across browsers, screen sizes, and the API layer." (owner). The old line joined the Atelier Postman work and the Versatile Haus template QC with numbers out of context; the numbers stay where they have context (Featured: 14 requests, Experience: 20 templates). Still 3 lines at 360, 390 and 1440. The approved mockup `docs/mockup/hero-featured.html` keeps the old wording; `portfolio.js` wins.
+- Lighthouse on the production build (median of 3): mobile 100 / 100 / 100 / 100, desktop 100 / 100 / 100 / 100 (performance, accessibility, best practices, SEO). Before self-hosting the fonts, mobile performance was 99 with a 1.4s first paint; now 0.76s.
 
 Carry over:
-- These have no users; remove them in R7: `Pill`, `SkillChip`, `SectionCard`, `SectionHeading`, `InsetPanel`, `QuickContactRow`, `UiverseButton`, `src/lib/styles.js` and the `.extrude` CSS.
-- Remove the `?parallax-debug` mode (`ContourHero.jsx` and its CSS in `index.css`) and its line in design.md section 7.
+- Performance leads, left as they are by the owner's decision (scores are 100): the gallery WebPs are 1440px wide for a smaller box (about 95KB to save with responsive sizes); about 58KB of unused JS; a 56ms forced layout from `useHeroMotion` measuring on mount (motion code).
 - The contour mockups no longer match the site's end band: `contact-desktop.html` and `contact-mobile.html` still show it 420px tall and on phones. The v3 decisions below and design.md win.
 - The iPhone stall when tapping the nav quickly did not come back in R6 testing (owner, real iPhone). If it does, profile it with Safari Web Inspector.
 - Inspector after R6: the six FAILs are the same as before R6 (`off-centre` @1440 is new in R6 and comes from the hero contour layers reaching the right edge, which design.md section 5 asks for; overflow is 0). New WARN `long-pin` @1440 is the pinned Experience, which opens a new role at each step. `still-page` is gone.
@@ -110,7 +118,7 @@ Five test rounds with the owner on a desktop and a real iPhone. design.md sectio
 
 ## Needs from owner
 
-- Who found and who fixed each of the two bugs (group project).
+- Set `VITE_SITE_URL` after the first deploy, so the canonical, `og:url` and share-image tags are built.
 - Screenshots for the gallery if they change; bug screenshots if any.
 
 ## Working routine

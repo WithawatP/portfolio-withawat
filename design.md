@@ -79,7 +79,7 @@ Nowhere else: not on links, headings, borders, icons or hover states.
 
 - **Michroma** (display): the name and large numerals only. Never headings, never body.
 - **Manrope** 400 / 500 / 600 / 700: everything else.
-- Load both from Google Fonts in `index.html` (no new npm dependency).
+- Both are self-hosted (no npm dependency): the Latin `woff2` files Google Fonts serves, in `public/fonts` — Manrope as one variable file for 400–600, Michroma at 400 — with `font-display: swap`, declared in `src/index.css` and preloaded in `index.html`.
 
 | Role | Size | Weight / style |
 |---|---|---|
@@ -135,7 +135,7 @@ Based on "witty-wolverine-69" by javierBarroso on uiverse.io (MIT). Put a credit
 - Pad key (Contact at >= 900px): 100px tall, radius 18px, padding 16px 18px, icon 19px top left, label bottom left (15px on the primary, 14px on the others).
 - Focus: `outline: 2px solid var(--accent); outline-offset: 4px` on `:focus-visible`.
 - Hover effects only inside `@media (hover: hover)`.
-- The old `UiverseButton` (styled-components) is retired once every button uses the Key.
+- Every button and icon link uses the Key; the old `UiverseButton` and styled-components were removed in R7.
 
 ### 6.2 Status pill
 Inset (`--sh-well`), radius 999px, text 12–13px 600 `--ink-2`.
@@ -187,7 +187,6 @@ The page has three peaks. The hero is the main one; the other two are smaller an
   - **The levels' range** ends at 400px of scroll at >= 900px and when the band leaves the screen below 900px. They ease out (`1 - (1 - p)²`, as `linear()` samples): fastest at the first pixel, settling by the end. `useHeroMotion` measures every range.
 - **Hero text:** the text column moves up 60px and fades to 0.4 from `scrollY` 0 until the Hero leaves the top of the screen. Its keys stay clickable.
 - **Mouse on the contour:** at >= 900px with `hover: hover` and `pointer: fine`, each level follows the pointer: outer up to 8px, middle 20px, inner 36px either way. The follow fades out with the same curve as the levels rise, so at the end of their range it is gone: mouse and scroll together never close a gap. It uses `requestAnimationFrame` and a smoothed follow, and runs only while the Hero is on screen.
-- `?parallax-debug` in the URL draws a box around each hero level.
 - **Peak 2: the device panel's entrance.** The one exception to the ban on entrance animation (section 10). When about a quarter of the panel is on screen (an IntersectionObserver on a wrapper that never moves), three steps play in a row: (1) the panel rises from `translateY(160px)` at >= 900px or `90px` below, and `scale(0.94)`, to its place in 0.65s with the switch knob's easing `cubic-bezier(0.34, 1.4, 0.64, 1)`, so it overshoots a few px and settles; (2) the slides in its screen go from opacity 0.15 to 1 in 0.6s, as if the screen had just been switched on; (3) the switch's selected LED lights over 0.3s. Transform and opacity only: nothing in the layout moves, and the text is in the DOM and readable all along. It plays again only after the panel has gone off the bottom of the screen (the reader scrolled back above it) and comes back in; returning to it from below shows it finished. With reduced motion it is finished from the start.
 - **Peak 3: the end of the page.**
   - **Experience opens role by role (section 8).** At >= 900px the section pins, centred in the space under the desktop capsule (from its measured height, never higher than 124px), and each role gets 40svh of scroll; the role whose step is reached opens and the one before closes. The list keeps the height of its longest role, so nothing below it moves. While a nav tap carries the page, the open role stays as it is and catches up on landing. A click always wins over the pin: clicking any row while pinned switches to manual at once. In the same frame the pin lets go, its scroll space goes, the clicked row opens or closes, and the page scrolls so the clicked title stays where it was on screen (within 1px). In manual, rows open and close instantly on click, several at a time, with no scrolling. The pin comes back only after the section has left the screen completely: the open role is then the one that matches the scroll position, and if the reader is below the section the page scrolls by what the section grew, so nothing on screen moves. Below 900px nothing pins and nothing opens by itself: it is the click accordion of section 8.
@@ -248,4 +247,4 @@ The nav socket ring (7px, `--socket-ring`) is the one exception to the border ru
 9. `npm run lint` and `npm run build` pass.
 
 Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`, `eyebrow`, `micro-label`, `body-size` (the 11–12px labels and 15–17px body in section 4 are deliberate; `body-size` also counts section 4's 13–14px secondary lines as body), `small-text` (the only text under 12px is the uppercase 11px eyebrow labels that section 4 allows; all other text must be 12px or larger).
-Until R7 removes them, findings caused by v2 leftovers (`UiverseButton` gradient, text-shadow and button-fx) are expected and are not blockers. Dev test pages under `dev/` are not inspected for content findings.
+Dev test pages under `dev/` are not inspected for content findings.
