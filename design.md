@@ -62,6 +62,53 @@ Contrast on `--ground`: ink about 11:1, body and muted above 5:1, white on accen
 
 Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for the shadows). Components use tokens only, never raw hex.
 
+### Dark theme
+
+Approved mockup: `docs/mockup/dark-theme.html` (the real page, light next to dark). The dark theme redefines the same tokens under `html[data-theme="dark"]`, so no component knows which theme is on. The ground is a neutral grey like the light theme's; the shadows keep the same offsets and blurs, with a dark side well under the ground and a light side only a little above it.
+
+```css
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #2B2B2B;
+  --screen: #222222;
+  --ink: #E6E6E6;           /* 11.3:1, never pure white */
+  --ink-2: #CFCFCF;         /* 9.1:1 */
+  --body: #BDB8BA;          /* 7.2:1, warm like the light body */
+  --muted: #ABA6A9;         /* 5.9:1 */
+  --label: #B3B3B3;         /* 6.8:1 */
+  --faint: #5A5A5A;         /* decoration only */
+  --switch-off: #A3A3A3;    /* 5.6:1 */
+  --key-pressed: #9E9E9E;   /* 5.3:1 */
+  --knob: #353535;
+  --accent: #8C2A47;        /* section 3 */
+  --socket-ring: rgba(255,255,255,.045);
+  --led-glow: 0 0 8px 2px rgba(196,58,98,.55);
+
+  --sh-key: 6px 6px 12px #1C1C1C, -6px -6px 12px #393939;
+  --sh-key-pressed: 0 0 0 #1C1C1C, 0 0 0 #393939, inset 4px 4px 12px #1C1C1C, inset -4px -4px 12px #393939;
+  --sh-primary: 6px 6px 12px #1A1A1A, -6px -6px 12px #393939;
+  --sh-primary-pressed: 0 0 0 #1A1A1A, 0 0 0 #393939, inset 4px 4px 12px rgba(0,0,0,.45), inset -4px -4px 12px rgba(255,255,255,.08);
+  --sh-device: 14px 14px 32px #1A1A1A, -12px -12px 28px #383838;
+  --sh-device-lg: 20px 20px 48px #191919, -18px -18px 44px #383838;
+  --sh-well: inset 4px 4px 9px #1C1C1C, inset -4px -4px 9px #373737;
+  --sh-screen: inset 7px 7px 15px #1A1A1A, inset -7px -7px 15px #383838;
+  --sh-track: inset 7px 7px 14px #161616, inset -7px -7px 14px #3A3A3A;
+  --sh-knob: 5px 5px 12px #151515, -4px -4px 10px #3D3D3D, inset 2px 2px 3px rgba(255,255,255,.07);
+  --sh-tray: inset 6px 6px 13px #1A1A1A, inset -6px -6px 13px #383838;
+  --sh-icon: 4px 4px 9px #1C1C1C, -4px -4px 9px #393939;
+  --sh-icon-lg: 5px 5px 10px #1C1C1C, -5px -5px 10px #393939;
+  --sh-capsule: 10px 10px 24px #191919, -8px -8px 20px #383838;
+  --sh-socket: 0 0 20px -12px #0E0E0E, inset 0 0 20px -13px #0E0E0E, inset 3px 3px 6px #1D1D1D;
+  --sh-ball: (the light value with stronger drop shadows, see src/index.css);
+}
+```
+
+The contours (section 6.7) and the theme switch (section 6.8) have tokens of their own in both themes.
+
+- **Which theme:** the first visit follows `prefers-color-scheme`. Once the reader uses the switch, the choice is kept in `localStorage` and wins from then on; there is no way back to "follow the system" (two states only). Until then, a change of the system theme applies at once. An inline script in `index.html` sets `data-theme` and `theme-color` before the first paint, so the prerendered page never flashes the wrong theme.
+- **Without JavaScript** the page is light and the switch is hidden (it could not work).
+- **Not themed:** the share image, the favicon, the gallery screenshots and the CV. `theme-color` follows the theme (`--ground`).
+
 ## 3. Accent rules
 
 `#651C32` appears only on:
@@ -72,6 +119,7 @@ Put these in `src/index.css` (Tailwind v4 `@theme` for colours, `@utility` for t
 5. the ball of the mobile nav.
 
 Plus the keyboard focus ring (section 6.1), which is an accessibility signal, not decoration.
+In the dark theme the accent is `#8C2A47`, in the same places: `#651C32` sank into the dark ground (1.2:1, the LEDs and the gallery dot nearly vanished). `#8C2A47` is 1.7:1 against it, and white on it 8.3:1. It is the same colour, lifted for the ground, not a second accent.
 The status pill LED is green by the owner's decision. It is the one exception to the single-accent rule. Green appears nowhere else.
 Nowhere else: not on links, headings, borders, icons or hover states.
 
@@ -103,14 +151,14 @@ Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 - No horizontal overflow at 360, 390, 768, 1024, 1440.
 
 ### Hero
-- **Mobile:** nav row (WP mark left, "Open to work" pill right), then the contour band (full bleed, 230px tall), then name, role, one-line claim, then two keys side by side (2-column grid). The text block starts directly below the band, with no margin and no overlap.
+- **Mobile:** nav row (WP mark left, "Open to work" pill and the theme switch right, 12px apart), then the contour band (full bleed, 230px tall), then name, role, one-line claim, then two keys side by side (2-column grid). The text block starts directly below the band, with no margin and no overlap.
 - **>= 900px:** min-height 760px. The contour sits absolutely on the right 52% of the hero, full hero height, touching the right edge of the screen. Text column on the left, max 540px, above the contour (z-index). The status pill moves into the text column; the nav shows spaced uppercase links.
 - The name must never overlap the contour. If it would, shrink the name with the clamp; never move the contour over it. One exception, by the owner's decision: below 900px, while the page scrolls, the text moving up (section 7) may pass over the faded lower part of the contour band.
 
 ### Navigation
-- Desktop, in the Hero: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em.
+- Desktop, in the Hero: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em, then the theme switch (section 6.8), 40px after the last link.
 - Desktop, past the Hero: a sticky raised capsule, approved in `docs/mockup/contact-desktop.html`.
-  - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 56px tall, centred, 20px from the top of the screen. WP (Michroma 12px), then Project, Experience, Skills, Contact (12px, 600, uppercase, tracking 0.2em).
+  - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 56px tall, centred, 20px from the top of the screen. WP (Michroma 12px), then Project, Experience, Skills, Contact (12px, 600, uppercase, tracking 0.2em), then the theme switch (section 6.8). The phone's bottom nav has no switch: it keeps its five icons.
   - **Active link:** a 7px LED in `--accent` with `--led-glow` and `--ink` text. The others have a 7px `--faint` dot and `--switch-off` text. The active link has `aria-current`.
   - **Appearing:** once the Hero has left the screen, it fades in and moves down 8px over 0.3s. While hidden it cannot be reached with Tab. With reduced motion it appears at once.
   - **Logic:** the same scroll-spy and navigation lock as the mobile nav. `scroll-padding-top` is 124px at >= 900px, 48px below the capsule, which ends 76px down.
@@ -168,6 +216,7 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 - Three families of debossed (sinking) contour lines; each family's outer edge follows its neighbours with an even channel between them. Do not redraw or "improve" the paths.
 - The `<g>` groups are levels: the first is the outer level of every family, the last group with paths is the innermost.
 - Fill stays exactly `--ground`. No accent dot.
+- **Colours in both themes:** the asset files stay untouched. When a component reads a file it swaps the fill (`#DADADA`) for `--ground` and gives each `feFlood` a token, as an inline style that wins over the file's attributes: `--contour-shade` and `--contour-light` for the colours, and one opacity per contour and side. Light: shade `#A8A8A8`, light `#FFFFFF`; hero 0.5 / 0.75, Experience 0.4 / 0.65, footer 0.3 / 0.55 (the files' own values, Experience as in its component). Dark: shade `#0E0E0E`, light `#FFFFFF`; hero 0.62 / 0.09, Experience 0.55 / 0.08, footer 0.45 / 0.07.
 - The SVG uses `preserveAspectRatio="xMinYMid slice"`, so the artwork is anchored to its left edge.
 - Lines fade out instead of being cut. The wrapper has a CSS `mask-image` that fades to transparent over about the top 10% at every width, over about the bottom 30% below 900px and the bottom 18% at >= 900px, and over about the left 10% at >= 900px. This is a mask, not a decorative gradient, so the gradient ban in section 10 does not apply to it.
 
@@ -176,6 +225,15 @@ There are no chips anywhere. Tech stacks and skills are plain text, items separa
 **Footer contour.** File: `src/assets/contour-footer.svg`. Inlined as a React component, `aria-hidden`, no pointer events. Do not redraw the paths. Like the hero, `ContourFooter` splits it into one `<svg>` per wave level (filter in the first, `overflow: visible`), so its levels can slide (section 7). It exists at >= 900px only. Below 900px it is not rendered at all, not hidden with CSS. It fills the band with the file's own viewBox and shadows, and a mask goes from transparent at 0% to opaque at 35%. The paths run to x=1900 while the band shows up to 1600, so a level can slide 300 units left before its end shows.
 
 **Experience contour.** File: `src/assets/contour-experience.svg` (owner-supplied; viewBox 1600x900, `xMidYMax slice`, four bands). Do not redraw the paths. `ContourExperience` splits it into one `<svg>` per band, each with its own copy of the filter under its own id, in a wrapper moved by `transform` only (`will-change: transform`). The file's filter (offset 7, blur 7, shadow 0.8, light 0.85) read about twice as heavy as the footer waves here, so the component uses offset 6, blur 5, shadow 0.4, light 0.65, which match the footer's edges (about 11 levels under the ground) at 1440 and 1920. At >= 900px only, never rendered on phones. It sits in the Experience frame behind the text (`aria-hidden`, no pointer events), full screen width, from the top of the frame to 140px below it, clipped on its own box only: no ancestor of the sticky frame may get an overflow. Two still fades sit over the bands instead of a mask: from `--ground` at the top to transparent at 45%, and back to `--ground` over the last 20%.
+
+### 6.8 Theme switch
+Adapted from "bright-dolphin-91" by Yaya12085 on uiverse.io (MIT). Put a credit comment in the component. Approved in `docs/mockup/dark-theme.html`.
+
+- **Where:** the Hero's top row at both widths (section 5) and the desktop capsule. Not in the phone's bottom nav.
+- **Track:** 64x32px, radius 999px, `--ground`, `--sh-toggle` (a soft inset rim and a faint drop shadow, after the original).
+- **Knob:** 22px, 5px from the edge, `--toggle-knob` with `--sh-toggle-knob`. Left in the light theme, right in the dark (`translateX(32px)`, 0.4s). The knob keeps the original's gradient: a lit metal ball in light, a dark one in dark. It is the one gradient on the page apart from the masks (section 10).
+- **Icons:** sun (left) and moon (right), 12px, from `Icon.jsx`, in `--faint`; the knob covers the one of the theme that is on. In the dark theme the sun is lit: white with a soft glow (`--toggle-sun`, `--toggle-sun-glow`), by the owner's decision.
+- **Element:** a `<button role="switch">`, `aria-checked` true in dark, `aria-label` "Dark theme", and the keys' focus ring (section 6.1). The knob's place comes from `html[data-theme]` in CSS, not from React, so the prerendered page shows the right side before it hydrates.
 
 ## 7. Motion
 
@@ -195,6 +253,8 @@ The page has three peaks. The hero is the main one; the other two are smaller an
   - **Footer waves (>= 900px):** as the end band comes into view, its wave levels slide left at different speeds, reaching the end at the end of the scroll: outer 0, then 40, 80 and 120 viewBox units. Levels never come closer than they are at rest, and the paths' ends stay off screen.
 - **Smooth scrolling:** on a desktop mouse (`hover: hover` and `pointer: fine`) the wheel is smoothed by Lenis, and both navs scroll with it (ease-in-out, 0.6s plus a little per distance, at most 1.4s). Phones keep their native scroll; reduced motion turns Lenis off. While a nav tap carries the page, nothing else may scroll it.
 - **Micro-interactions:** key press 0.3s, switch knob 0.45s with a small overshoot, LED fade 0.3s.
+- **Changing theme:** the whole page cross-fades over 0.4s with the View Transitions API (the browser fades a picture of the old page into the new one, so no shadow animates). Browsers without it, and reduced motion, change at once. The theme switch's knob slides 0.4s.
+- **Theme switch tilt:** on hover, with `hover: hover` and no reduced motion, the switch tilts toward its knob (`perspective(100px) rotateX(5deg) rotateY(-5deg)`, mirrored when it is on), 0.4s.
 - **Counting numerals:** the large accent numerals (the "14" on the Test side, the Skills count) count up over 0.8s with an ease-out (`1 - (1 - t)³`): from 0 the first time the numeral is on screen and each time the switch goes to Test, and from the old value to the new one when the Skills group changes. The box keeps the width of the final value, so the text beside it never moves. Screen readers always get the real value (hidden text); the counting digits are `aria-hidden`. With reduced motion the real value shows at once. The Skills count is worked out from the items each group shows in `portfolio.js`: Development 13 (3 + 5 + 5), QA & Testing 5, Design 3, Soft skills 3.
 - **Nav ball (section 5):** a `transform` transition with `cubic-bezier(.34, Y, .64, 1)`: it never moves backwards first, and bounces on arrival by about the same 10–14px on a phone at any distance. Y depends on the sockets travelled: 1.78 for 1, 1.56 for 2, 1.43 for 3, 1.37 for 4. The duration depends on the distance too: 0.35s plus 0.1s per socket (1 socket 0.45s, 4 sockets 0.75s).
 - **Nav icons:** the active icon fades to white over 0.25s with a `transition-delay` equal to that roll's duration, so it changes after the ball arrives. The icon of the socket the ball left goes grey at once. With reduced motion the colour changes at once.
@@ -233,6 +293,7 @@ Build these after Hero and Featured project are approved on the real site.
 Borders used for structure · gradients · glass or blur panels · pure black · chips · cards inside cards · more than one raised container per section · accent outside section 3 · `01 / 06` counters · gradient text · emoji · entrance fade or slide animations (one exception: the device panel, section 7) · scroll-down cues · invented statistics.
 
 The nav socket ring (7px, `--socket-ring`) is the one exception to the border rule: it draws the rim of the socket.
+The theme switch's knob gradient and its lit white sun in the dark theme (section 6.8) are the exceptions to the gradient and pure-white rules, by the owner's decision.
 
 ## 11. Review gate (answer before calling a task done)
 
@@ -245,6 +306,7 @@ The nav socket ring (7px, `--socket-ring`) is the one exception to the border ru
 7. No horizontal overflow at 360 / 390 / 768 / 1024 / 1440; report the page height at 390.
 8. With reduced motion on, does nothing move?
 9. `npm run lint` and `npm run build` pass.
+10. Checked in both themes: every question above, the contrast in section 2, and no flash of the other theme on load.
 
 Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`, `eyebrow`, `micro-label`, `body-size` (the 11–12px labels and 15–17px body in section 4 are deliberate; `body-size` also counts section 4's 13–14px secondary lines as body), `small-text` (the only text under 12px is the uppercase 11px eyebrow labels that section 4 allows; all other text must be 12px or larger).
 Dev test pages under `dev/` are not inspected for content findings.

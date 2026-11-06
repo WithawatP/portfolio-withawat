@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useScrollSpy } from '../lib/useScrollSpy'
 import { scrollToSection } from '../lib/sectionScroll'
 import { profile } from '../data/portfolio'
+import ThemeSwitch from './ui/ThemeSwitch'
 
 const focus =
   'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent'
@@ -73,6 +74,8 @@ export default function DesktopNav() {
           </a>
         )
       })}
+
+      <ThemeSwitch />
     </nav>
   )
 }
