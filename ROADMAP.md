@@ -21,11 +21,11 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R5 | Contact, footer, floating bottom nav, sticky desktop nav, end band | Done |
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
-| P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done on branch `prerender` (Vercel preview, not merged) |
+| P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
 
-## Next task: owner review of the `prerender` preview, then search and AI files
+## Next task: search and AI files
 
-P1 is on the `prerender` branch, pushed for a Vercel preview; it is not merged into `redesign-v2` or `main`. After the owner has tested the preview (a real iPhone included, see Needs from owner), the next task is the search and AI files, decided already:
+P1 is merged into `main` and live (PR #4; a crawler fetching the page without JavaScript gets the content). The next task is the search and AI files, decided already:
 - JSON-LD `Person` from `portfolio.js`: name, url, jobTitle (`profile.roles`), description (`profile.headline`), email, address (Pathum Thani, TH), sameAs (GitHub, LinkedIn), alumniOf Generation Thailand, knowsAbout = the technical skills only (no soft skills). No telephone.
 - `robots.txt` with a `Sitemap:` line and `sitemap.xml`, both built from `VITE_SITE_URL` and left out while it is empty.
 - A short `llms.txt` with facts already on the page, without the phone number.
