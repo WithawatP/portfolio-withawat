@@ -7,7 +7,7 @@ Design rules: `design.md` (v3). Visual reference: `docs/mockup/hero-featured.htm
 
 The v2 site was tidy but read as cluttered and flat: every element sat in a raised or inset box, dozens of chips, no accent, and four small motion moments that nobody noticed. v3 keeps the content, data and logic, and replaces the visual layer: flat ground, a few neumorphic objects, one accent (`#651C32`), one peak (the hero contour).
 
-Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live in git history; their content decisions below still hold.
+The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (1 to 7) are finished and live in git history; their content decisions below still hold.
 
 ## Status
 
@@ -22,15 +22,42 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
+| D1 | Light and dark theme (see Next tasks) | Mockup in progress |
+| L1 | Thai and English, `/` and `/th/` (see Next tasks) | Planned, after D1 |
 
-## Next task: search and AI files
+## Deployed
 
-P1 is merged into `main` and live (PR #4; a crawler fetching the page without JavaScript gets the content). The next task is the search and AI files, decided already:
-- JSON-LD `Person` from `portfolio.js`: name, url, jobTitle (`profile.roles`), description (`profile.headline`), email, address (Pathum Thani, TH), sameAs (GitHub, LinkedIn), alumniOf Generation Thailand, knowsAbout = the technical skills only (no soft skills). No telephone.
-- `robots.txt` with a `Sitemap:` line and `sitemap.xml`, both built from `VITE_SITE_URL` and left out while it is empty.
-- A short `llms.txt` with facts already on the page, without the phone number.
+The site is live on Vercel at https://portfolio-withawat.vercel.app/. `VITE_SITE_URL` is set there, so the live page has the canonical, `og:url` and absolute share-image tags. P1 is merged into `main` (PR #4); a crawler fetching the page without JavaScript gets the content.
 
-Still open from R7: deploy, then set `VITE_SITE_URL` and rebuild (see Needs from owner).
+## Next tasks
+
+Two features, planned with the owner on 2026-11-06. Two branches and two PRs from `main`, dark theme first (it needs no new copy, so it goes ahead while the owner reviews the Thai copy).
+
+### D1: light and dark theme (branch `dark-theme`)
+
+- **Process:** mockup first, `docs/mockup/dark-theme.html`, built on `hero-featured.html`: Hero and Featured at 390 and 1440, light next to dark, then a strip of every depth object (Skills tray and knob switch, timeline rail and LED, both nav capsules, icon keys, Contact keys, footer contour). The owner approves it, then `design.md` changes, then code.
+- **Reference:** `docs/reference/dark-theme/` (in `.gitignore`: other designers' work, and the repo is public). One image is enough: an otakoyi neumorphism freebie (ground `#292D32`, 18px offset, 20px blur).
+- **Ground `#2B2B2B`**, neutral like the light theme (the reference's blue-grey was not chosen). The shadows need careful tuning to look right.
+- **Text** keeps the design.md contrast targets on the dark ground (ink about 11:1, body and muted above 5:1), no pure white (ink about `#E6E6E6`).
+- **Accent** starts as `#651C32` in the same five places. If the primary key or the nav ball sinks into the ground, the mockup compares a lighter shade.
+- **Contours:** the same three files; CSS changes only the fill and the shadow and light colours. Paths untouched.
+- **Unchanged in dark:** `og-image.png`, the favicon, the gallery screenshots, the CV. `theme-color` follows the theme.
+- **First visit** follows `prefers-color-scheme`; a manual choice is remembered on the device. An inline script in `index.html` sets the theme before the first paint (the prerendered HTML must not flash light).
+- **Switching** cross-fades 0.4s with the View Transitions API; instant where unsupported or with reduced motion.
+- **The theme switch** is adapted from uiverse "bright-dolphin-91" (Yaya12085, MIT): inset track from tokens; the knob keeps its gradient (light in light, dark in dark), a design.md exception like the LED ping; tokens only; sized to the row it sits in. Left = light, right = dark; faint ☀ and ☾ at the track ends. A real `<button role="switch" aria-checked>` with the keys' focus ring (the original hid its checkbox). The hover tilt only with `hover: hover` and without reduced motion.
+- **Placement:** the Hero's top row at both widths, and the desktop capsule. The phone bottom nav keeps its 5 icons.
+
+### L1: Thai and English (branch from `main` after D1)
+
+- **URLs:** `/` English (primary: meta, share image, CV are English), `/th/` Thai, both prerendered. No redirect by browser language. Switching loads the other page at the top.
+- **Language switch:** a text key showing the language it goes to ("ไทย" on `/`, "EN" on `/th/`), a link (`hreflang`), next to the theme switch.
+- **Copy:** Claude drafts the Thai, the owner reviews every line; nothing unreviewed is merged. Review: an English/Thai table in the PR and the real page on the Vercel preview at 390 and 1440 (Thai has no spaces, so it wraps differently).
+- **Not translated:** technology, company and project names, email, links, the CV (a Thai CV may come later).
+- **Name:** the `/th/` Hero shows **วิทวัส ภิระบรรณ์** in Mitr ExtraLight 200. Everywhere else (title, footer, meta, share image) the English name stays.
+- **Fonts:** Thai glyphs in Anuphan, Latin words inside Thai text stay Manrope (`"Manrope", "Anuphan"`, Manrope limited to Latin), checked on a font comparison page first. Large numerals stay Michroma. Self-hosted files, no npm dependency.
+- **Dates:** Thai month names, Gregorian years ("กรกฎาคม 2026 – ตุลาคม 2026", "2019 – 2026").
+- **Data:** `src/data/portfolio.th.js`, the same shape and order as `portfolio.js`; values that do not change (email, links, CV) come from `portfolio.js`. Strings hard-coded in components today ("Built with React and Tailwind CSS", "2019 – 2026", the nav `aria-label`s) move into the data files, with the English wording unchanged.
+- **Meta on `/th/`:** Thai title and description (drafted, owner-reviewed), `og:locale` `th_TH`, canonical to itself, the same share image. `hreflang` alternates on both pages, built from `VITE_SITE_URL` like the canonical.
 
 ## P1 decisions (prerender)
 
@@ -149,7 +176,6 @@ Five test rounds with the owner on a desktop and a real iPhone. design.md sectio
 
 ## Needs from owner
 
-- Set `VITE_SITE_URL` after the first deploy, so the canonical, `og:url` and share-image tags are built.
 - Screenshots for the gallery if they change; bug screenshots if any.
 
 ## Optional (not scheduled)
@@ -158,7 +184,7 @@ Five test rounds with the owner on a desktop and a real iPhone. design.md sectio
 
 ## Working routine
 
-1. Commit first, then work on `redesign-v2`.
+1. Commit first, then work on the phase's own branch from `main` (`redesign-v2` is merged and finished).
 2. Plan Mode for anything touching more than about 3 files.
 3. Verify at 360, 390, 768, 1024, 1440; report page height at 390; answer design.md section 11.
 4. Commit, update this file, `/clear`, next phase.
