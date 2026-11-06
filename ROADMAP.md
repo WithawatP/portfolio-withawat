@@ -22,7 +22,7 @@ The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
-| D1 | Light and dark theme (see Next tasks) | Mockup `docs/mockup/dark-theme.html` waiting for the owner's review |
+| D1 | Light and dark theme (see Next tasks) | Built on `dark-theme`, not merged yet: waiting for the owner's test (Vercel preview, real iPhone) |
 | L1 | Thai and English, `/` and `/th/` (see Next tasks) | Planned, after D1 |
 
 ## Deployed
@@ -46,6 +46,15 @@ Two features, planned with the owner on 2026-11-06. Two branches and two PRs fro
 - **Switching** cross-fades 0.4s with the View Transitions API; instant where unsupported or with reduced motion.
 - **The theme switch** is adapted from uiverse "bright-dolphin-91" (Yaya12085, MIT): inset track from tokens; the knob keeps its gradient (light in light, dark in dark), a design.md exception like the LED ping; tokens only; sized to the row it sits in. Left = light, right = dark; ☀ and ☾ icons at the track ends, faint, except the sun in the dark theme: white with a soft glow (owner, after the mockup). A real `<button role="switch" aria-checked>` with the keys' focus ring (the original hid its checkbox). The hover tilt only with `hover: hover` and without reduced motion.
 - **Placement:** the Hero's top row at both widths, and the desktop capsule. The phone bottom nav keeps its 5 icons.
+
+**D1 as built** (design.md sections 2, 3, 6.7, 6.8, 7, 10 and 11 hold the rules):
+- The mockup was approved with the owner's two changes: accent `#8C2A47` in dark, and the sun lit white with a soft glow in dark. The mockup is the real page captured from the dev server with the dark tokens laid over it, not a redrawn page.
+- `src/index.css`: the dark tokens under `html[data-theme='dark']`, the switch and contour tokens in both themes, the switch's CSS (`.theme-switch`), the 0.4s view transition, and `html:not([data-theme]) .theme-switch { display: none }` for no-JS. `--color-recessed` (only the text selection) is `#424242` in dark so a selection shows.
+- `index.html`: the existing inline script sets `data-theme` (stored choice, else the system) and `theme-color` before the first paint; the `theme-color` meta moved above it.
+- `src/lib/theme.js`: `useTheme` (server value 'light', like `useMediaQuery`), `setTheme` (stores, cross-fades or changes at once), one system listener that applies only while nothing is stored.
+- `src/components/ui/ThemeSwitch.jsx` in `Header.jsx` and `DesktopNav.jsx`; sun and moon added to `Icon.jsx`.
+- `src/lib/contourTheme.js`: the three contour components give the files' fill and `feFlood` colours tokens as inline styles. The files are untouched; `ContourExperience`'s 0.4/0.65 opacity replacements became the light tokens.
+- Measured on the production build: overflow 0 at 360/390/768/1024/1440 in both themes; page height at 390 is 3950px (unchanged); no console errors or hydration warnings; the click sets the theme, `aria-checked`, storage and `theme-color`, and a reload keeps it; reduced motion changes at once; a stored choice ignores system changes, and without one the page follows them; without JS the page is light and the switch hidden; Tab reaches the switch with the accent focus ring. Lint and build pass.
 
 ### L1: Thai and English (branch from `main` after D1)
 

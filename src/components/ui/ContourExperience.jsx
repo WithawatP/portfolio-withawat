@@ -1,18 +1,18 @@
 import { useEffect, useRef } from 'react'
 import contourSvg from '../../assets/contour-experience.svg?raw'
+import { themeContour } from '../../lib/contourTheme'
 
-const art = contourSvg.replace(/<metadata>.*?<\/metadata>/s, '')
+const art = themeContour(contourSvg.replace(/<metadata>.*?<\/metadata>/s, ''), 'experience')
 const svgOpen = art.match(/<svg[^>]*>/)[0]
 // The file's filter (offset 7, blur 7, shadow 0.8, light 0.85) reads about twice as heavy on this site
 // as the footer waves (edges 18-22 levels under the ground, against the footer's 11). These values
-// match the footer at 1440 and 1920 (measured on screenshots); the paths are untouched.
+// match the footer at 1440 and 1920 (measured on screenshots); the paths are untouched. The shadow and
+// light opacities (0.4 and 0.65 in light) are tokens now: --contour-experience-* in index.css.
 const filter = art
   .match(/<filter[\s\S]*?<\/filter>/)[0]
   .replace('dx="7" dy="7"', 'dx="6" dy="6"')
   .replace('dx="-5.6" dy="-5.6"', 'dx="-4.8" dy="-4.8"')
   .replaceAll('stdDeviation="7"', 'stdDeviation="5"')
-  .replace('flood-opacity="0.8"', 'flood-opacity="0.4"')
-  .replace('flood-opacity="0.85"', 'flood-opacity="0.65"')
 
 // One <svg> per band from the untouched asset, each with its own copy of the filter under its own id,
 // so each band is its own layer: moving it never re-filters it.

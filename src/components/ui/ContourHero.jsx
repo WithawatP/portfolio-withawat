@@ -1,6 +1,7 @@
 import contourSvg from '../../assets/contour-hero.svg?raw'
+import { themeContour } from '../../lib/contourTheme'
 
-const art = contourSvg.replace(/<metadata>.*?<\/metadata>/s, '')
+const art = themeContour(contourSvg.replace(/<metadata>.*?<\/metadata>/s, ''), 'hero')
 const svgOpen = art.match(/<svg[^>]*>/)[0]
 const defs = art.match(/<defs>.*?<\/defs>/s)[0]
 

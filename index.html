@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Above the script, which sets it to the theme's ground. -->
+    <meta name="theme-color" content="#DADADA" />
     <!-- The page arrives prerendered (scripts/prerender.mjs). Scrolling waits until React has hydrated, so
          the desktop layout and the Experience pin can never move the page under a reader who scrolled early
          (html.js-pending, src/index.css). Only browsers that run this script get the class: without
@@ -10,10 +12,19 @@
          page unscrollable.
          The page always opens at the top, as before prerendering: scroll restoration is manual, and a #hash
          is taken off the URL until the release, so the browser does not jump to a section whose place the
-         pin is about to change. -->
+         pin is about to change.
+         The theme (design.md 2) is set here too, before the first paint, so the page never flashes the
+         other theme: the reader's stored choice, else the system's. Without JavaScript the page stays light
+         and the theme switch is hidden. src/lib/theme.js takes over after this and shares the key. -->
     <script>
       (function () {
         var root = document.documentElement;
+        var theme = null;
+        try { theme = localStorage.getItem('theme'); } catch (e) {}
+        if (theme !== 'dark' && theme !== 'light') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        root.setAttribute('data-theme', theme);
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#2B2B2B' : '#DADADA');
+
         var hash = location.hash;
         var release = function () {
           if (!root.classList.contains('js-pending')) return;
@@ -39,7 +50,6 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#DADADA" />
     <title>Withawat Phiraban — Software Developer & QA</title>
     <meta
       name="description"
