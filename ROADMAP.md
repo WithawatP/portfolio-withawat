@@ -22,15 +22,21 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
+| C1 | Crawler metadata: JSON-LD `Person` in the head, `robots.txt`, `sitemap.xml`, `llms.txt`, all generated at build time from `portfolio.js` and `VITE_SITE_URL` | Done on branch `crawler-meta` (Vercel preview, not merged) |
 
-## Next task: search and AI files
+## Next task: owner review of the `crawler-meta` preview
 
-P1 is merged into `main` and live (PR #4; a crawler fetching the page without JavaScript gets the content). The next task is the search and AI files, decided already:
-- JSON-LD `Person` from `portfolio.js`: name, url, jobTitle (`profile.roles`), description (`profile.headline`), email, address (Pathum Thani, TH), sameAs (GitHub, LinkedIn), alumniOf Generation Thailand, knowsAbout = the technical skills only (no soft skills). No telephone.
-- `robots.txt` with a `Sitemap:` line and `sitemap.xml`, both built from `VITE_SITE_URL` and left out while it is empty.
-- A short `llms.txt` with facts already on the page, without the phone number.
+C1 is on the `crawler-meta` branch, pushed for a Vercel preview; it is not merged. P1 is merged into `main` and live (PR #4); the site is deployed with `VITE_SITE_URL` set (the live page has its canonical tag).
 
-Still open from R7: deploy, then set `VITE_SITE_URL` and rebuild (see Needs from owner).
+## C1 decisions (crawler metadata)
+
+- **One plugin, static output only.** `site-meta` in `vite.config.js` (it replaces `site-url-tags`) imports `src/data/portfolio.js` and writes everything at build time: the head tags and the JSON-LD into `index.html` (`<!--site-url-tags-->`), and `robots.txt`, `sitemap.xml` and `llms.txt` into `dist/`. Nothing is injected by the app's JavaScript. It skips the prerender's server build. `public/robots.txt` is gone (the generated one replaces it).
+- **Absolute URLs follow the canonical rule:** with `VITE_SITE_URL` empty or not a public http(s) address, the JSON-LD has no `url`, `robots.txt` has no `Sitemap:` line, `sitemap.xml` is not written and `llms.txt` has no CV link; the build passes, and warns for a non-public address.
+- **JSON-LD `Person`** (owner's decisions): name, url, jobTitle (`profile.roles`), description (`profile.headline`), email (`mailto:`), address (Pathum Thani, TH), alumniOf `EducationalOrganization` Generation Thailand, sameAs (GitHub, LinkedIn), knowsAbout = every skill group except the soft skills. **No telephone.** Every property was checked against the schema.org vocabulary: no issues. Google shows no rich result for `Person` on its own; a `ProfilePage` wrapper would be the step for that (optional).
+- **`robots.txt`** allows every crawler, AI crawlers included (owner: recruiters' AI tools should read the site), plus the `Sitemap:` line.
+- **`sitemap.xml`:** the one page, `lastmod` = build date.
+- **`llms.txt`** (llmstxt.org): the approved draft, built from `portfolio.js` (headline, status, the featured project with its facts, testing line, bugs and links, the five roles, the four skill groups, contact), only text the page shows, **no phone**. The CV link is written only when `public/withawat-phiraban-cv.pdf` exists (it does). UTF-8; Vercel serves `.txt` as `text/plain; charset=utf-8`.
+- Verified: the phone number appears nowhere in the generated output (JSON-LD, head, the three files); the page body is byte-identical to the P1 build; the hydration check (production and development React, negative control) and the 207-value regression show 0 differences.
 
 ## P1 decisions (prerender)
 
@@ -149,7 +155,6 @@ Five test rounds with the owner on a desktop and a real iPhone. design.md sectio
 
 ## Needs from owner
 
-- Set `VITE_SITE_URL` after the first deploy, so the canonical, `og:url` and share-image tags are built.
 - Screenshots for the gallery if they change; bug screenshots if any.
 
 ## Optional (not scheduled)
