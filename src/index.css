@@ -392,6 +392,12 @@
   }
 }
 
+/* Until React has hydrated the prerendered page, the reader cannot scroll (index.html adds the class only
+   when JavaScript runs; App.jsx releases it). Lenis is stopped for the same time (smoothScroll.js). */
+html.js-pending {
+  overflow: hidden;
+}
+
 /* Lenis moves the page itself on every frame; native smooth scrolling would fight it. */
 html.lenis {
   scroll-behavior: auto;

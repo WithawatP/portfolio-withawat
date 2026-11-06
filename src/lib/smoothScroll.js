@@ -47,11 +47,28 @@ export function whenScrollSettles(fn) {
   else fn()
 }
 
+// index.html holds scrolling (html.js-pending) until React has hydrated. Lenis scrolls by script, which
+// overflow: hidden does not stop, so it stays stopped until the class goes.
+const scrollHeld = () => document.documentElement.classList.contains('js-pending')
+
+function startWhenReleased() {
+  const observer = new MutationObserver(() => {
+    if (scrollHeld()) return
+    observer.disconnect()
+    lenis?.start()
+  })
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+}
+
 export function initSmoothScroll() {
   const query = window.matchMedia(SMOOTH_QUERY)
   const apply = () => {
     if (query.matches && !lenis) {
       lenis = new Lenis({ autoRaf: true })
+      if (scrollHeld()) {
+        lenis.stop()
+        startWhenReleased()
+      }
     } else if (!query.matches && lenis) {
       lenis.destroy()
       lenis = null

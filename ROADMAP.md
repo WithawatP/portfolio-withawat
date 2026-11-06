@@ -21,10 +21,40 @@ Work on the `redesign-v2` branch. The v2 phases (1 to 7) are finished and live i
 | R5 | Contact, footer, floating bottom nav, sticky desktop nav, end band | Done |
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
+| P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done on branch `prerender` (Vercel preview, not merged) |
 
-## Next task: deploy
+## Next task: owner review of the `prerender` preview, then search and AI files
 
-R7 is done; the redesign is ready to ship. Next: deploy, then set `VITE_SITE_URL` and rebuild (see Needs from owner).
+P1 is on the `prerender` branch, pushed for a Vercel preview; it is not merged into `redesign-v2` or `main`. After the owner has tested the preview (a real iPhone included, see Needs from owner), the next task is the search and AI files, decided already:
+- JSON-LD `Person` from `portfolio.js`: name, url, jobTitle (`profile.roles`), description (`profile.headline`), email, address (Pathum Thani, TH), sameAs (GitHub, LinkedIn), alumniOf Generation Thailand, knowsAbout = the technical skills only (no soft skills). No telephone.
+- `robots.txt` with a `Sitemap:` line and `sitemap.xml`, both built from `VITE_SITE_URL` and left out while it is empty.
+- A short `llms.txt` with facts already on the page, without the phone number.
+
+Still open from R7: deploy, then set `VITE_SITE_URL` and rebuild (see Needs from owner).
+
+## P1 decisions (prerender)
+
+- **Own script, no dependency.** `npm run build` = client build, then `vite build --ssr src/entry-server.jsx --outDir dist-ssr`, then `scripts/prerender.mjs`, which renders `<App/>` with `renderToString` into `<!--app-html-->` in `dist/index.html` and deletes `dist-ssr` (also on failure; it is in `.gitignore`). `main.jsx` hydrates when `#root` has HTML in it and renders from scratch on the dev server. `vite-react-ssg` and headless snapshots were rejected (same app fixes needed, plus a dependency; snapshots capture post-script state).
+- **The server HTML is the phone layout.** `useMediaQuery` is a `useSyncExternalStore` whose server value is `false`; while hydrating React uses that value and then re-renders with the real one, so the markup always matches. `useHydrated()` (same file) is false in the HTML and while hydrating: the navs render only after it (`BottomNav` portals into `<body>`), so neither is in the HTML. On phones the bottom nav appears at hydration, slightly after the content (fixed, no layout shift; owner accepted).
+- **Scroll hold until hydration** (owner's choice of three options; the others were hiding `#root` until hydration, which gives up the earlier paint, and making the desktop layout CSS-driven plus compensating in the motion code). Measured without it: a reader who scrolled before hydration was snapped back to the top (`main.jsx` reset), and without that reset the Experience pin and the desktop layout moved the page under them (CLS 0.38-0.59 at 1440). Now an inline script in `index.html` adds `html.js-pending` (`overflow: hidden`, `src/index.css`) only when JavaScript runs, so no-JS browsers scroll as usual. Released by `App.jsx` after hydration (`window.__releaseScroll`), at `load` if the app never started (`window.__appStarted`), and after 4s in any case. Lenis starts stopped while the class is there (it scrolls by script, which `overflow: hidden` does not stop).
+- **The page still opens at the top, as before.** The inline script sets manual scroll restoration and takes a `#hash` off the URL until the release (then puts it back with `replaceState`, unless the reader followed another anchor meanwhile). Without that, a new tab on `/#skills` jumped to the section before hydration and the pin then pushed the reader into Experience. The `window.scrollTo(0, 0)` at startup in `main.jsx` is gone: it is no longer needed and it undid a Tab focus scroll made before hydration. Reload, back/forward and new-tab hash loads were measured against the previous build: identical.
+- **Count-up numerals:** the HTML and the first render show the real value (14, 13), so no-JS readers never see "0" and hydration matches; right after hydration a numeral that is off screen or not displayed drops to 0 and counts up as before. The box width is unchanged.
+- React 19 adds `<link rel="preload" as="image">` for the three gallery images at the start of `#root`. Removing them made no measurable difference, so they stay.
+- **Font swap on slow networks:** text now paints before the fonts arrive, so on a throttled desktop load the hero copy grows 28px when Manrope swaps in (CLS 0.009; 0.005 with reduced motion; 0 at 390 and on normal connections). The old build hid this by painting nothing until the JavaScript ran. Not fixed (fonts were matched pixel for pixel in R7); a metric-matched fallback `@font-face` (`size-adjust`) would remove it if the owner wants.
+- Lighthouse 13.6, production build served with gzip like Vercel, median of 3 (performance / accessibility / best practices / SEO):
+
+  | | R7 build | P1 build |
+  |---|---|---|
+  | Mobile scores | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+  | Mobile FCP = LCP (simulated) | 754 ms | 907 ms |
+  | Mobile TBT | 44 ms | 15 ms |
+  | Desktop scores | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+  | Desktop FCP = LCP | 203 ms | 243 ms |
+  | CLS (mobile and desktop) | 0 | 0 |
+  | HTML transfer (gzip) | 0.8 kB | 19.5 kB |
+
+  The simulated FCP is about 150ms higher, mostly from the hero contour SVG now in the HTML; the simulation leaves out the JavaScript the R7 build needed before anything could paint. In a real browser on a throttled connection (1.6 Mbps, 150ms latency, 4x CPU) the content shows sooner: FCP 1740ms before, about 1100ms now, at 390 and 1440.
+- Measured, all at 390 and 1440 with and without reduced motion: no hydration warnings or errors in production or development React (React keeps every server node; a deliberate mismatch is reported, so the check works); the behaviour regression (nav landing and lock, pin and click mode, phone accordion, Skills switch and counts, count-up, Featured entrance, contours, overflow at 360-1920) shows 0 differences in 207 recorded values against the R7 build; a clean clone builds with `npm ci && npm run build` without a `.env`.
 
 R7 summary:
 - Removed after proving they have no users: `UiverseButton`, the styled-components dependency, `SkillChip`, `SectionCard`, `InsetPanel`, `QuickContactRow`, `Pill`, `SectionHeading`, `src/lib/styles.js` (`LEVEL_*`), the 13 `neu-*` utilities and their tokens (`--lx`, `--ly`, `--depth-scale`, `--color-shadow`, `--color-highlight`), `--color-surface`, the `.extrude` CSS, the `?parallax-debug` mode, `public/icons.svg`, and unused images in `src/assets` (`hero.png`, `neumorphism*.png`, `react.svg`, `vite.svg`, the four `atelier-*.jpg` originals and `reference ui components style.jpg`; the owner kept copies).
@@ -119,6 +149,8 @@ Five test rounds with the owner on a desktop and a real iPhone. design.md sectio
 ## Needs from owner
 
 - Set `VITE_SITE_URL` after the first deploy, so the canonical, `og:url` and share-image tags are built.
+- Test the `prerender` preview on a real iPhone: the page must not scroll for the moment before hydration and must scroll normally after it (iOS Safari is the browser where `overflow: hidden` on `<html>` has been unreliable in the past; Chrome was tested here).
+- Decide whether to fix the slow-network font swap (P1 decisions).
 - Screenshots for the gallery if they change; bug screenshots if any.
 
 ## Working routine

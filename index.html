@@ -2,6 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- The page arrives prerendered (scripts/prerender.mjs). Scrolling waits until React has hydrated, so
+         the desktop layout and the Experience pin can never move the page under a reader who scrolled early
+         (html.js-pending, src/index.css). Only browsers that run this script get the class: without
+         JavaScript the page scrolls as usual. App.jsx releases it after hydration; this script releases it
+         at load if the app never started, and after 4s in any case, so a failed script can never leave the
+         page unscrollable.
+         The page always opens at the top, as before prerendering: scroll restoration is manual, and a #hash
+         is taken off the URL until the release, so the browser does not jump to a section whose place the
+         pin is about to change. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var hash = location.hash;
+        var release = function () {
+          if (!root.classList.contains('js-pending')) return;
+          root.classList.remove('js-pending');
+          // Back into the address bar, unless the reader has followed a link to another section meanwhile.
+          if (hash && !location.hash) history.replaceState(history.state, '', location.pathname + location.search + hash);
+        };
+        window.__releaseScroll = release;
+        history.scrollRestoration = 'manual';
+        if (hash) history.replaceState(history.state, '', location.pathname + location.search);
+        root.classList.add('js-pending');
+        setTimeout(release, 4000);
+        addEventListener('load', function () { if (!window.__appStarted) release(); });
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -34,7 +61,8 @@
     <!--site-url-tags-->
   </head>
   <body>
-    <div id="root"></div>
+    <!-- The app's HTML goes here at build time (scripts/prerender.mjs); keep the comment on the same line. -->
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
