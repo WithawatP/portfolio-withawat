@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import FeaturedProject from './components/FeaturedProject'
@@ -8,15 +9,23 @@ import Footer from './components/Footer'
 import BottomNav from './components/BottomNav'
 import DesktopNav from './components/DesktopNav'
 import ContourFooter from './components/ui/ContourFooter'
-import { useMediaQuery } from './lib/useMediaQuery'
+import { useHydrated, useMediaQuery } from './lib/useMediaQuery'
 
 export default function App() {
   const isWide = useMediaQuery('(min-width: 900px)')
+  // The navs are browser-only (BottomNav portals into <body>), so they are not in the prerendered HTML.
+  const hydrated = useHydrated()
+
+  // Hydrated and in its final layout (the children's effects, the pin among them, have run): let the
+  // reader scroll, and put a #hash back in the address bar (the inline script in index.html).
+  useEffect(() => {
+    if (hydrated) window.__releaseScroll?.()
+  }, [hydrated])
 
   return (
     <div className="min-h-svh overflow-x-clip bg-ground">
       <Header />
-      {isWide ? <DesktopNav /> : <BottomNav />}
+      {hydrated && (isWide ? <DesktopNav /> : <BottomNav />)}
       <main>
         <Hero />
         <div className="mx-auto max-w-[1240px] px-4 pt-24 wide:px-12 wide:pt-40">

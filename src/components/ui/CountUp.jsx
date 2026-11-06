@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useMediaQuery } from '../../lib/useMediaQuery'
 
 // design.md 7: a large accent numeral counts up (0.8s, ease-out) when it first comes into view, when it
 // becomes active (the Test side), and from its old value to a new one. The final value, invisible, sets
@@ -6,15 +7,14 @@ import { useEffect, useRef, useState } from 'react'
 // Screen readers get the real value at all times. Reduced motion shows the real value at once.
 const DURATION_MS = 800
 const easeOutCubic = (t) => 1 - (1 - t) ** 3
-const prefersReduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
 export default function CountUp({ value, active = true, align = 'start' }) {
   const boxRef = useRef(null)
-  // Reduced motion is read once: it shows the real value and never counts.
-  const [reduced] = useState(prefersReduced)
-  // Until it has been seen, it waits at 0 (a numeral below the fold, or the hidden Test side).
-  const [shown, setShown] = useState(0)
-  const live = useRef({ shown: 0, seen: false, frame: 0, active, value })
+  // Reduced motion shows the real value and never counts. False in the prerendered HTML (useMediaQuery).
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  // The real value in the prerendered HTML and the first render, so the page reads right without
+  // JavaScript and hydration matches. The layout effect below then sets it to 0 if it still has to count.
+  const [shown, setShown] = useState(value)
+  const live = useRef({ shown: value, seen: false, frame: 0, active, value })
 
   const show = (next) => {
     live.current.shown = next
@@ -35,6 +35,16 @@ export default function CountUp({ value, active = true, align = 'start' }) {
   useEffect(() => {
     const state = live.current
     return () => cancelAnimationFrame(state.frame)
+  }, [])
+
+  // Once mounted (hydrated), before paint: a numeral off screen, or not displayed (the phone Skills tray),
+  // waits at 0 and counts up when it comes into view or becomes active. One already on screen keeps its
+  // value and counts as seen. With reduced motion the value shows either way (the render below).
+  useLayoutEffect(() => {
+    const box = boxRef.current.getBoundingClientRect()
+    const onScreen = box.width > 0 && box.bottom > 0 && box.top < window.innerHeight
+    if (onScreen) live.current.seen = true
+    else show(0)
   }, [])
 
   // (a) First time on screen, if active.
