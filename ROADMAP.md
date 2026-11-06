@@ -22,7 +22,7 @@ The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
-| D1 | Light and dark theme (see Next tasks) | Mockup in progress |
+| D1 | Light and dark theme (see Next tasks) | Mockup `docs/mockup/dark-theme.html` waiting for the owner's review |
 | L1 | Thai and English, `/` and `/th/` (see Next tasks) | Planned, after D1 |
 
 ## Deployed
@@ -39,12 +39,12 @@ Two features, planned with the owner on 2026-11-06. Two branches and two PRs fro
 - **Reference:** `docs/reference/dark-theme/` (in `.gitignore`: other designers' work, and the repo is public). One image is enough: an otakoyi neumorphism freebie (ground `#292D32`, 18px offset, 20px blur).
 - **Ground `#2B2B2B`**, neutral like the light theme (the reference's blue-grey was not chosen). The shadows need careful tuning to look right.
 - **Text** keeps the design.md contrast targets on the dark ground (ink about 11:1, body and muted above 5:1), no pure white (ink about `#E6E6E6`).
-- **Accent** starts as `#651C32` in the same five places. If the primary key or the nav ball sinks into the ground, the mockup compares a lighter shade.
+- **Accent in dark is `#8C2A47`** (owner, after the mockup), in the same five places. `#651C32` sank into the dark ground (1.2:1, the LEDs and gallery dot nearly vanished); `#8C2A47` is 1.7:1 and white on it 8.3:1. The light theme keeps `#651C32`.
 - **Contours:** the same three files; CSS changes only the fill and the shadow and light colours. Paths untouched.
 - **Unchanged in dark:** `og-image.png`, the favicon, the gallery screenshots, the CV. `theme-color` follows the theme.
 - **First visit** follows `prefers-color-scheme`; a manual choice is remembered on the device. An inline script in `index.html` sets the theme before the first paint (the prerendered HTML must not flash light).
 - **Switching** cross-fades 0.4s with the View Transitions API; instant where unsupported or with reduced motion.
-- **The theme switch** is adapted from uiverse "bright-dolphin-91" (Yaya12085, MIT): inset track from tokens; the knob keeps its gradient (light in light, dark in dark), a design.md exception like the LED ping; tokens only; sized to the row it sits in. Left = light, right = dark; faint ☀ and ☾ at the track ends. A real `<button role="switch" aria-checked>` with the keys' focus ring (the original hid its checkbox). The hover tilt only with `hover: hover` and without reduced motion.
+- **The theme switch** is adapted from uiverse "bright-dolphin-91" (Yaya12085, MIT): inset track from tokens; the knob keeps its gradient (light in light, dark in dark), a design.md exception like the LED ping; tokens only; sized to the row it sits in. Left = light, right = dark; ☀ and ☾ icons at the track ends, faint, except the sun in the dark theme: white with a soft glow (owner, after the mockup). A real `<button role="switch" aria-checked>` with the keys' focus ring (the original hid its checkbox). The hover tilt only with `hover: hover` and without reduced motion.
 - **Placement:** the Hero's top row at both widths, and the desktop capsule. The phone bottom nav keeps its 5 icons.
 
 ### L1: Thai and English (branch from `main` after D1)
