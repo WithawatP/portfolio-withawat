@@ -22,8 +22,8 @@ The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
-| D1 | Light and dark theme (see Next tasks) | Built on `dark-theme`, not merged yet: waiting for the owner's test (Vercel preview, real iPhone) |
-| L1 | Thai and English, `/` and `/th/` (see Next tasks) | Built on `bilingual` (from `dark-theme`), not merged yet: the owner is reviewing the Thai copy; rebase onto `main` after D1 merges |
+| D1 | Light and dark theme (see Next tasks) | Done, merged into `main` (PR #6, `aa7de3d`) |
+| L1 | Thai and English, `/` and `/th/` (see Next tasks) | Built on `bilingual` (`main` merged in, with D1 and C1), not merged yet: the owner is reviewing the Thai copy (PR table) |
 
 ## Deployed
 
@@ -80,6 +80,7 @@ Two features, planned with the owner on 2026-11-06. Two branches and two PRs fro
 - `src/components/ui/LanguageLink.jsx` in `Header.jsx` and `DesktopNav.jsx`, before the theme switch.
 - `public/fonts`: `anuphan-thai-variable.woff2` (19 kB), `anuphan-latin-variable.woff2` (35 kB), `mitr-thai-300.woff2` (14 kB); `mitr-thai-200.woff2` from step 1 is deleted. The Anuphan files are Google's full variable files, so 700 (the language link) needs no extra file; `@font-face` declares 400–700. `/` downloads only the Anuphan Thai subset (for "ไทย").
 - Measured on the production build with `VITE_SITE_URL` set: overflow 0 at 360/390/768/1024/1440 for both languages in both themes; page height at 390 is 3950px on `/` (unchanged) and 3869px on `/th/` (the name on one line, 42.4px); no console errors or hydration warnings on either page; without JS `/th/` is Thai (lang, title, h1, h2s); the language link loads the other page; the 360px top row fits (the link is 44px wide). Lint and build pass.
+- After merging `main` (C1, crawler metadata): `sitemap.xml` (vite.config.js) lists `/` and `/th/`, each with the en / th / x-default alternates, the same set as the pages' `hreflang` links. The JSON-LD Person and `llms.txt` stay English on both pages (`/` is the primary page). Rechecked after the merge: lint, build, overflow, heights, no hydration warnings.
 - Still to check on the Vercel preview: `/th` without the slash (`vite preview` serves the English page there, and `main.jsx` then hydrates it as English, so nothing breaks; Vercel should serve `th/index.html`).
 
 ## P1 decisions (prerender)
