@@ -143,6 +143,15 @@ Nowhere else: not on links, headings, borders, icons or hover states.
 
 Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 
+### Thai page (`/th/`)
+Approved in `docs/mockup/thai-fonts.html` (ROADMAP L1).
+
+- **Anuphan** 400–600 for all text (700 only for the language link, section 6.9), Latin words inside Thai sentences included (one family, so the strokes match). Michroma stays for the WP mark and the large numerals; Manrope is not used on `/th/`.
+- **Name:** **วิทวัส ภิระบรรณ์** in **Mitr 300** (owner, over ExtraLight 200), on **one line** (owner: first and last name together), never wrapping, line-height 1.2 (1.06 would let the vowels above touch the line above), no tracking. Below 900px it is **42.4px**, so it ends where the role line under it ends (owner; measured, both are fixed sizes there; it fits at 360px). At >= 900px it takes the English name's `clamp(34px, 4.6vw, 64px)`. Only in the `/th/` Hero; the title, footer, meta and share image keep the English name.
+- **Headings** keep line-height 1.1.
+- **Labels in capitals** (eyebrows, nav links, small labels): Thai has no capitals and wide letter spacing breaks a Thai word into loose letters, so on `/th/` they are 12px with 0.04em. In code they are tokens (`text-eyebrow`, `tracking-caps`, `tracking-caps-sm`, `tracking-caps-xs`) that `html:lang(th)` redefines.
+- The fonts are Google Fonts' own subsets, self-hosted in `public/fonts`: Anuphan Thai and Latin, Mitr Thai 300. A browser downloads a face only for the characters it shows, so `/` loads just the Anuphan Thai subset, for its "ไทย" link. `/th/` preloads its own fonts instead of Manrope.
+
 ## 5. Layout (mobile first)
 
 - Design at **390px** first. One breakpoint: **900px**.
@@ -151,14 +160,14 @@ Text is never smaller than 12px, except uppercase eyebrow labels at 11px.
 - No horizontal overflow at 360, 390, 768, 1024, 1440.
 
 ### Hero
-- **Mobile:** nav row (WP mark left, "Open to work" pill and the theme switch right, 12px apart), then the contour band (full bleed, 230px tall), then name, role, one-line claim, then two keys side by side (2-column grid). The text block starts directly below the band, with no margin and no overlap.
+- **Mobile:** nav row (WP mark left, "Open to work" pill, the language link (section 6.9) and the theme switch right, 12px apart), then the contour band (full bleed, 230px tall), then name, role, one-line claim, then two keys side by side (2-column grid). The text block starts directly below the band, with no margin and no overlap.
 - **>= 900px:** min-height 760px. The contour sits absolutely on the right 52% of the hero, full hero height, touching the right edge of the screen. Text column on the left, max 540px, above the contour (z-index). The status pill moves into the text column; the nav shows spaced uppercase links.
 - The name must never overlap the contour. If it would, shrink the name with the clamp; never move the contour over it. One exception, by the owner's decision: below 900px, while the page scrolls, the text moving up (section 7) may pass over the faded lower part of the contour band.
 
 ### Navigation
-- Desktop, in the Hero: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em, then the theme switch (section 6.8), 40px after the last link.
+- Desktop, in the Hero: spaced uppercase links (Project, Experience, Skills, Contact), 12px, 600, tracking 0.22em, then the language link (section 6.9) and the theme switch (section 6.8), 12px apart, 40px after the last link.
 - Desktop, past the Hero: a sticky raised capsule, approved in `docs/mockup/contact-desktop.html`.
-  - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 56px tall, centred, 20px from the top of the screen. WP (Michroma 12px), then Project, Experience, Skills, Contact (12px, 600, uppercase, tracking 0.2em), then the theme switch (section 6.8). The phone's bottom nav has no switch: it keeps its five icons.
+  - **Capsule:** `--ground`, `--sh-capsule`, radius 999px, 56px tall, centred, 20px from the top of the screen. WP (Michroma 12px), then Project, Experience, Skills, Contact (12px, 600, uppercase, tracking 0.2em), then the language link (section 6.9) and the theme switch (section 6.8), 12px apart. The phone's bottom nav has neither: it keeps its five icons.
   - **Active link:** a 7px LED in `--accent` with `--led-glow` and `--ink` text. The others have a 7px `--faint` dot and `--switch-off` text. The active link has `aria-current`.
   - **Appearing:** once the Hero has left the screen, it fades in and moves down 8px over 0.3s. While hidden it cannot be reached with Tab. With reduced motion it appears at once.
   - **Logic:** the same scroll-spy and navigation lock as the mobile nav. `scroll-padding-top` is 124px at >= 900px, 48px below the capsule, which ends 76px down.
@@ -233,7 +242,15 @@ Adapted from "bright-dolphin-91" by Yaya12085 on uiverse.io (MIT). Put a credit 
 - **Track:** 64x32px, radius 999px, `--ground`, `--sh-toggle` (a soft inset rim and a faint drop shadow, after the original).
 - **Knob:** 22px, 5px from the edge, `--toggle-knob` with `--sh-toggle-knob`. Left in the light theme, right in the dark (`translateX(32px)`, 0.4s). The knob keeps the original's gradient: a lit metal ball in light, a dark one in dark. It is the one gradient on the page apart from the masks (section 10).
 - **Icons:** sun (left) and moon (right), 12px, from `Icon.jsx`, in `--faint`; the knob covers the one of the theme that is on. In the dark theme the sun is lit: white with a soft glow (`--toggle-sun`, `--toggle-sun-glow`), by the owner's decision.
-- **Element:** a `<button role="switch">`, `aria-checked` true in dark, `aria-label` "Dark theme", and the keys' focus ring (section 6.1). The knob's place comes from `html[data-theme]` in CSS, not from React, so the prerendered page shows the right side before it hydrates.
+- **Element:** a `<button role="switch">`, `aria-checked` true in dark, `aria-label` "Dark theme" ("ธีมมืด" on `/th/`), and the keys' focus ring (section 6.1). The knob's place comes from `html[data-theme]` in CSS, not from React, so the prerendered page shows the right side before it hydrates.
+
+### 6.9 Language link
+Approved in `docs/mockup/thai-fonts.html` section D (ROADMAP L1). The owner chose text only over a small key.
+
+- **What:** a link to the same page in the other language, labelled in that language: "ไทย" on `/` (to `/th/`), "EN" on `/th/` (to `/`). `lang` and `hreflang` set to the target language; `aria-label` "ภาษาไทย" / "English" (it contains the visible label). It loads the other page at the top. No redirect by browser language, and the choice is not stored.
+- **Where:** just before the theme switch, 12px from it, in the Hero's top row at both widths and in the desktop capsule. Not in the phone's bottom nav.
+- **Look:** no surface, no shadow box and no white rim (owner): 15px, 700, 0.04em, `--muted`, flat at rest. Tap area 32px tall (the switch's height) and at least 44px wide. "ไทย" is set in Anuphan on `/` too.
+- **States:** hover (with `hover: hover` only) darkens the text to `--ink`, 0.15s. Pressed (`:active`) sinks it: `--label`, `--lang-press` (a 1px dark edge at the top left, so the letters look carved in; no light edge) and 1px down, 0.1s. Focus: the keys' focus ring.
 
 ## 7. Motion
 
@@ -307,6 +324,7 @@ The theme switch's knob gradient and its lit white sun in the dark theme (sectio
 8. With reduced motion on, does nothing move?
 9. `npm run lint` and `npm run build` pass.
 10. Checked in both themes: every question above, the contrast in section 2, and no flash of the other theme on load.
+11. Checked on both `/` and `/th/`: every question above, Thai lines wrapping cleanly at 360 and 390, and no hydration warning on either page.
 
 Waived findings from the skill's inspector: `shadow` (neumorphism needs shadows), `button-fx` (the Key's inset press is the design), `few-pictures`, `font-fallback`, `eyebrow`, `micro-label`, `body-size` (the 11–12px labels and 15–17px body in section 4 are deliberate; `body-size` also counts section 4's 13–14px secondary lines as body), `small-text` (the only text under 12px is the uppercase 11px eyebrow labels that section 4 allows; all other text must be 12px or larger).
 Dev test pages under `dev/` are not inspected for content findings.
