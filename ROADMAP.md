@@ -22,18 +22,18 @@ The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
-| D1 | Light and dark theme (see Next tasks) | Done, merged into `main` (PR #6, `aa7de3d`) |
-| L1 | Thai and English, `/` and `/th/` (see Next tasks) | Built on `bilingual` (`main` merged in, with D1 and C1), not merged yet: PR #7; the owner's first review of the Thai copy is applied |
+| D1 | Light and dark theme (see D1 and L1) | Done, merged into `main` (PR #6, `aa7de3d`) |
+| L1 | Thai and English, `/` and `/th/` (see D1 and L1) | Done, merged into `main` (PR #7, `850cd1d`) after two rounds of the owner's copy review |
 
 ## Deployed
 
-The site is live on Vercel at https://portfolio-withawat.vercel.app/. `VITE_SITE_URL` is set there, so the live page has the canonical, `og:url` and absolute share-image tags. P1 is merged into `main` (PR #4); a crawler fetching the page without JavaScript gets the content.
+The site is live on Vercel at https://portfolio-withawat.vercel.app/. `VITE_SITE_URL` is set there, so the live page has the canonical, `og:url` and absolute share-image tags. P1 is merged into `main` (PR #4); a crawler fetching the page without JavaScript gets the content. Since PR #6 and PR #7 the live site has the light and dark theme and a Thai page at https://portfolio-withawat.vercel.app/th/ (`sitemap.xml` lists both pages).
 
-## Next tasks
+## D1 and L1 (done)
 
-Two features, planned with the owner on 2026-11-06. Two branches and two PRs from `main`, dark theme first (it needs no new copy, so it goes ahead while the owner reviews the Thai copy).
+Two features, planned with the owner on 2026-11-06, both merged into `main`: D1 (PR #6) and L1 (PR #7). Kept here as the record of their decisions. There is no next task scheduled; see Optional.
 
-### D1: light and dark theme (branch `dark-theme`)
+### D1: light and dark theme (branch `dark-theme`, merged PR #6)
 
 - **Process:** mockup first, `docs/mockup/dark-theme.html`, built on `hero-featured.html`: Hero and Featured at 390 and 1440, light next to dark, then a strip of every depth object (Skills tray and knob switch, timeline rail and LED, both nav capsules, icon keys, Contact keys, footer contour). The owner approves it, then `design.md` changes, then code.
 - **Reference:** `docs/reference/dark-theme/` (in `.gitignore`: other designers' work, and the repo is public). One image is enough: an otakoyi neumorphism freebie (ground `#292D32`, 18px offset, 20px blur).
@@ -56,7 +56,7 @@ Two features, planned with the owner on 2026-11-06. Two branches and two PRs fro
 - `src/lib/contourTheme.js`: the three contour components give the files' fill and `feFlood` colours tokens as inline styles. The files are untouched; `ContourExperience`'s 0.4/0.65 opacity replacements became the light tokens.
 - Measured on the production build: overflow 0 at 360/390/768/1024/1440 in both themes; page height at 390 is 3950px (unchanged); no console errors or hydration warnings; the click sets the theme, `aria-checked`, storage and `theme-color`, and a reload keeps it; reduced motion changes at once; a stored choice ignores system changes, and without one the page follows them; without JS the page is light and the switch hidden; Tab reaches the switch with the accent focus ring. Lint and build pass.
 
-### L1: Thai and English (branch from `main` after D1)
+### L1: Thai and English (branch `bilingual`, merged PR #7)
 
 - **URLs:** `/` English (primary: meta, share image, CV are English), `/th/` Thai, both prerendered. No redirect by browser language. Switching loads the other page at the top.
 - **Language switch:** text only, no key (owner, after the font mockup), showing the language it goes to ("ไทย" on `/`, "EN" on `/th/`), a link (`hreflang`), just before the theme switch. 15px 700, no white rim (owner, second look). Hover darkens the letters; pressing sinks them.
@@ -84,7 +84,8 @@ Two features, planned with the owner on 2026-11-06. Two branches and two PRs fro
 - Owner review, round 1 (PR #7 table, 2026-11-07): 22 strings changed in `portfolio.th.js`, word for word. The owner prefers the English terms recruiters use where Thai is stiff (remote, hybrid, authentication, frameworks, Soft skills, e-commerce, manual); a few strings are now the same as the English ones. `/th/` title: "วิทวัส ภิระบรรณ์ — Software Developer & QA". "ดูโปรเจกต์ของผม" fits its key at 360px with nothing to spare.
 - Owner review, round 2 (PR #7 table): the status reads "กำลังมองหางาน" (pill, Hero status line, Contact line). The pill still fits the 360px top row.
 - `/th` without the slash: checked by the owner on the Vercel preview, it serves the Thai page.
-- Still to check: a real iPhone.
+- Merged by the owner on 2026-11-07 (PR #7, `850cd1d`). Not confirmed in this record: a check on a real iPhone.
+- Later, if wanted: a Thai CV (the CV link stays the English PDF on `/th/`).
 
 ## P1 decisions (prerender)
 
