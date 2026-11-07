@@ -70,12 +70,29 @@ function robotsTxt(url) {
   return lines.join("\n") + "\n";
 }
 
+// L1: both language pages, each listing both as alternates (Google's sitemap form of hreflang, the same
+// set scripts/prerender.mjs writes into each page's <head>). Keep in step with PAGES there.
+const SITEMAP_PAGES = [
+  { lang: "en", path: "/" },
+  { lang: "th", path: "/th/" },
+];
+
 function sitemapXml(url) {
   const lastmod = new Date().toISOString().slice(0, 10);
+  const alternates = [
+    ...SITEMAP_PAGES.map((page) => `    <xhtml:link rel="alternate" hreflang="${page.lang}" href="${url}${page.path}" />`),
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${url}/" />`,
+  ];
   return [
     `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-    `  <url><loc>${url}/</loc><lastmod>${lastmod}</lastmod></url>`,
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`,
+    ...SITEMAP_PAGES.flatMap((page) => [
+      `  <url>`,
+      `    <loc>${url}${page.path}</loc>`,
+      `    <lastmod>${lastmod}</lastmod>`,
+      ...alternates,
+      `  </url>`,
+    ]),
     `</urlset>`,
     "",
   ].join("\n");

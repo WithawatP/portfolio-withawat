@@ -5,37 +5,22 @@ import KnobSwitch from './ui/KnobSwitch'
 import CountUp from './ui/CountUp'
 import Icon from './ui/Icon'
 import { IconKey } from './ui/Key'
-import { featuredProject } from '../data/portfolio'
+import { useContent } from '../lib/content'
 import atelierHome from '../assets/atelier-home.webp'
 import atelierProducts from '../assets/atelier-products.webp'
 import atelierBlog from '../assets/atelier-blog.webp'
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 
-const projectGallery = [
-  {
-    src: atelierProducts,
-    alt: 'Product catalogue with filters and bouquet cards',
-  },
-  {
-    src: atelierHome,
-    alt: 'Atelier De Flora homepage with the custom bouquet builder',
-  },
-  {
-    src: atelierBlog,
-    alt: 'Floral care blog with guides and studio stories',
-  },
-]
+// In the order of ui.featured.gallery (the alt texts) in portfolio.js.
+const projectGallery = [atelierProducts, atelierHome, atelierBlog]
 
 const INITIAL_SLIDE = 1
 
-const projectViews = [
-  { id: 'build', label: 'Build' },
-  { id: 'test', label: 'Test' },
-]
+const PROJECT_VIEWS = ['build', 'test']
 
-const EYEBROW = 'text-[11px] font-semibold uppercase tracking-[0.22em] text-label'
-const SMALL_LABEL = 'text-[11px] font-semibold uppercase tracking-[0.2em] text-label'
+const EYEBROW = 'text-eyebrow font-semibold uppercase tracking-caps text-label'
+const SMALL_LABEL = 'text-eyebrow font-semibold uppercase tracking-caps-sm text-label'
 
 function BuildView({ title, rows }) {
   return (
@@ -155,7 +140,8 @@ function useDeviceIntro(introRef) {
 }
 
 export default function FeaturedProject() {
-  const project = featuredProject
+  const { featuredProject: project, ui } = useContent()
+  const projectViews = PROJECT_VIEWS.map((id) => ({ id, label: ui.featured.views[id] }))
   const [projectView, setProjectView] = useState('build')
   const [activeSlide, setActiveSlide] = useState(INITIAL_SLIDE)
   const introRef = useRef(null)
@@ -169,7 +155,9 @@ export default function FeaturedProject() {
     >
       <div className="flex flex-col gap-6 wide:flex-row wide:flex-wrap wide:items-end wide:justify-between wide:gap-10">
         <div className="flex max-w-[620px] flex-col gap-3.5">
-          <p className={EYEBROW}>Featured project · {project.context}</p>
+          <p className={EYEBROW}>
+            {ui.featured.eyebrow} · {project.context}
+          </p>
           <h2
             id="featured-title"
             className="text-[clamp(32px,3.4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-ink"
@@ -214,11 +202,11 @@ export default function FeaturedProject() {
                   onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
                   className="atelier-coverflow h-full"
                 >
-                  {projectGallery.map((shot) => (
-                    <SwiperSlide key={shot.src} className="!w-[88%]">
+                  {projectGallery.map((src, index) => (
+                    <SwiperSlide key={src} className="!w-[88%]">
                       <img
-                        src={shot.src}
-                        alt={shot.alt}
+                        src={src}
+                        alt={ui.featured.gallery[index]}
                         width="1440"
                         height="900"
                         loading="eager"
@@ -231,9 +219,9 @@ export default function FeaturedProject() {
               </div>
             </div>
             <div aria-hidden="true" className="flex justify-center gap-2">
-              {projectGallery.map((shot, index) => (
+              {projectGallery.map((src, index) => (
                 <span
-                  key={shot.src}
+                  key={src}
                   className={`h-1.5 rounded-full [transition:all_.3s] ${
                     index === activeSlide ? 'w-[18px] bg-accent' : 'w-1.5 bg-faint'
                   }`}
@@ -247,7 +235,7 @@ export default function FeaturedProject() {
               options={projectViews}
               value={projectView}
               onChange={setProjectView}
-              ariaLabel="Project view"
+              ariaLabel={ui.featured.viewsLabel}
               role="radiogroup"
               showLed
               ledLit={ledLit}

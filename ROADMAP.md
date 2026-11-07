@@ -22,8 +22,8 @@ The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (
 | R6 | Motion: three peaks (hero parallax, device panel entrance, Experience pin + footer waves), Lenis, nav landing points, counting numerals, reduced-motion pass | Done |
 | R7 | Cleanup: remove `UiverseButton`, styled-components, chip components and unused `neu-*` utilities; inspector, Lighthouse, meta/OG | Done |
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
-| D1 | Light and dark theme (see Next tasks) | Built on `dark-theme`, not merged yet: waiting for the owner's test (Vercel preview, real iPhone) |
-| L1 | Thai and English, `/` and `/th/` (see Next tasks) | Planned, after D1 |
+| D1 | Light and dark theme (see Next tasks) | Done, merged into `main` (PR #6, `aa7de3d`) |
+| L1 | Thai and English, `/` and `/th/` (see Next tasks) | Built on `bilingual` (`main` merged in, with D1 and C1), not merged yet: PR #7; the owner's first review of the Thai copy is applied |
 
 ## Deployed
 
@@ -59,14 +59,32 @@ Two features, planned with the owner on 2026-11-06. Two branches and two PRs fro
 ### L1: Thai and English (branch from `main` after D1)
 
 - **URLs:** `/` English (primary: meta, share image, CV are English), `/th/` Thai, both prerendered. No redirect by browser language. Switching loads the other page at the top.
-- **Language switch:** a text key showing the language it goes to ("ไทย" on `/`, "EN" on `/th/`), a link (`hreflang`), next to the theme switch.
+- **Language switch:** text only, no key (owner, after the font mockup), showing the language it goes to ("ไทย" on `/`, "EN" on `/th/`), a link (`hreflang`), just before the theme switch. 15px 700, no white rim (owner, second look). Hover darkens the letters; pressing sinks them.
 - **Copy:** Claude drafts the Thai, the owner reviews every line; nothing unreviewed is merged. Review: an English/Thai table in the PR and the real page on the Vercel preview at 390 and 1440 (Thai has no spaces, so it wraps differently).
 - **Not translated:** technology, company and project names, email, links, the CV (a Thai CV may come later).
-- **Name:** the `/th/` Hero shows **วิทวัส ภิระบรรณ์** in Mitr ExtraLight 200. Everywhere else (title, footer, meta, share image) the English name stays.
-- **Fonts:** Thai glyphs in Anuphan, Latin words inside Thai text stay Manrope (`"Manrope", "Anuphan"`, Manrope limited to Latin), checked on a font comparison page first. Large numerals stay Michroma. Self-hosted files, no npm dependency.
+- **Name:** the `/th/` Hero shows **วิทวัส ภิระบรรณ์** in **Mitr 300** on **one line**, line-height 1.2: 42.4px below 900px, so it is as long as the role line under it (owner, third look), and the English name's `clamp(34px, 4.6vw, 64px)` at >= 900px (option A of the mockup). The owner first chose ExtraLight 200, tried 300 and kept it, and asked for first and last name on one line. Everywhere else (title, footer, meta, share image) the English name stays.
+- **Fonts:** `/th/` sets everything in **Anuphan alone**, Latin words included (owner chose option 2 of the mockup over Manrope + Anuphan). Large numerals and the WP mark stay Michroma. Self-hosted files, no npm dependency.
+- **Thai labels:** headings keep line-height 1.1; eyebrows and nav links are 12px with .04em letter spacing (the English .2–.22em scatters a Thai word into letters).
+- **Job titles stay English** on `/th/`, as in the CV.
 - **Dates:** Thai month names, Gregorian years ("กรกฎาคม 2026 – ตุลาคม 2026", "2019 – 2026").
 - **Data:** `src/data/portfolio.th.js`, the same shape and order as `portfolio.js`; values that do not change (email, links, CV) come from `portfolio.js`. Strings hard-coded in components today ("Built with React and Tailwind CSS", "2019 – 2026", the nav `aria-label`s) move into the data files, with the English wording unchanged.
 - **Meta on `/th/`:** Thai title and description (drafted, owner-reviewed), `og:locale` `th_TH`, canonical to itself, the same share image. `hreflang` alternates on both pages, built from `VITE_SITE_URL` like the canonical.
+
+**L1 as built** (design.md sections 4, 5 and 6.9 hold the rules):
+- Step 1 (`14363f6`): the Thai font files, `docs/mockup/thai-fonts.html` (fonts inlined, opens without a server), and the Thai copy draft `src/data/portfolio.th.js`. The mockup was then updated twice with the owner's answers: section A shows the name in Mitr 300 on one line, section D the text-only language link (15px 700, no white rim) with its three states.
+- `src/data/portfolio.js` gains `ui`: every string that was hard-coded in a component (nav labels and `aria-label`s, keys, section titles and intros, "2019 – 2026", the gallery alt texts, the copy status, the footer line), English wording unchanged. `portfolio.th.js` has the same keys, plus `profile.heroName` and `meta` (the `/th/` `<head>` text).
+- `src/lib/content.js`: `CONTENT.en` / `CONTENT.th` and `useContent()`. `App` takes `lang` and provides it; every component reads its copy from `useContent()`.
+- `main.jsx`: a built page hydrates in the language its `<html lang>` says (so it always matches the HTML that arrived); the dev server uses the path.
+- `scripts/prerender.mjs` renders both pages: `dist/index.html` and `dist/th/index.html` (Thai `lang`, title, description, `og:`/`twitter:` text, `og:locale` `th_TH`, canonical and `og:url` to `/th/`, the Thai fonts preloaded instead of Manrope). Both pages get `hreflang` en / th / x-default from the canonical URL; without `VITE_SITE_URL` there are none. Every swap fails the build if its tag is missing.
+- `src/index.css`: `@font-face` for Anuphan (Thai and Latin subsets) and Mitr 300; `--font-thai-name`; the caps labels became tokens (`text-eyebrow`, `tracking-caps`, `-sm`, `-xs`, same values in English) that `html:lang(th)` redefines with `--font-sans`; `.lang-link` and its `--lang-rest` / `--lang-press` text shadows in both themes.
+- `src/components/ui/LanguageLink.jsx` in `Header.jsx` and `DesktopNav.jsx`, before the theme switch.
+- `public/fonts`: `anuphan-thai-variable.woff2` (19 kB), `anuphan-latin-variable.woff2` (35 kB), `mitr-thai-300.woff2` (14 kB); `mitr-thai-200.woff2` from step 1 is deleted. The Anuphan files are Google's full variable files, so 700 (the language link) needs no extra file; `@font-face` declares 400–700. `/` downloads only the Anuphan Thai subset (for "ไทย").
+- Measured on the production build with `VITE_SITE_URL` set: overflow 0 at 360/390/768/1024/1440 for both languages in both themes; page height at 390 is 3950px on `/` (unchanged) and 3869px on `/th/` (the name on one line, 42.4px; 3894px after the owner's copy review); no console errors or hydration warnings on either page; without JS `/th/` is Thai (lang, title, h1, h2s); the language link loads the other page; the 360px top row fits (the link is 44px wide). Lint and build pass.
+- After merging `main` (C1, crawler metadata): `sitemap.xml` (vite.config.js) lists `/` and `/th/`, each with the en / th / x-default alternates, the same set as the pages' `hreflang` links. The JSON-LD Person and `llms.txt` stay English on both pages (`/` is the primary page). Rechecked after the merge: lint, build, overflow, heights, no hydration warnings.
+- Owner review, round 1 (PR #7 table, 2026-11-07): 22 strings changed in `portfolio.th.js`, word for word. The owner prefers the English terms recruiters use where Thai is stiff (remote, hybrid, authentication, frameworks, Soft skills, e-commerce, manual); a few strings are now the same as the English ones. `/th/` title: "วิทวัส ภิระบรรณ์ — Software Developer & QA". "ดูโปรเจกต์ของผม" fits its key at 360px with nothing to spare.
+- Owner review, round 2 (PR #7 table): the status reads "กำลังมองหางาน" (pill, Hero status line, Contact line). The pill still fits the 360px top row.
+- `/th` without the slash: checked by the owner on the Vercel preview, it serves the Thai page.
+- Still to check: a real iPhone.
 
 ## P1 decisions (prerender)
 

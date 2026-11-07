@@ -3,6 +3,7 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { initSmoothScroll } from './lib/smoothScroll'
+import { langFromPath } from './lib/content'
 
 // The scroll hold in index.html waits for hydration from here on, instead of releasing at load.
 window.__appStarted = true
@@ -12,14 +13,24 @@ window.__appStarted = true
 // before hydration (Tab scrolls a focused element into view even while scrolling is held).
 initSmoothScroll()
 
+const container = document.getElementById('root')
+const prerendered = Boolean(container.firstElementChild)
+
+// /th/ is the Thai page (L1). A built page says its language in <html lang> (scripts/prerender.mjs), and
+// hydration must match the HTML that arrived, whatever the path. The dev server serves the English
+// index.html for every path, so there the path decides.
+const lang = prerendered
+  ? document.documentElement.lang === 'th' ? 'th' : 'en'
+  : langFromPath(window.location.pathname)
+document.documentElement.lang = lang
+
 const app = (
   <StrictMode>
-    <App />
+    <App lang={lang} />
   </StrictMode>
 )
-const container = document.getElementById('root')
 
 // The built page arrives with the app's HTML in #root (scripts/prerender.mjs): hydrate it. The dev
 // server has only the placeholder comment there, so it renders from scratch.
-if (container.firstElementChild) hydrateRoot(container, app)
+if (prerendered) hydrateRoot(container, app)
 else createRoot(container).render(app)

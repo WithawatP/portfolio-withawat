@@ -296,3 +296,55 @@ export const skillGroups = [
     ],
   },
 ]
+
+// Text that lived in the components, in the order the page shows it. portfolio.th.js has the same keys.
+export const ui = {
+  nav: { home: 'Home', project: 'Project', experience: 'Experience', work: 'Work', skills: 'Skills', contact: 'Contact' },
+  primaryNav: 'Primary',
+  sectionNav: 'Section navigation',
+  backToTop: `WP ${profile.name}, back to top`,
+  darkTheme: 'Dark theme',
+  // The link to the other language: its label is in that language.
+  language: { label: 'ไทย', name: 'ภาษาไทย', href: '/th/', lang: 'th' },
+  hero: { downloadCv: 'Download CV', viewProject: 'View project' },
+  featured: {
+    eyebrow: 'Featured project',
+    views: { build: 'Build', test: 'Test' },
+    viewsLabel: 'Project view',
+    gallery: [
+      'Product catalogue with filters and bouquet cards',
+      'Atelier De Flora homepage with the custom bouquet builder',
+      'Floral care blog with guides and studio stories',
+    ],
+  },
+  experience: {
+    title: 'Work experience',
+    intro:
+      'A career that moved from IT support and design through operations to full-stack development and quality-focused front-end work.',
+    years: '2019 – 2026',
+  },
+  skills: {
+    title: 'Technical skills',
+    intro:
+      'The tools and methods I have used to build, test, and design web applications, plus the people skills from running restaurant shifts.',
+    tabs: {
+      dev: { label: 'Development', short: 'Dev' },
+      qa: { label: 'QA & Testing', short: 'QA' },
+      design: { label: 'Design', short: 'Design' },
+      soft: { label: 'Soft skills', short: 'Soft' },
+    },
+    tabsLabel: 'Skill group',
+    countLabel: 'Skills in group',
+  },
+  contact: {
+    title: 'Contact',
+    copyEmail: 'Copy email',
+    copied: 'Copied!',
+    copyFailed: 'Copy failed',
+    sendEmail: 'Send email',
+    downloadCv: 'Download CV',
+    call: 'Call',
+    cv: 'CV',
+  },
+  footer: { builtWith: 'Built with React and Tailwind CSS' },
+}

@@ -3,14 +3,14 @@ import Icon from './ui/Icon'
 import KnobSwitch from './ui/KnobSwitch'
 import CountUp from './ui/CountUp'
 import { useMediaQuery } from '../lib/useMediaQuery'
-import { skillGroups } from '../data/portfolio'
+import { useContent } from '../lib/content'
 
-// In the order of skillGroups in portfolio.js.
-const tabs = [
-  { id: 'dev', label: 'Development', short: 'Dev', icon: 'code' },
-  { id: 'qa', label: 'QA & Testing', short: 'QA', icon: 'check' },
-  { id: 'design', label: 'Design', short: 'Design', icon: 'monitor' },
-  { id: 'soft', label: 'Soft skills', short: 'Soft', icon: 'users' },
+// In the order of skillGroups in portfolio.js. The labels are ui.skills.tabs.
+const TABS = [
+  { id: 'dev', icon: 'code' },
+  { id: 'qa', icon: 'check' },
+  { id: 'design', icon: 'monitor' },
+  { id: 'soft', icon: 'users' },
 ]
 
 const SKILL_TEXT = 'text-base font-medium leading-normal text-ink wide:text-[17px]'
@@ -21,7 +21,9 @@ const countSkills = (group) =>
     : group.items.length
 
 export default function Skills() {
-  const [activeId, setActiveId] = useState(tabs[0].id)
+  const { skillGroups, ui } = useContent()
+  const tabs = TABS.map((tab) => ({ ...tab, ...ui.skills.tabs[tab.id] }))
+  const [activeId, setActiveId] = useState(TABS[0].id)
   const isWide = useMediaQuery('(min-width: 900px)')
   const activeIndex = tabs.findIndex((tab) => tab.id === activeId)
   const activeTab = tabs[activeIndex]
@@ -38,10 +40,10 @@ export default function Skills() {
           id="skills-title"
           className="text-[clamp(32px,3.4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-ink wide:shrink-0"
         >
-          Technical skills
+          {ui.skills.title}
         </h2>
         <p className="text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-body wide:max-w-[520px]">
-          The tools and methods I have used to build, test, and design web applications, plus the people skills from running restaurant shifts.
+          {ui.skills.intro}
         </p>
       </header>
 
@@ -53,7 +55,7 @@ export default function Skills() {
           }))}
           value={activeId}
           onChange={setActiveId}
-          ariaLabel="Skill group"
+          ariaLabel={ui.skills.tabsLabel}
           orientation={isWide ? 'vertical' : 'horizontal'}
           idPrefix="skills"
           showLed
@@ -74,7 +76,7 @@ export default function Skills() {
                 <Icon name={activeTab.icon} className="h-[17px] w-[17px] wide:h-[18px] wide:w-[18px]" />
               </span>
               <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
-                <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-label wide:text-xs wide:tracking-[0.22em]">
+                <h3 className="text-eyebrow font-semibold uppercase tracking-caps-sm text-label wide:text-xs wide:tracking-caps">
                   {group.title}
                 </h3>
                 <p className="text-[13px] leading-[1.45] text-muted wide:text-sm wide:leading-normal">
@@ -90,7 +92,7 @@ export default function Skills() {
                     key={subgroup.label}
                     className="flex flex-col gap-[3px] wide:flex-row wide:flex-wrap wide:items-baseline wide:gap-x-4"
                   >
-                    <dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-label wide:w-[150px] wide:shrink-0">
+                    <dt className="text-eyebrow font-semibold uppercase tracking-caps-xs text-label wide:w-[150px] wide:shrink-0">
                       {subgroup.label}
                     </dt>
                     <dd className={`min-w-0 wide:flex-[1_1_300px] ${SKILL_TEXT}`}>
@@ -119,8 +121,8 @@ export default function Skills() {
             <span className="font-display text-[72px] leading-none text-accent">
               <CountUp value={countSkills(group)} align="end" />
             </span>
-            <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.22em] text-label">
-              Skills in group
+            <span className="whitespace-nowrap text-eyebrow font-semibold uppercase tracking-caps text-label">
+              {ui.skills.countLabel}
             </span>
           </div>
         </div>
