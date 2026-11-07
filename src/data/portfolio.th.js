@@ -11,10 +11,10 @@ export const profile = {
   heroName: 'วิทวัส ภิระบรรณ์',
   headline:
     'สร้างเว็บแอป full-stack ด้วย React และ Node.js แล้วทดสอบเองทั้งบนหลายเบราว์เซอร์ หลายขนาดหน้าจอ และในระดับ API',
-  statusShort: 'เปิดรับงาน',
-  statusLong: 'เปิดรับงาน · ปทุมธานีและกรุงเทพฯ, remote และ hybrid',
+  statusShort: 'กำลังมองหางาน',
+  statusLong: 'กำลังมองหางาน · ปทุมธานีและกรุงเทพฯ, remote และ hybrid',
   contactLine:
-    'อยู่ที่ปทุมธานี เปิดรับงานแบบ remote และ แบบ hybrid ในกรุงเทพฯ และปทุมธานี',
+    'กำลังมองหางานแบบ remote และ แบบ hybrid ภายในกรุงเทพฯ และปทุมธานี',
 }
 
 export const coreStack = en.coreStack
