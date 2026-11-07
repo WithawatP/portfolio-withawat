@@ -10,8 +10,18 @@ import BottomNav from './components/BottomNav'
 import DesktopNav from './components/DesktopNav'
 import ContourFooter from './components/ui/ContourFooter'
 import { useHydrated, useMediaQuery } from './lib/useMediaQuery'
+import { CONTENT, ContentContext } from './lib/content'
 
-export default function App() {
+// lang: 'en' for /, 'th' for /th/ (main.jsx, entry-server.jsx). Every component reads its copy from here.
+export default function App({ lang = 'en' }) {
+  return (
+    <ContentContext value={CONTENT[lang]}>
+      <Page />
+    </ContentContext>
+  )
+}
+
+function Page() {
   const isWide = useMediaQuery('(min-width: 900px)')
   // The navs are browser-only (BottomNav portals into <body>), so they are not in the prerendered HTML.
   const hydrated = useHydrated()

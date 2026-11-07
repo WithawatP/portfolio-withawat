@@ -4,13 +4,14 @@ import { createPortal } from 'react-dom'
 import { useScrollSpy } from '../lib/useScrollSpy'
 import { scrollToSection } from '../lib/sectionScroll'
 import Icon from './ui/Icon'
+import { useContent } from '../lib/content'
 
 const NAV_ITEMS = [
-  { section: 'home', href: '#home', label: 'Home', icon: 'home' },
-  { section: 'featured', href: '#featured', label: 'Project', icon: 'folder' },
-  { section: 'experience', href: '#experience', label: 'Work', icon: 'briefcase' },
-  { section: 'skills', href: '#skills', label: 'Skills', icon: 'code' },
-  { section: 'contact', href: '#contact', label: 'Contact', icon: 'mail' },
+  { section: 'home', href: '#home', key: 'home', icon: 'home' },
+  { section: 'featured', href: '#featured', key: 'project', icon: 'folder' },
+  { section: 'experience', href: '#experience', key: 'work', icon: 'briefcase' },
+  { section: 'skills', href: '#skills', key: 'skills', icon: 'code' },
+  { section: 'contact', href: '#contact', key: 'contact', icon: 'mail' },
 ]
 
 const SECTION_IDS = NAV_ITEMS.map((item) => item.section)
@@ -26,6 +27,7 @@ const BALL_EASING = [
 ]
 
 export default function BottomNav() {
+  const { ui } = useContent()
   const [activeId, navigateTo] = useScrollSpy(SECTION_IDS)
   const activeIndex = Math.max(
     0,
@@ -47,7 +49,7 @@ export default function BottomNav() {
   return createPortal(
     <nav
       data-scroll-nav
-      aria-label="Section navigation"
+      aria-label={ui.sectionNav}
       className="fixed left-3 right-3 bottom-[calc(16px+env(safe-area-inset-bottom))] z-40 rounded-full bg-ground px-1.5 py-2 sh-capsule"
     >
       <div className="relative grid grid-cols-5">
@@ -70,7 +72,7 @@ export default function BottomNav() {
               key={item.section}
               href={item.href}
               onClick={(event) => handleClick(event, item.section)}
-              aria-label={item.label}
+              aria-label={ui.nav[item.key]}
               aria-current={isActive ? 'location' : undefined}
               // The icon turns white once the ball has arrived. The socket it left goes grey at once.
               style={isActive ? { transitionDelay: `${rollSeconds}s` } : undefined}

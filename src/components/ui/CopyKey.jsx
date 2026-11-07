@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import Icon from './Icon'
 import { keySurface } from './Key'
-
-const STATUS = { idle: '', copied: 'Copied!', error: 'Copy failed' }
+import { useContent } from '../../lib/content'
 
 export default function CopyKey({ value, label, className = '' }) {
+  const { ui } = useContent()
+  const status = { idle: '', copied: ui.contact.copied, error: ui.contact.copyFailed }
   const [copyState, setCopyState] = useState('idle')
   const resetTimer = useRef(null)
 
@@ -42,7 +43,7 @@ export default function CopyKey({ value, label, className = '' }) {
         aria-live="polite"
         className="absolute right-0 top-full mt-1 whitespace-nowrap text-xs font-semibold leading-none text-ink-2"
       >
-        {STATUS[copyState]}
+        {status[copyState]}
       </span>
     </span>
   )

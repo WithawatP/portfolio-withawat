@@ -3,12 +3,13 @@ import TimelineItem from './ui/TimelineItem'
 import ContourExperience from './ui/ContourExperience'
 import { useExperienceMotion } from '../lib/useExperienceMotion'
 import { useMediaQuery } from '../lib/useMediaQuery'
-import { experiences } from '../data/portfolio'
+import { useContent } from '../lib/content'
 
 // Scroll per role while the section is pinned (design.md 7, peak 3).
 const PIN_STEP = '40svh'
 
 export default function Experience() {
+  const { experiences, ui } = useContent()
   const sectionRef = useRef(null)
   const listRef = useRef(null)
   const { mode, open, ledY, pinnedListHeight, pinTop, handleRowClick } = useExperienceMotion({
@@ -49,12 +50,12 @@ export default function Experience() {
             id="experience-title"
             className="text-[clamp(32px,3.4vw,48px)] font-semibold leading-[1.1] tracking-[-0.02em] text-ink"
           >
-            Work experience
+            {ui.experience.title}
           </h2>
           <p className="text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-body">
-            A career that moved from IT support and design through operations to full-stack development and quality-focused front-end work.
+            {ui.experience.intro}
           </p>
-          <p className="text-[13px] leading-normal text-muted">2019 – 2026</p>
+          <p className="text-[13px] leading-normal text-muted">{ui.experience.years}</p>
         </header>
 
         <ol

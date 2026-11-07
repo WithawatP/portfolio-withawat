@@ -20,6 +20,38 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* L1, design.md 4: the Thai page (/th/) sets its text in Anuphan alone (one variable file per subset,
+   400 to 700; 700 is only the language link), Latin words included, and the Thai
+   name in the hero in Mitr 300. Google Fonts' own subsets (OFL). A browser only downloads a face whose
+   unicode-range the page uses, so / never loads them, except the Thai subset of Anuphan for the "ไทย"
+   language link. scripts/prerender.mjs preloads the /th/ files on /th/ only. */
+@font-face {
+  font-family: "Anuphan";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/anuphan-thai-variable.woff2") format("woff2");
+  unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Anuphan";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/anuphan-latin-variable.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Mitr";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/mitr-thai-300.woff2") format("woff2");
+  unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+}
+
 @theme static {
   --color-recessed: #d1d1d1;
   --color-ink: #2a2a2a;
@@ -46,6 +78,24 @@
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: "Michroma", var(--font-sans);
+  --font-thai-name: "Mitr", "Anuphan", var(--font-sans);
+
+  /* Labels in capitals (eyebrows, nav links). The Thai page redefines them below. */
+  --text-eyebrow: 11px;
+  --tracking-caps: 0.22em;
+  --tracking-caps-sm: 0.2em;
+  --tracking-caps-xs: 0.16em;
+}
+
+/* L1, design.md 4: the Thai page. Thai has no capitals, and wide letter spacing breaks a Thai word into
+   loose letters, so its labels are 12px with .04em. Headings keep line-height 1.1. */
+html:lang(th) {
+  --font-sans: "Anuphan", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --text-eyebrow: 12px;
+  --tracking-caps: 0.04em;
+  --tracking-caps-sm: 0.04em;
+  --tracking-caps-xs: 0.04em;
 }
 
 :root {
@@ -74,6 +124,11 @@
   --sh-toggle-knob: 0 1px 1px rgba(0,0,0,.3), 5px 5px 6px rgba(0,0,0,.22);
   --toggle-sun: var(--color-faint);
   --toggle-sun-glow: none;
+
+  /* design.md 6.9: the language link's letters, flat at rest and carved in when pressed (a dark edge
+     top left only: no white rim). The rest value is the same shadow at zero, so the press interpolates. */
+  --lang-rest: 0 0 0 transparent;
+  --lang-press: -1px -1px 1px #9E9E9E;
 
   /* design.md 6.7: the contours' filter colours (src/lib/contourTheme.js). Light = the files' own values. */
   --contour-shade: #A8A8A8;
@@ -128,6 +183,8 @@ html[data-theme='dark'] {
   --sh-toggle-knob: 0 1px 1px rgba(0,0,0,.5), 5px 5px 6px rgba(0,0,0,.45);
   --toggle-sun: #FFFFFF;
   --toggle-sun-glow: drop-shadow(0 0 1.5px rgba(255,255,255,.9)) drop-shadow(0 0 4px rgba(255,255,255,.45));
+
+  --lang-press: -1px -1px 1px #121212;
 
   --contour-shade: #0E0E0E;
   --contour-hero-shade: 0.62;
@@ -199,6 +256,41 @@ html[data-theme='dark'] .theme-switch-knob {
 /* Without JavaScript the page stays light and the switch could not work (index.html sets data-theme). */
 html:not([data-theme]) .theme-switch {
   display: none;
+}
+
+/* design.md 6.9: the language link (LanguageLink.jsx). Text only; the tap area is the switch's height and
+   at least 44px wide. Hover darkens the letters, pressing sinks them. */
+.lang-link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 44px;
+  padding: 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  text-shadow: var(--lang-rest);
+  transition: color 0.15s, text-shadow 0.1s, transform 0.1s;
+}
+
+/* "ไทย" on the English page: Manrope has no Thai letters. */
+.lang-link:lang(th) {
+  font-family: "Anuphan", var(--font-sans);
+}
+
+@media (hover: hover) {
+  .lang-link:hover {
+    color: var(--color-ink);
+  }
+}
+
+.lang-link:active {
+  color: var(--color-label);
+  text-shadow: var(--lang-press);
+  transform: translateY(1px);
 }
 
 /* design.md 7: changing theme cross-fades the whole page over 0.4s (src/lib/theme.js). */

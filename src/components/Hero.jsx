@@ -4,9 +4,18 @@ import ContourHero from './ui/ContourHero'
 import Icon from './ui/Icon'
 import Key from './ui/Key'
 import { useHeroMotion } from '../lib/useHeroMotion'
-import { profile } from '../data/portfolio'
+import { useContent } from '../lib/content'
+
+// The name: Michroma capitals on two lines on /; on /th/ the Thai name on one line in Mitr 300 (design.md 4),
+// a little looser, because Thai vowels and tone marks sit above and below the line. Below 900px the Thai name
+// is 42.4px, measured so it ends where the role line under it ends (both are fixed sizes there).
+const NAME = {
+  en: 'font-display font-normal uppercase leading-[1.06] tracking-[-0.01em] text-[clamp(34px,4.6vw,64px)]',
+  th: 'font-thai-name font-light leading-[1.2] whitespace-nowrap text-[42.4px] wide:text-[clamp(34px,4.6vw,64px)]',
+}
 
 export default function Hero() {
+  const { lang, profile, ui } = useContent()
   const [firstName, lastName] = profile.name.split(' ')
   const sectionRef = useRef(null)
   useHeroMotion(sectionRef)
@@ -28,11 +37,15 @@ export default function Hero() {
 
           <h1
             id="hero-title"
-            className="font-display text-[clamp(34px,4.6vw,64px)] font-normal uppercase leading-[1.06] tracking-[-0.01em] text-ink"
+            className={`${NAME[lang]} text-ink`}
           >
-            {firstName}
-            <br />
-            {lastName}
+            {profile.heroName ?? (
+              <>
+                {firstName}
+                <br />
+                {lastName}
+              </>
+            )}
           </h1>
 
           <p className="text-[clamp(16px,1.4vw,19px)] font-semibold text-ink-2">
@@ -51,10 +64,10 @@ export default function Hero() {
               icon="download"
               className="whitespace-nowrap max-wide:px-3.5"
             >
-              Download CV
+              {ui.hero.downloadCv}
             </Key>
             <Key href="#featured" className="whitespace-nowrap max-wide:px-3.5">
-              View project
+              {ui.hero.viewProject}
               <Icon name="arrowRight" className="h-[18px] w-[18px] shrink-0" />
             </Key>
           </div>
