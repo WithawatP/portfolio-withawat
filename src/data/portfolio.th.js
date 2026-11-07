@@ -12,9 +12,9 @@ export const profile = {
   headline:
     'สร้างเว็บแอป full-stack ด้วย React และ Node.js แล้วทดสอบเองทั้งบนหลายเบราว์เซอร์ หลายขนาดหน้าจอ และในระดับ API',
   statusShort: 'เปิดรับงาน',
-  statusLong: 'เปิดรับงาน · ปทุมธานีและกรุงเทพฯ, remote or hybrid',
+  statusLong: 'เปิดรับงาน · ปทุมธานีและกรุงเทพฯ, remote และ hybrid',
   contactLine:
-    'อยู่ที่ปทุมธานี เปิดรับงานแบบทำงานทางไกลและแบบไฮบริด ในกรุงเทพฯ และปทุมธานี',
+    'อยู่ที่ปทุมธานี เปิดรับงานแบบ remote และ แบบ hybrid ในกรุงเทพฯ และปทุมธานี',
 }
 
 export const coreStack = en.coreStack
@@ -25,9 +25,9 @@ export const featuredProject = {
   ...en.featuredProject,
   context: 'โปรเจกต์กลุ่ม JSD#13',
   summary:
-    'ร้านค้าออนไลน์ full-stack สำหรับช่อดอกไม้สำเร็จรูปและช่อที่จัดเองได้ ทำร่วมกันเป็นทีม โดยรับผิดชอบระบบยืนยันตัวตน แดชบอร์ดผู้ดูแล และหน้าจอหลักฝั่งลูกค้าหลายหน้า',
+    'ร้านค้าออนไลน์ full-stack สำหรับช่อดอกไม้สำเร็จรูปและช่อที่จัดเองได้ ทำร่วมกันเป็นทีม โดยรับผิดชอบระบบ authentication แอดมินแดชบอร์ด และ หน้าจอ interfaces ที่ลูกค้าใช้งาน',
   facts: [
-    { label: 'บทบาท', value: 'นักพัฒนา Full-stack' },
+    { label: 'บทบาท', value: 'Full-stack developer' },
     { label: 'ขอบเขต', value: 'Auth · Admin · Core UI' },
     { label: 'เทคโนโลยี', value: 'MERN + Stripe + Gemini' },
   ],
@@ -41,12 +41,12 @@ export const featuredProject = {
   buildRows: [
     {
       icon: 'lock',
-      title: 'ระบบยืนยันตัวตน',
+      title: 'Authentication',
       line: 'เข้าสู่ระบบ สมัครสมาชิก refresh token และรีเซ็ตรหัสผ่าน',
     },
     {
       icon: 'dashboard',
-      title: 'แดชบอร์ดผู้ดูแล',
+      title: 'แอดมินแดชบอร์ด',
       line: 'CRUD แคตตาล็อกสินค้า จัดการคำสั่งซื้อ และติดตามงานหลังบ้าน',
     },
     {
@@ -57,8 +57,8 @@ export const featuredProject = {
   ],
   testing: {
     ...en.featuredProject.testing,
-    title: 'วิธีทดสอบ',
-    requestCaption: 'คำขอ API ที่ทดสอบด้วยมือใน Postman collection เดียว แบ่งเป็นโฟลเดอร์ Auth และ Products',
+    title: 'วิธีที่ใช้ทดสอบ',
+    requestCaption: 'requests API ที่ทดสอบแบบ manual ใน Postman collection เดียว แบ่งเป็นโฟลเดอร์ Auth และ Products',
     bugs: [
       {
         ...en.featuredProject.testing.bugs[0],
@@ -79,7 +79,7 @@ export const experiences = [
     ...en.experiences[0],
     period: 'กรกฎาคม 2026 – ตุลาคม 2026',
     highlights: [
-      'จบ bootcamp วิศวกรรมซอฟต์แวร์แบบเข้มข้น 4 เดือน เน้น MERN Stack แนวทาง Agile การทำงานร่วมกันผ่าน Git/GitHub และการส่งมอบซอฟต์แวร์เป็นทีม',
+      'จบ bootcamp software engineering แบบเข้มข้น 4 เดือน เน้น MERN Stack แนวทาง Agile การทำงานร่วมกันผ่าน Git/GitHub และการส่งมอบซอฟต์แวร์เป็นทีม',
     ],
   },
   {
@@ -88,7 +88,7 @@ export const experiences = [
     highlights: [
       'ผลัดกันคุมกะในฐานะหนึ่งในผู้จัดการกะสามคนของร้านอาหาร และจัดตารางงานให้ทีม 5 คน',
       'ควบคุมสต็อกในช่วงเทศกาลที่ลูกค้าหนาแน่น รวมถึงนับสต็อกทุกวันจันทร์อย่างละเอียดถึงระดับกรัม',
-      'แก้ออเดอร์ผิดได้ทันทีโดยไม่ให้คิวสะดุด และสอนพนักงานให้แก้ปัญหาเบื้องต้นได้เอง ตลอดช่วงที่ทำตำแหน่งนี้ไม่มีเรื่องร้องเรียนส่งถึงเลย',
+      'แก้ออเดอร์ผิดได้ทันทีโดยไม่ให้คิวสะดุด และสอนพนักงานให้แก้ปัญหาเบื้องต้นได้เอง ตลอดช่วงที่ทำตำแหน่งนี้ไม่มีเรื่องร้องเรียนส่งถึง',
     ],
     tags: ['งานบริหารหน้าร้าน', 'ควบคุมสต็อก', 'สอนงานทีม'],
   },
@@ -104,14 +104,14 @@ export const experiences = [
     ...en.experiences[3],
     period: 'มีนาคม 2021 – กันยายน 2021',
     highlights: [
-      'ออกแบบเลย์เอาต์เว็บ แบนเนอร์ และสื่อการตลาดดิจิทัลให้ลูกค้าอีคอมเมิร์ซด้วย Adobe Illustrator โดยใช้หลัก visual hierarchy ของ UI/UX',
+      'ออกแบบเลย์เอาต์เว็บ แบนเนอร์ และสื่อการตลาดดิจิทัลให้ลูกค้า e-commerce ด้วย Adobe Illustrator โดยใช้หลัก visual hierarchy ของ UI/UX',
     ],
   },
   {
     ...en.experiences[4],
     period: 'ตุลาคม 2019 – กุมภาพันธ์ 2020',
     highlights: [
-      'ดูแลเครื่องมากกว่า 80 เครื่องที่บริษัท IT outsourcing ซึ่งให้บริการสำนักงานและโรงเรียน ทั้งวิเคราะห์อาการเสีย ซ่อม อัปเกรด แล้วส่งเครื่องกลับไปใช้งาน',
+      'ดูแลเครื่องคอมพิวเตอร์มากกว่า 80 เครื่องที่บริษัท IT outsourcing ซึ่งให้บริการสำนักงานและโรงเรียน ทั้งวิเคราะห์อาการเสีย ซ่อม อัปเกรด แล้วส่งเครื่องกลับไปใช้งาน',
       'ออกไปติดตั้งเครื่องถึงสำนักงานและบ้านของลูกค้า',
     ],
     tags: ['IT support', 'ฮาร์ดแวร์', 'แก้ปัญหาเครื่อง'],
@@ -122,10 +122,10 @@ export const skillGroups = [
   {
     ...en.skillGroups[0],
     title: 'การเขียนโปรแกรมและพัฒนาเว็บ',
-    summary: 'ภาษา เฟรมเวิร์ก และเครื่องมือด้านข้อมูลที่ใช้ทำงาน full-stack',
+    summary: 'ภาษา frameworks และ data tools ที่ใช้ทำงาน full-stack',
     groups: [
       { ...en.skillGroups[0].groups[0], label: 'ภาษา' },
-      { ...en.skillGroups[0].groups[1], label: 'เฟรมเวิร์ก' },
+      { ...en.skillGroups[0].groups[1], label: 'Frameworks' },
       { ...en.skillGroups[0].groups[2], label: 'เครื่องมือและข้อมูล' },
     ],
   },
@@ -141,7 +141,7 @@ export const skillGroups = [
   },
   {
     ...en.skillGroups[3],
-    title: 'ทักษะด้านคนและการบริหาร',
+    title: 'Soft Skills และ การบริหาร',
     summary: 'จากการคุมกะร้านอาหารในฐานะหนึ่งในผู้จัดการกะสามคน และการสอนงานพนักงาน',
     items: ['การแก้ปัญหา', 'การนำทีม', 'การสื่อสาร'],
   },
@@ -155,7 +155,7 @@ export const ui = {
   backToTop: `WP ${en.profile.name} กลับขึ้นด้านบน`,
   darkTheme: 'ธีมมืด',
   language: { label: 'EN', name: 'English', href: '/', lang: 'en' },
-  hero: { downloadCv: 'ดาวน์โหลด CV', viewProject: 'ดูโปรเจกต์' },
+  hero: { downloadCv: 'ดาวน์โหลด CV', viewProject: 'ดูโปรเจกต์ของผม' },
   featured: {
     eyebrow: 'โปรเจกต์เด่น',
     views: { build: 'พัฒนา', test: 'ทดสอบ' },
@@ -180,7 +180,7 @@ export const ui = {
       dev: { label: 'การพัฒนา', short: 'พัฒนา' },
       qa: { label: 'QA และการทดสอบ', short: 'QA' },
       design: { label: 'การออกแบบ', short: 'ออกแบบ' },
-      soft: { label: 'ทักษะด้านคน', short: 'ด้านคน' },
+      soft: { label: 'Soft skills', short: 'Soft' },
     },
     tabsLabel: 'กลุ่มทักษะ',
     countLabel: 'ทักษะในกลุ่ม',
@@ -188,7 +188,7 @@ export const ui = {
   contact: {
     title: 'ติดต่อ',
     copyEmail: 'คัดลอกอีเมล',
-    copied: 'คัดลอกแล้ว',
+    copied: 'คัดลอกแล้ว!',
     copyFailed: 'คัดลอกไม่สำเร็จ',
     sendEmail: 'ส่งอีเมล',
     downloadCv: 'ดาวน์โหลด CV',
@@ -200,9 +200,9 @@ export const ui = {
 
 // <head> of /th/ (scripts/prerender.mjs).
 export const meta = {
-  title: 'Withawat Phiraban — นักพัฒนาซอฟต์แวร์และ QA',
+  title: 'วิทวัส ภิระบรรณ์ — Software Developer & QA',
   description:
-    'Withawat Phiraban นักพัฒนาซอฟต์แวร์ระดับจูเนียร์และ QA / software tester สร้างเว็บแอปด้วย MERN และทดสอบเองทั้งด้วยมือ ใน Postman และบนหลายเบราว์เซอร์',
+    'Withawat Phiraban junior software developer และ QA / software tester สร้างเว็บแอปด้วย MERN และทดสอบเองทั้งด้วยมือ ใน Postman และบนหลายเบราว์เซอร์',
   ogDescription:
-    'นักพัฒนาซอฟต์แวร์ระดับจูเนียร์และ QA / software tester สร้างเว็บแอปด้วย MERN และทดสอบเองทั้งด้วยมือ ใน Postman และบนหลายเบราว์เซอร์',
+    'junior software developer และ QA / software tester สร้างเว็บแอปด้วย MERN และทดสอบเองทั้งด้วยมือ ใน Postman และบนหลายเบราว์เซอร์',
 }
