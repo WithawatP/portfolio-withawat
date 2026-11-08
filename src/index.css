@@ -622,6 +622,23 @@ html:not([data-theme]) .theme-switch {
   }
 }
 
+/* design.md 7, peak 3: the scroll hint under the pinned Experience bobs down and back. Only rendered
+   while pinned, which reduced motion never is; the reduce rule below would stop it anyway. */
+@keyframes experience-hint-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+.experience-hint {
+  display: block;
+  animation: experience-hint-bob 1.6s ease-in-out infinite;
+}
+
 /* Until React has hydrated the prerendered page, the reader cannot scroll (index.html adds the class only
    when JavaScript runs; App.jsx releases it). Lenis is stopped for the same time (smoothScroll.js). */
 html.js-pending {

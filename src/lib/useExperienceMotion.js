@@ -80,6 +80,8 @@ export function useExperienceMotion({ sectionRef, listRef, count }) {
   const [ledY, setLedY] = useState(0)
   const [pinnedListHeight, setPinnedListHeight] = useState(0)
   const [pinTop, setPinTop] = useState(PIN_TOP_MIN)
+  // The scroll hint under the pinned block: on while the pin holds a role before the last one.
+  const [hint, setHint] = useState(false)
   const pinnable = useRef(false)
 
   // The latest committed state, for scroll handlers and observers. Declared first, so it is current
@@ -171,6 +173,13 @@ export function useExperienceMotion({ sectionRef, listRef, count }) {
     let frame = 0
     let deferred = false
 
+    // On inside the pin until the last role's step; off while a nav tap carries the page.
+    const showHint = () => {
+      const { start, step } = pinGeometry(section, count, state.current.pinTop)
+      const y = window.scrollY
+      setHint(!isScriptedScroll() && y >= start - 1 && y < start + (count - 1) * step)
+    }
+
     const pick = (onlyInside) => {
       const { start, step } = pinGeometry(section, count, state.current.pinTop)
       const y = window.scrollY
@@ -184,12 +193,14 @@ export function useExperienceMotion({ sectionRef, listRef, count }) {
 
     const update = () => {
       frame = 0
+      showHint()
       if (isScriptedScroll()) {
         if (!deferred) {
           deferred = true
           whenScrollSettles(() => {
             deferred = false
             pick(true)
+            showHint()
           })
         }
         return
@@ -209,6 +220,7 @@ export function useExperienceMotion({ sectionRef, listRef, count }) {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', schedule)
       window.removeEventListener('resize', schedule)
+      setHint(false)
     }
   }, [mode, count, sectionRef, openOnly])
 
@@ -298,5 +310,5 @@ export function useExperienceMotion({ sectionRef, listRef, count }) {
     [listRef, openOnly]
   )
 
-  return { mode, open, ledY, pinnedListHeight, pinTop, handleRowClick }
+  return { mode, open, ledY, pinnedListHeight, pinTop, hint: mode === 'pinned' && hint, handleRowClick }
 }

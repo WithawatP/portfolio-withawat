@@ -24,6 +24,7 @@ The redesign was built on `redesign-v2`, now merged into `main`. The v2 phases (
 | P1 | Prerender: the page's HTML is rendered at build time and hydrated, so crawlers and no-JS browsers get the content; scroll hold until hydration; count-up numerals show their real value in the HTML | Done, merged into `main` (PR #4, `4b9547a`) |
 | D1 | Light and dark theme (see D1 and L1) | Done, merged into `main` (PR #6, `aa7de3d`) |
 | L1 | Thai and English, `/` and `/th/` (see D1 and L1) | Done, merged into `main` (PR #7, `850cd1d`) after two rounds of the owner's copy review |
+| H1 | Experience scroll hint: a faint bobbing arrow while the section is pinned (see H1) | Approved by the owner after one change (bigger, two chevrons); committed on branch `experience-scroll-hint`, not merged |
 
 ## Deployed
 
@@ -86,6 +87,12 @@ Two features, planned with the owner on 2026-11-06, both merged into `main`: D1 
 - `/th` without the slash: checked by the owner on the Vercel preview, it serves the Thai page.
 - Merged by the owner on 2026-11-07 (PR #7, `850cd1d`). Not confirmed in this record: a check on a real iPhone.
 - Later, if wanted: a Thai CV (the CV link stays the English PDF on `/th/`).
+
+## H1: Experience scroll hint (branch `experience-scroll-hint`)
+
+- **Why:** the owner asked (2026-11-08) for a faint bouncing arrow at the bottom while Experience is pinned, so new readers know that scrolling opens the next role. design.md banned scroll cues and other looping animation; sections 7 and 10 now list this as the one exception.
+- **As built:** `useExperienceMotion` returns `hint`: on while `scrollY` is inside the pin and before the last role's step, off while a nav tap carries the page, and only in pinned mode. `Experience.jsx` renders a fixed, `aria-hidden` pair of stacked `chevronDown` icons (40px each, the lower at half opacity, `text-muted`, opacity 0.8, 28px from the bottom, centred) while pinned. The owner's first look found one 28px chevron at 0.55 too faint and small; it fades 0.3s. `index.css`: `experience-hint-bob`, 8px down and back, 1.6s ease-in-out, looping. No copy, so nothing to translate.
+- **Measured** on the production build: at 1024 and 1440, on `/` and `/th/`, in both themes, the hint is 0 before the pin, 0.8 from the pin's first pixel through role 4, 0 from role 5's step and below the section; a row click (manual) removes it; reduced motion and phones (360/390/768) do not render it. Overflow 0 at every width; page height at 390 is 3950px on `/` and 3894px on `/th/` (unchanged); no console errors.
 
 ## P1 decisions (prerender)
 
