@@ -1,16 +1,38 @@
-# React + Vite
+# Portfolio — Withawat Phiraban
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+My personal portfolio: a single-page, neumorphic site in English and Thai, with a light and a dark theme.
 
-Currently, two official plugins are available:
+**Live:** https://portfolio-withawat.vercel.app/ (Thai: [/th/](https://portfolio-withawat.vercel.app/th/))
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- React 19 + Vite
+- Tailwind CSS v4 (design tokens in `src/index.css`)
+- Swiper for the project gallery, Lenis for smooth scrolling
+- Prerendered at build time (`/` and `/th/`), deployed on Vercel
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the Oxlint configuration
+```bash
+npm install
+npm run dev      # dev server
+npm run build    # production build + prerender into dist/
+npm run lint     # oxlint
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Copy `.env.example` to `.env` and set `VITE_SITE_URL` to the deployed address (used for canonical and share-image tags). It can stay empty for local work.
+
+## Project structure
+
+```
+src/
+  components/      page sections (Hero, Experience, FeaturedProject, Skills, Contact…)
+  components/ui/   shared pieces (keys, switches, icons, contour art)
+  data/            portfolio.js (English copy) and portfolio.th.js (Thai copy)
+  lib/             content, theme, scroll and motion hooks
+  index.css        design tokens and theme styles
+scripts/prerender.mjs   renders the static HTML for each language
+design.md               design rules for the site
+```
+
+All page copy lives in `src/data/`; components read it through `useContent()`.
