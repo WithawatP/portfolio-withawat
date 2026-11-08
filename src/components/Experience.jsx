@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import TimelineItem from './ui/TimelineItem'
 import ContourExperience from './ui/ContourExperience'
+import Icon from './ui/Icon'
 import { useExperienceMotion } from '../lib/useExperienceMotion'
 import { useMediaQuery } from '../lib/useMediaQuery'
 import { useContent } from '../lib/content'
@@ -12,7 +13,7 @@ export default function Experience() {
   const { experiences, ui } = useContent()
   const sectionRef = useRef(null)
   const listRef = useRef(null)
-  const { mode, open, ledY, pinnedListHeight, pinTop, handleRowClick } = useExperienceMotion({
+  const { mode, open, ledY, pinnedListHeight, pinTop, hint, handleRowClick } = useExperienceMotion({
     sectionRef,
     listRef,
     count: experiences.length,
@@ -93,6 +94,23 @@ export default function Experience() {
 
       {/* The scroll the pinned block stays for. A sticky element only travels inside its parent's
           content box, so this is a real box after it, not padding. */}
+      {/* The scroll hint (design.md 7, peak 3): a faint bobbing arrow at the bottom of the screen, only
+          while the pin holds a role before the last one, so a new reader knows scrolling opens more. */}
+      {pinned && (
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none fixed inset-x-0 bottom-7 z-10 flex justify-center text-muted [transition:opacity_.3s_ease-out] ${
+            hint ? 'opacity-80' : 'opacity-0'
+          }`}
+        >
+          {/* Two chevrons stacked, the lower one fainter, pointing down the scroll. */}
+          <span className="experience-hint flex flex-col items-center">
+            <Icon name="chevronDown" className="h-10 w-10" strokeWidth={2} />
+            <Icon name="chevronDown" className="-mt-6 h-10 w-10 opacity-50" strokeWidth={2} />
+          </span>
+        </div>
+      )}
+
       {pinned && (
         <div
           aria-hidden="true"
